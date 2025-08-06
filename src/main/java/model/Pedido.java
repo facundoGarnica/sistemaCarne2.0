@@ -31,7 +31,10 @@ public class Pedido {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
     private LocalDate fecha;
+    private LocalDate fechaEntrega;
+    private Boolean estado;
     private Double senia;
+    private String observacion;
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetallePedido> detallePedidos;
 
@@ -73,6 +76,30 @@ public class Pedido {
 
     public void setDetallePedidos(List<DetallePedido> detallePedidos) {
         this.detallePedidos = detallePedidos;
+    }
+
+    public LocalDate getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(LocalDate fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
+
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
     }
     
     

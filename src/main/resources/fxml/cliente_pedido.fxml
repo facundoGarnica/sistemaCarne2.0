@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -10,9 +9,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientesController">
+<AnchorPane fx:id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PedidosController">
 
     <stylesheets>
         <URL value="@../styles/clientes.css" />
@@ -23,7 +21,7 @@
         <VBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             
             <!-- Título -->
-            <Label fx:id="titulo" alignment="CENTER" maxWidth="Infinity" styleClass="titulo" text="Lista de clientes fiados">
+            <Label fx:id="titulo" alignment="CENTER" maxWidth="Infinity" styleClass="titulo" text="Gestión de Pedidos">
                 <font>
                     <Font size="38.0" />
                 </font>
@@ -31,58 +29,67 @@
 
             <!-- Apartado de Filtrado -->
             <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <Label fx:id="lblFiltrar" styleClass="medioPago" text="Buscar cliente:">
+                <Label fx:id="lblFiltrar" styleClass="medioPago" text="Buscar pedido:">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
                 
-                <TextField fx:id="txtFiltroCliente" prefWidth="250.0" promptText="Ingrese nombre o alias..." styleClass="campo-filtro" />
+                <TextField fx:id="txtFiltroPedido" prefHeight="28.0" prefWidth="186.0" promptText="Ingresar cliente..." styleClass="campo-filtro" />
                 
                 <Button fx:id="btnLimpiarFiltro" prefWidth="85.0" styleClass="boton" text="Limpiar" />
             </HBox>
 
-            <!-- Tabla principal -->
-            <TableView fx:id="tablaClientes" prefHeight="300.0" styleClass="tablaVenta" VBox.vgrow="ALWAYS">
+            <!-- Tabla principal de pedidos -->
+            <TableView fx:id="tablaPedidos" prefHeight="280.0" styleClass="tablaVenta" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre/Alias" />
-                    <TableColumn fx:id="colCelular" prefWidth="120.0" text="Celular" />
+                    <TableColumn fx:id="colCliente" prefWidth="180.0" text="Cliente" />
+                    <TableColumn fx:id="colFechaPedido" prefWidth="100.0" text="Fecha Pedido" />
+                    <TableColumn fx:id="colFechaEntrega" prefWidth="110.0" text="Fecha Entrega" />
+                    <TableColumn fx:id="colSenia" prefWidth="100.0" text="Seña" />
                     <TableColumn fx:id="colTotal" prefWidth="100.0" text="Total ($)" />
-                    <TableColumn fx:id="colAbonado" prefWidth="130.0" text="Pago a cuenta ($)" />
-                    <TableColumn fx:id="colFecha" prefWidth="100.0" text="Fecha" />
-                    <TableColumn fx:id="colResto" prefWidth="130.0" text="Resto a pagar ($)" />
-                    <TableColumn fx:id="colPago" prefWidth="130.0" text="Finalizado" />
+                    <TableColumn fx:id="colTotalSenia" prefWidth="100.0" text="Total con seña" />
+                    <TableColumn fx:id="colEstado" prefWidth="100.0" text="Estado" />
+                    <TableColumn fx:id="colObservaciones" prefWidth="150.0" text="Observaciones" />
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
             </TableView>
 
-            <!-- Botones de acción -->
-            <HBox spacing="15.0">
-                <Button fx:id="btnVerDetalle" onAction="#difuminarTodo" styleClass="boton" text="Ver detalle" />
-                <Button fx:id="btnFinalizarDeuda" styleClass="boton" text="Finalizar deuda" />
+            <!-- Botones de acción para pedidos -->
+            <HBox prefHeight="34.0" prefWidth="846.0" spacing="15.0">
+                <Button fx:id="btnCrearPedido" styleClass="boton" text="Crear pedido" />
+                <Button fx:id="btnEditarPedido" styleClass="boton" text="Editar pedido" />
+                <Button fx:id="btnFinalizarPedido" styleClass="boton" text="Finalizar pedido" />
             </HBox>
 
-            <!-- Cliente Info -->
+            <!-- Info del pedido seleccionado -->
             <HBox spacing="10.0">
-                <Label fx:id="lblClienteInfo" styleClass="medioPago" text="Cliente:">
+                <Label fx:id="lblPedidoInfo" styleClass="medioPago" text="Pedido seleccionado:">
                     <font>
                         <Font size="20.0" />
                     </font>
                 </Label>
-                <Label fx:id="lblClienteInfo1" styleClass="medioPago" text="Nombre">
+                <Label fx:id="lblPedidoInfo1" styleClass="medioPago" text="Ninguno">
                     <font>
                         <Font size="20.0" />
                     </font>
                 </Label>
             </HBox>
 
-            <!-- Tabla productos -->
-            <TableView fx:id="tablaProductos" prefHeight="250.0" styleClass="tablaVuelto" VBox.vgrow="SOMETIMES">
+            <!-- Título para tabla de productos -->
+            <Label fx:id="tituloProductos" styleClass="medioPago" text="Detalle de productos del pedido:">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+
+            <!-- Tabla productos del pedido -->
+            <TableView fx:id="tablaProductos" prefHeight="220.0" styleClass="tablaVuelto" VBox.vgrow="SOMETIMES">
                 <columns>
                     <TableColumn fx:id="colProducto" prefWidth="300.0" text="Producto" />
-                    <TableColumn fx:id="colPrecioUnit" prefWidth="120.0" text="Precio actual ($)" />
+                    <TableColumn fx:id="colPrecioUnit" prefWidth="120.0" text="Precio unit. ($)" />
                     <TableColumn fx:id="colPeso" prefWidth="120.0" text="Peso/Cant." />
                     <TableColumn fx:id="colTotalProd" prefWidth="120.0" text="Total ($)" />
                 </columns>
@@ -96,7 +103,7 @@
         <!-- Panel de difuminado (modal) -->
         <AnchorPane fx:id="difuminar" disable="true" styleClass="difuminar" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <AnchorPane fx:id="spaDetalle" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
+                <AnchorPane fx:id="spaDetalle" prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
             </children>
         </AnchorPane>
 

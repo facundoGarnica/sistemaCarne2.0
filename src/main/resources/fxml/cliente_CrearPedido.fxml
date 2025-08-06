@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.Cliente_CrearPedidoController"
+            prefWidth="752.0" prefHeight="618.0"
+            styleClass="mainFxmlClass">
+    <stylesheets>
+        <URL value="@../styles/clientes.css" />
+    </stylesheets>
+
+    <VBox spacing="15.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+        <padding>
+            <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+        </padding>
+
+        <!-- Sección Producto -->
+        <VBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Producto:" styleClass="medioPago"/>
+                <ComboBox fx:id="cmbProductos" prefWidth="150.0" />
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Medida:" styleClass="medioPago"/>
+                <RadioButton fx:id="radioKilos" text="Kilos" styleClass="combobox"/>
+                <RadioButton fx:id="radioUnidad" text="Unidad" styleClass="combobox"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Cantidad:" styleClass="medioPago"/>
+                <TextField fx:id="txtCantidad" prefWidth="133.0"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Precio:" styleClass="medioPago"/>
+                <Label fx:id="lblPrecio" text="--" styleClass="medioPago"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <Button fx:id="btnAgregar" text="Agregar" styleClass="boton"/>
+                <Button fx:id="btnBorrarTodo" text="Borrar todo" styleClass="boton"/>
+            </HBox>
+        </VBox>
+
+        <!-- Tabla -->
+        <TableView fx:id="tablaPedido" prefHeight="250.0" styleClass="tablaVenta">
+            <columns>
+                <TableColumn fx:id="colProducto" text="Producto" prefWidth="75.0"/>
+                <TableColumn fx:id="colCantidad" text="Cantidad" prefWidth="75.0"/>
+                <TableColumn fx:id="colPrecio" text="Precio X Kilo" prefWidth="75.0"/>
+                <TableColumn fx:id="colTotal" text="Total" prefWidth="75.0"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+
+        <Button fx:id="btnBorrarSeleccionado" text="Borrar seleccionado" styleClass="boton" />
+
+        <!-- Datos del cliente -->
+        <VBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Nombre:" styleClass="medioPago"/>
+                <TextField fx:id="txtNombre" prefWidth="200.0"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Celular:" styleClass="medioPago"/>
+                <TextField fx:id="txtCelular" prefWidth="200.0"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Seña:" styleClass="medioPago"/>
+                <TextField fx:id="txtSena" prefWidth="200.0"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Fecha entrega:" styleClass="medioPago"/>
+                <TextField fx:id="txtFechaEntrega" prefWidth="200.0"/>
+            </HBox>
+        </VBox>
+
+        <!-- Botones finales -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="btnGuardar" text="Guardar pedido" styleClass="boton"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnCancelar" text="&lt;Cancelar y regresar" styleClass="boton"/>
+        </HBox>
+    </VBox>
+</AnchorPane>
