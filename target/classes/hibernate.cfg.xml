@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Conexión a H2 -->
+        <property name="hibernate.connection.driver_class">org.h2.Driver</property>
+        <property name="hibernate.connection.url">jdbc:h2:file:./data/carnedb;AUTO_SERVER=TRUE</property>
+
+
+
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password"></property>
+
+        <!-- Dialecto para H2 -->
+        <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
+
+        <!-- Mostrar SQL en consola -->
+        <property name="show_sql">true</property>
+
+        <!-- Crear tablas automáticamente -->
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- Clases mapeadas -->
+        <mapping class="model.CajonPollo"/>
+        <mapping class="model.Cliente"/>
+        <mapping class="model.DetalleCajonPollo"/>
+        <mapping class="model.DetalleMediaRes"/>
+        <mapping class="model.DetallePedido"/>
+        <mapping class="model.DetalleVenta"/>
+        <mapping class="model.Fiado"/>
+        <mapping class="model.FiadoParcial"/>
+        <mapping class="model.MediaRes"/>
+        <mapping class="model.Pedido"/>
+        <mapping class="model.Producto"/>
+        <mapping class="model.Stock"/>
+        <mapping class="model.Venta"/>
+        
+        
+    </session-factory>
+</hibernate-configuration>
+

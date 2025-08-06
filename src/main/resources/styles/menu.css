@@ -1,0 +1,127 @@
+/* Estilos principales */
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.mainFxmlClass {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Barra lateral */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 2, 0);
+}
+
+/* Header del menú */
+.menu-header {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-padding: 15px;
+    -fx-background-color: rgba(52, 73, 94, 0.8);
+    -fx-background-radius: 8px;
+}
+
+/* Secciones del menú */
+.menu-section {
+    -fx-spacing: 2px;
+    -fx-padding: 5px 8px;
+}
+
+/* Botones principales del menú */
+.menu-button-main {
+    -fx-background-color: rgba(95, 106, 106, 0.9);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 15px 20px;
+    -fx-alignment: center-left;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+.menu-button-main:hover {
+    -fx-background-color: rgba(108, 122, 137, 1.0);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(95, 106, 106, 0.6), 8, 0, 0, 3);
+}
+
+.menu-button-main:pressed {
+    -fx-background-color: rgba(85, 98, 112, 1.0);
+}
+
+/* Botón simple (sin submenú) */
+.menu-button-single {
+    -fx-background-color: rgba(95, 106, 106, 0.9);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 15px 20px;
+    -fx-alignment: center-left;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+.menu-button-single:hover {
+    -fx-background-color: rgba(108, 122, 137, 1.0);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(95, 106, 106, 0.6), 8, 0, 0, 3);
+}
+
+.menu-button-single:pressed {
+    -fx-background-color: rgba(85, 98, 112, 1.0);
+}
+
+/* Contenedor de submenú */
+.submenu {
+    -fx-background-color: rgba(0,0,0,0.4);
+    -fx-spacing: 3px;
+    -fx-padding: 8px;
+    -fx-background-radius: 0 0 8px 8px;
+}
+
+/* Botones del submenú */
+.submenu-button {
+    -fx-background-color: rgba(236, 240, 241, 0.9);
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
+    -fx-padding: 12px 25px;
+    -fx-alignment: center-left;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+.submenu-button:hover {
+    -fx-background-color: rgba(231, 76, 60, 0.9);
+    -fx-text-fill: white;
+    -fx-padding: 12px 30px;
+    -fx-effect: dropshadow(gaussian, rgba(231, 76, 60, 0.4), 5, 0, 0, 2);
+    -fx-scale-x: 1.02;
+}
+
+.submenu-button:pressed {
+    -fx-background-color: rgba(192, 57, 43, 1.0);
+    -fx-scale-x: 0.98;
+}
+
+/* Área de contenido principal */
+.content-area {
+    -fx-background-color: white;
+}
+
+.welcome-text {
+    -fx-font-size: 30px;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: 300;
+}

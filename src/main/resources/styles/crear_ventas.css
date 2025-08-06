@@ -1,0 +1,130 @@
+/* Fuente general */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #f4f6f8;
+}
+
+/* Cabecera de código de barra */
+.anchoBarra {
+    -fx-background-color: #2c3e50;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+/* Texto de la barra (etiqueta) */
+.textoBarra {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Campo de código de barras */
+.codigoBarra {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 4px 8px;
+}
+
+/* Tablas principales */
+.tablaVenta,
+.tablaVuelto {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dcdde1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-table-cell-border-color: #ecf0f1;
+    -fx-selection-bar: #3498db;
+    -fx-selection-bar-non-focused: #bdc3c7;
+}
+
+/* Encabezado de tablas */
+.table-view .column-header-background {
+    -fx-background-color: #34495e;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px; /* ← Aumentado */
+}
+
+/* Contenedores inferiores */
+.contenedor {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-padding: 16px;
+}
+
+/* Títulos grandes */
+.titulo {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+    -fx-font-size: 38px; /* ← Más grande */
+}
+
+/* Subtítulos */
+.subtitulo {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: normal;
+    -fx-font-size: 24px;
+}
+
+/* Botones principales */
+.boton {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.boton:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Botones deslizantes < > */
+.botonDeslizante {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50%;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-cursor: hand;
+}
+
+.botonDeslizante:hover {
+    -fx-background-color: #7f8c8d;
+}
+/* Títulos: Medio de pago, Total a pagar */
+.titulo {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+    -fx-font-size: 36px;
+}
+
+/* Valores dinámicos: efectivo, número, etc. */
+.medioPago,
+.numeroTotal {
+    -fx-text-fill: #27ae60;           /* Verde moderno */
+    -fx-font-weight: bold;
+    -fx-font-size: 40px;
+    -fx-alignment: center;
+}
+.fondoTitulo {
+    -fx-background-color: #34495e; /* gris azulado oscuro */
+    -fx-background-radius: 5;
+}

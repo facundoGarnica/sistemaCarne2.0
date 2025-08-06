@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="controller.MenuController">
+    <stylesheets>
+        <URL value="@../styles/menu.css" />
+    </stylesheets>
+   <children>
+      <!-- Barra Lateral -->
+      <AnchorPane fx:id="barraLateral" prefHeight="1080.0" prefWidth="300.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="menuContainer" prefWidth="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+               <children>
+                  
+                  <!-- Header del Menú -->
+                  <Label styleClass="menu-header" text="SISTEMA DE VENTAS">
+                     <VBox.margin>
+                        <Insets bottom="30.0" left="15.0" right="15.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  
+                  <!-- Sección Cliente -->
+                  <VBox fx:id="clienteSection" styleClass="menu-section">
+                     <children>
+                        <Button fx:id="btnCliente" mnemonicParsing="false" onAction="#toggleClienteMenu" prefWidth="300.0" styleClass="menu-button-main" text="👤 CLIENTE">
+                        </Button>
+                        
+                        <VBox fx:id="clienteSubmenu" styleClass="submenu" visible="false">
+                           <children>
+                              <Button fx:id="btnFiado" mnemonicParsing="false" onAction="#handleFiado" prefWidth="300.0" styleClass="submenu-button" text="💳 Fiado">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnPedido" mnemonicParsing="false" onAction="#handlePedido" prefWidth="300.0" styleClass="submenu-button" text="📋 Pedido">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Sección Producto -->
+                  <VBox fx:id="productoSection" styleClass="menu-section">
+                     <children>
+                        <Button fx:id="btnProducto" mnemonicParsing="false" onAction="#toggleProductoMenu" prefWidth="300.0" styleClass="menu-button-main" text="📦 PRODUCTO">
+                        </Button>
+                        
+                        <VBox fx:id="productoSubmenu" styleClass="submenu" visible="false">
+                           <children>
+                              <Button fx:id="btnVisualizarProductos" mnemonicParsing="false" onAction="#handleVisualizarProductos" prefWidth="300.0" styleClass="submenu-button" text="👁️ Visualizar Productos">
+                              </Button>
+                              <Button fx:id="btnAgregarStock" mnemonicParsing="false" onAction="#handleAgregarStock" prefWidth="300.0" styleClass="submenu-button" text="📈 Agregar Stock">
+                              </Button>
+                              <Button fx:id="btnGestionarProductos" mnemonicParsing="false" onAction="#handleGestionarProductos" prefWidth="300.0" styleClass="submenu-button" text="⚙️ Gestionar Productos">
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Sección Ventas -->
+                  <VBox fx:id="ventasSection" styleClass="menu-section">
+                     <children>
+                        <Button fx:id="btnVentas" mnemonicParsing="false" onAction="#toggleVentasMenu" prefWidth="300.0" styleClass="menu-button-main" text="💰 VENTAS">
+                        </Button>
+                        
+                        <VBox fx:id="ventasSubmenu" styleClass="submenu" visible="false">
+                           <children>
+                              <Button fx:id="btnCrearVenta" mnemonicParsing="false" onAction="#handleCrearVenta" prefWidth="300.0" styleClass="submenu-button" text="➕ Crear Venta">
+                              </Button>
+                              <Button fx:id="btnHistorialVentas" mnemonicParsing="false" onAction="#handleHistorialVentas" prefWidth="300.0" styleClass="submenu-button" text="📊 Historial de Ventas">
+                              </Button>
+                              <Button fx:id="btnReportes" mnemonicParsing="false" onAction="#handleReportes" prefWidth="300.0" styleClass="submenu-button" text="📈 Reportes">
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Sección Configuración -->
+                  <VBox fx:id="configSection" styleClass="menu-section">
+                     <children>
+                        <Button fx:id="btnConfiguracion" mnemonicParsing="false" onAction="#handleConfiguracion" prefWidth="300.0" styleClass="menu-button-single" text="⚙️ CONFIGURACIÓN">
+                        </Button>
+                     </children>
+                  </VBox>
+                  
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      
+      <!-- Área de Contenido Principal -->
+      <AnchorPane fx:id="contenidoPrincipal" styleClass="content-area" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label styleClass="welcome-text" text="Selecciona una opción del menú" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0" />
+         </children>
+      </AnchorPane>
+      
+   </children>
+</AnchorPane>
