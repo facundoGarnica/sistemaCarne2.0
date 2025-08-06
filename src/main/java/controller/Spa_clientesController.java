@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
+ */
 package controller;
 
 import java.io.IOException;
@@ -15,26 +19,44 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 
-public class ClientesController implements Initializable {
+/**
+ * FXML Controller class
+ *
+ * @author garca
+ */
+public class Spa_clientesController implements Initializable {
 
+    /**
+     * Initializes the controller class.
+     */
+    private ClientesController clientesController;
     @FXML
-    private AnchorPane difuminar;
+    AnchorPane overlayMonto;
     @FXML
-    private AnchorPane spaDetalle; //el spa que trae la ventana de pagos de clientes
+    AnchorPane difuminar;
     @FXML
-    private Spa_clientesController spaClienteController;
-
+    private AgregarPago_clienteController agregarPagoClienteController;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // No aplicamos nada aquí para que sea a demanda
+        // TODO
     }
 
+    @FXML
+    public void cerrarOverlay() {
+        if (clientesController != null) {
+            clientesController.CerrarDifuminarYSpa();
+        }
+    }
+
+    public void setClientesController(ClientesController c) {
+        clientesController = c;
+    }
     public void difuminarTodo() {
         difuminar.setVisible(true);
         difuminar.setDisable(false);
 
-        spaDetalle.setVisible(true);
-        spaDetalle.setDisable(false);
+        overlayMonto.setVisible(true);
+        overlayMonto.setDisable(false);
 
         invocarSpaDetalle();
 
@@ -79,23 +101,23 @@ public class ClientesController implements Initializable {
         difuminar.setDisable(true);
         difuminar.setVisible(false);
 
-        spaDetalle.setDisable(true);
-        spaDetalle.setVisible(false);
+        overlayMonto.setDisable(true);
+        overlayMonto.setVisible(false);
     }
 
     @FXML
     public void invocarSpaDetalle() {  //llama a detalle de fiados
         try {
-            spaDetalle.getChildren().clear(); // Limpiar el AnchorPane destino
+            overlayMonto.getChildren().clear(); // Limpiar el AnchorPane destino
 
             // Cargar el FXML spa_clientes.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/spa_clientes.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/agregarPago_cliente.fxml"));
             Parent root = loader.load();
-            spaClienteController = loader.getController();
-            spaClienteController.setClientesController(this);
+            agregarPagoClienteController = loader.getController();
+            agregarPagoClienteController.setSpa_ClientesController(this);
             // controller.setClientesController(this); // Por ejemplo
             // Insertar el contenido cargado en el AnchorPane
-            spaDetalle.getChildren().add(root);
+            overlayMonto.getChildren().add(root);
 
             // Hacer que el contenido cargado se ajuste al tamaño del AnchorPane
             AnchorPane.setTopAnchor(root, 0.0);

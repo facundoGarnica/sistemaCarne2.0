@@ -15,7 +15,7 @@
         <URL value="@../styles/crear_ventas.css" />
     </stylesheets>
    <children>
-      <AnchorPane layoutX="25.0" prefHeight="18.0" prefWidth="379.0" styleClass="anchoBarra">
+      <AnchorPane layoutX="548.0" layoutY="3.0" prefHeight="18.0" prefWidth="379.0" styleClass="anchoBarra">
          <children>
             <Label layoutX="14.0" layoutY="14.0" styleClass="textoBarra" text="Codigo de barra" />
             <TextField layoutX="128.0" layoutY="10.0" prefHeight="25.0" prefWidth="230.0" styleClass="codigoBarra" />
@@ -113,5 +113,6 @@
             <Button mnemonicParsing="false" styleClass="boton" text="Generar fiado" />
         </buttons>
       </ButtonBar>
+      <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" styleClass="boton" text="&lt; Regresar" />
    </children>
 </AnchorPane>

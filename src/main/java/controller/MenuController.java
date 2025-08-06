@@ -5,10 +5,13 @@
 package controller;
 
 import Util.HibernateUtil;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -83,6 +86,9 @@ public class MenuController implements Initializable {
     private Button btnHistorialVentas;
     @FXML
     private Button btnReportes;
+    //anchorPane para usarlo de Overlay o SPA
+    @FXML
+    private AnchorPane overlayClientes;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -227,6 +233,29 @@ public class MenuController implements Initializable {
             // en el contenidoPrincipal
             System.out.println("Cargando vista: " + fxmlFile);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //metodo para invocar la ventana cliente en el overlay
+    @FXML
+    private void handleFiado(ActionEvent event) {
+        try {
+            // Cargar clientes.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/clientes.fxml"));
+            AnchorPane vistaClientes = loader.load();
+
+            // Limpiar lo anterior y añadir la nueva vista
+            overlayClientes.getChildren().clear();
+            overlayClientes.getChildren().add(vistaClientes);
+
+            // Hacer que se ajuste al tamaño del overlay
+            AnchorPane.setTopAnchor(vistaClientes, 0.0);
+            AnchorPane.setBottomAnchor(vistaClientes, 0.0);
+            AnchorPane.setLeftAnchor(vistaClientes, 0.0);
+            AnchorPane.setRightAnchor(vistaClientes, 0.0);
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

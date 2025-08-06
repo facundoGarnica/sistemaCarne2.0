@@ -1,3 +1,4 @@
+controller\AgregarPago_clienteController.class
 model\DetalleCajonPollo.class
 model\FiadoParcial.class
 model\Venta.class
@@ -5,6 +6,7 @@ model\DetallePedido.class
 module-info.class
 carniceria\sistemacarne\PrimaryController.class
 model\Cliente.class
+controller\Spa_clientesController.class
 model\CajonPollo.class
 model\DetalleMediaRes.class
 model\DetalleVenta.class
@@ -14,6 +16,7 @@ model\Producto.class
 Util\HibernateUtil.class
 controller\Crear_ventasController.class
 model\Fiado.class
+controller\ClientesController.class
 carniceria\sistemacarne\SecondaryController.class
 model\MediaRes.class
 model\Stock.class
