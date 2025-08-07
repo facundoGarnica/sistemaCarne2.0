@@ -6,6 +6,7 @@ package controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -18,9 +19,21 @@ public class Cliente_CrearPedidoController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private Cliente_pedidoController clientePedidoController;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+public void setSpa_clientePedidoController(Cliente_pedidoController c) {
+        clientePedidoController = c;
+    }
+    
+    @FXML
+    public void cerrarOverlay() {
+        if (clientePedidoController != null) {
+            clientePedidoController.CerrarDifuminarYSpa();
+        }
+    }
     
 }

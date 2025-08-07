@@ -259,4 +259,26 @@ public class MenuController implements Initializable {
             e.printStackTrace();
         }
     }
+    //metodo para invocar la ventana cliente pedido en el overlay
+     @FXML
+    private void handlePedido(ActionEvent event) {
+        try {
+            // Cargar clientes.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/cliente_pedido.fxml"));
+            AnchorPane vistaClientes = loader.load();
+
+            // Limpiar lo anterior y añadir la nueva vista
+            overlayClientes.getChildren().clear();
+            overlayClientes.getChildren().add(vistaClientes);
+
+            // Hacer que se ajuste al tamaño del overlay
+            AnchorPane.setTopAnchor(vistaClientes, 0.0);
+            AnchorPane.setBottomAnchor(vistaClientes, 0.0);
+            AnchorPane.setLeftAnchor(vistaClientes, 0.0);
+            AnchorPane.setRightAnchor(vistaClientes, 0.0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

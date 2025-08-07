@@ -3,6 +3,8 @@ model\DetalleCajonPollo.class
 model\FiadoParcial.class
 model\Venta.class
 model\DetallePedido.class
+controller\Cliente_pedidoController.class
+controller\Cliente_CrearPedidoController.class
 module-info.class
 carniceria\sistemacarne\PrimaryController.class
 model\Cliente.class
