@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -27,7 +27,7 @@ public class FiadoParcial {
     @JoinColumn(name = "cliente_id")
     private Fiado fiado;
     private Double montoPagado;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private String observacion;
 
     public Long getId() {
@@ -54,11 +54,11 @@ public class FiadoParcial {
         this.montoPagado = montoPagado;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

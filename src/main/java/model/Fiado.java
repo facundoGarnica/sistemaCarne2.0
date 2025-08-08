@@ -14,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,7 +33,7 @@ public class Fiado {
     @ManyToOne
     @JoinColumn(name = "venta_id")
     private Venta venta;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private String observacion;
     @OneToMany(mappedBy = "fiado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FiadoParcial> fiadoParciales;
@@ -62,11 +62,11 @@ public class Fiado {
         this.venta = venta;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

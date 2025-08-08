@@ -12,7 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public class MediaRes {
     private Double pesoPilon;
     private Double pesoBoleta;
     private Double pesoFinal;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private Double precio;
     @OneToMany(mappedBy = "mediaRes", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetalleMediaRes> detalleMediaRes;
@@ -65,11 +65,11 @@ public class MediaRes {
         this.pesoFinal = pesoFinal;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

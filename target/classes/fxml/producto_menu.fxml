@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="693.0" prefWidth="1200.0" styleClass="main-container" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Producto_menuController">
+    <stylesheets>
+        <URL value="@../styles/producto_menu.css" />
+    </stylesheets>
+    
+    <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="scroll-container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox prefHeight="691.0" prefWidth="1146.0" spacing="25.0" styleClass="content-container">
+            <padding>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
+            
+            <!-- Header Section -->
+            <VBox spacing="10.0" styleClass="header-section">
+                <Label styleClass="subtitulo" text="Gestión de Productos" />
+            </VBox>
+            
+            <Separator styleClass="main-separator" />
+            
+            <!-- Stats Section -->
+            <HBox spacing="20.0" styleClass="stats-container">
+                <VBox styleClass="stat-card" />
+                <VBox styleClass="stat-card" />
+                <VBox styleClass="stat-card" />
+                <VBox styleClass="stat-card" />
+            </HBox>
+            
+            <!-- Search Section -->
+            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="search-section">
+                <TextField fx:id="searchField" prefWidth="400.0" promptText="🔍 Buscar productos..." styleClass="barra" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label styleClass="subtitulo" text="Mostrando 0 productos" />
+            </HBox>
+            
+            <!-- Toolbar Section -->
+            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="toolbar-section">
+                <Button fx:id="btnAgregar" onAction="#setRutaProducto" styleClass="boton" text="➕ Agregar Producto" />
+                <Button fx:id="btnEditar" styleClass="boton" text="✏ Editar Seleccionado" />
+                <Button fx:id="btnEliminar" styleClass="boton" text="🗑 Eliminar Seleccionado" />
+                <Button fx:id="btnAumentarPrecio" onAction="#setRutaPorcentaje" styleClass="boton" text="📈 Aumentar Precio %" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnExportar" styleClass="boton" text="📄 Exportar" />
+            </HBox>
+            
+            <!-- Table Section -->
+            <VBox styleClass="table-section" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tablaProductos" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colId" prefWidth="80.0" text="Codigo" />
+                        <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre" />
+                        <TableColumn fx:id="colPrecio" prefWidth="100.0" text="Precio" />
+                        <TableColumn fx:id="colStock" prefWidth="100.0" text="Stock" />
+                        <TableColumn fx:id="colCategoria" prefWidth="120.0" text="Categoría" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <placeholder>
+                        <VBox alignment="CENTER" prefHeight="375.0" prefWidth="1098.0" spacing="15.0" />
+                    </placeholder>
+                </TableView>
+            </VBox>
+            
+            <!-- Footer Section -->
+            <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="footer-section">
+                <Separator orientation="VERTICAL" />
+                <Region HBox.hgrow="ALWAYS" />
+            </HBox>
+        </VBox>
+    </ScrollPane>
+   <AnchorPane fx:id="difuminar" disable="true" prefHeight="200.0" prefWidth="200.0" styleClass="difuminar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+         <AnchorPane fx:id="overlayCrearProducto" layoutX="93.0" layoutY="59.0" prefHeight="575.0" prefWidth="1014.0" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="93.0" AnchorPane.rightAnchor="93.0" AnchorPane.topAnchor="59.0" />
+      </children>
+   </AnchorPane>
+</AnchorPane>

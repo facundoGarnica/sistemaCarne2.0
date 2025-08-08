@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Crear_ventasController">
+<AnchorPane id="AnchorPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Crear_ventasController">
     <stylesheets>
         <URL value="@../styles/crear_ventas.css" />
     </stylesheets>
@@ -110,9 +110,14 @@
       <ButtonBar layoutX="1614.0" layoutY="14.0" prefHeight="40.0" prefWidth="304.0">
         <buttons>
             <Button mnemonicParsing="false" styleClass="boton" text="Historial ventas" />
-            <Button mnemonicParsing="false" styleClass="boton" text="Generar fiado" />
+            <Button mnemonicParsing="false" onAction="#difuminarTodo" styleClass="boton" text="Generar fiado" />
         </buttons>
       </ButtonBar>
-      <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" styleClass="boton" text="&lt; Regresar" />
+      <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#cerrarVentas" styleClass="boton" text="&lt; Regresar" />
+      <AnchorPane id="difuminar" fx:id="difuminar" disable="true" prefHeight="668.0" prefWidth="1175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane id="overlayNombre" fx:id="overlayNombre" layoutX="693.0" layoutY="244.0" prefHeight="282.0" prefWidth="534.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

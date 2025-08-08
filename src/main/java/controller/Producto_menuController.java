@@ -8,66 +8,49 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
  *
  * @author garca
  */
-public class Crear_ventasController implements Initializable {
+public class Producto_menuController implements Initializable {
 
     /**
      * Initializes the controller class.
      */
-    
+    private Crear_productoController crearProductoController;
+    private AumentarPrecioProductoController aumentarPrecioProductoController;
     @FXML
-    private AnchorPane overlayNombre;
+    private AnchorPane overlayCrearProducto;
     @FXML
     private AnchorPane difuminar;
-    private NombreFiadoClienteController nombreFiadoClienteController;
+    private String guardarRuta;
+    private String rutaAsociada;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
 
-    @FXML
-    private void cerrarVentas(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menu.fxml"));
-            Parent root = loader.load();
-
-            // Obtener el stage desde el botón que dispara el evento
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
     public void difuminarTodo() {
         difuminar.setVisible(true);
         difuminar.setDisable(false);
 
-        overlayNombre.setVisible(true);
-        overlayNombre.setDisable(false);
+        overlayCrearProducto.setVisible(true);
+        overlayCrearProducto.setDisable(false);
 
-        invocarSpaCrearPedido();
+        invocarSpa();
 
         Platform.runLater(() -> {
             Parent root = difuminar.getScene().getRoot();
@@ -110,29 +93,65 @@ public class Crear_ventasController implements Initializable {
         difuminar.setDisable(true);
         difuminar.setVisible(false);
 
-        overlayNombre.setDisable(true);
-        overlayNombre.setVisible(false);
+        overlayCrearProducto.setDisable(true);
+        overlayCrearProducto.setVisible(false);
+        overlayCrearProducto.getChildren().clear();
     }
 
     @FXML
-    public void invocarSpaCrearPedido() {  //llama a detalle de fiados
+    public void setRutaProducto() {
+        this.guardarRuta = "/fxml/crear_producto.fxml";
+        rutaAsociada = "producto";
+        iniciarDifuminar();
+    }
+
+    @FXML
+    public void setRutaPorcentaje() {
+        this.guardarRuta = "/fxml/aumentarPrecioProducto.fxml";
+        rutaAsociada = "porcentaje";
+        iniciarDifuminar();
+    }
+
+    public void iniciarDifuminar() {
+        if (rutaAsociada == null) {
+            System.out.println("no hay ruta");
+        } else {
+            difuminarTodo();
+        }
+    }
+
+    @FXML
+    public void invocarSpa() {
         try {
-            overlayNombre.getChildren().clear(); // Limpiar el AnchorPane destino
+            overlayCrearProducto.getChildren().clear(); // Limpiar contenido
+            crearProductoController = null;
+            aumentarPrecioProductoController = null;
 
-            // Cargar el FXML spa_clientes.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/nombreFiadoCliente.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(guardarRuta));
             Parent root = loader.load();
-            nombreFiadoClienteController = loader.getController();
-            nombreFiadoClienteController.setSpa_creaVentasController(this);
-            // controller.setClientesController(this); // Por ejemplo
-            // Insertar el contenido cargado en el AnchorPane
-            overlayNombre.getChildren().add(root);
 
-            // Hacer que el contenido cargado se ajuste al tamaño del AnchorPane
-            AnchorPane.setTopAnchor(root, 0.0);
-            AnchorPane.setBottomAnchor(root, 0.0);
-            AnchorPane.setLeftAnchor(root, 0.0);
-            AnchorPane.setRightAnchor(root, 0.0);
+            if ("producto".equals(rutaAsociada)) {
+                crearProductoController = loader.getController();
+                crearProductoController.setSpa_productoController(this);
+
+                // Tamaño reducido
+                AnchorPane.setTopAnchor(root, 168.0);
+                AnchorPane.setBottomAnchor(root, 167.0);
+                AnchorPane.setLeftAnchor(root, 403.0);
+                AnchorPane.setRightAnchor(root, 403.0);
+
+            } else if ("porcentaje".equals(rutaAsociada)) {
+                aumentarPrecioProductoController = loader.getController();
+                aumentarPrecioProductoController.setSpa_productoController(this);
+
+                // Tamaño grande
+                AnchorPane.setTopAnchor(root, 59.0);
+                AnchorPane.setBottomAnchor(root, 59.0);
+                AnchorPane.setLeftAnchor(root, 93.0);
+                AnchorPane.setRightAnchor(root, 93.0);
+            }
+
+            overlayCrearProducto.getChildren().add(root);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -13,9 +13,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.hibernate.Session;
 import model.Producto;
@@ -184,8 +188,24 @@ public class MenuController implements Initializable {
     // Handlers para Producto
     @FXML
     private void handleVisualizarProductos() {
-        System.out.println("Navegando a Visualizar Productos...");
-        // loadView("visualizarProductos.fxml");
+        try {
+            // Cargar clientes.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/producto_menu.fxml"));
+            AnchorPane vistaClientes = loader.load();
+
+            // Limpiar lo anterior y añadir la nueva vista
+            overlayClientes.getChildren().clear();
+            overlayClientes.getChildren().add(vistaClientes);
+
+            // Hacer que se ajuste al tamaño del overlay
+            AnchorPane.setTopAnchor(vistaClientes, 0.0);
+            AnchorPane.setBottomAnchor(vistaClientes, 0.0);
+            AnchorPane.setLeftAnchor(vistaClientes, 0.0);
+            AnchorPane.setRightAnchor(vistaClientes, 0.0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -202,9 +222,20 @@ public class MenuController implements Initializable {
 
     // Handlers para Ventas
     @FXML
-    private void handleCrearVenta() {
-        System.out.println("Navegando a Crear Venta...");
-        // loadView("crearVenta.fxml");
+    private void handleCrearVenta(ActionEvent event) {
+        try {
+            System.out.println("Cargando crear_ventas.fxml...");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/crear_ventas.fxml"));
+            Parent root = loader.load();
+
+            // Obtener stage desde el botón que disparó el evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -259,8 +290,9 @@ public class MenuController implements Initializable {
             e.printStackTrace();
         }
     }
+
     //metodo para invocar la ventana cliente pedido en el overlay
-     @FXML
+    @FXML
     private void handlePedido(ActionEvent event) {
         try {
             // Cargar clientes.fxml

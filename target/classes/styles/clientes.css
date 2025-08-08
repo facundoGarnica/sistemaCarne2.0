@@ -138,7 +138,7 @@
 
 /* Labels dentro del GridPane */
 .gridPanel .label {
-    -fx-font-size: 13px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
     -fx-padding: 5 0 5 0;
@@ -318,4 +318,159 @@
     -fx-max-height: 1;
     -fx-min-height: 1;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+/* ==========================================
+   CSS PROFESIONAL PARA DATEPICKER JAVAFX
+   ========================================== */
+
+/* ESTILO BASE - Elegante y Moderno */
+.date-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e1e5e9;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-prompt-text-fill: #95a5a6;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 2, 0, 0, 1);
+}
+
+/* Estado Hover */
+.date-picker:hover {
+    -fx-border-color: #3498db;
+    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.15), 4, 0, 0, 2);
+    -fx-background-color: #fafbfc;
+}
+
+/* Estado Focused */
+.date-picker:focused {
+    -fx-border-color: #2980b9;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(41,128,185,0.25), 6, 0, 0, 2);
+    -fx-background-color: #ffffff;
+}
+
+/* Botón de flecha del DatePicker */
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 6px;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #34495e;
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+    -fx-scale-shape: true;
+    -fx-effect: null;
+}
+
+.date-picker:hover .arrow-button .arrow {
+    -fx-background-color: #2980b9;
+}
+
+/* POPUP DEL CALENDARIO */
+.date-picker-popup {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 12, 0, 0, 4);
+    -fx-padding: 12px;
+}
+
+/* Encabezado del mes/año */
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 12px;
+    -fx-spacing: 10px;
+    -fx-border-radius: 8px 8px 0 0;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.date-picker-popup .month-year-pane .label {
+    -fx-font-family: "Segoe UI Semibold", Arial, sans-serif;
+    -fx-font-size: 16px;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Botones de navegación */
+.date-picker-popup .left-button,
+.date-picker-popup .right-button {
+    -fx-background-color: #ecf0f1;
+    -fx-border-color: transparent;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px;
+    -fx-cursor: hand;
+}
+
+.date-picker-popup .left-button:hover,
+.date-picker-popup .right-button:hover {
+    -fx-background-color: #3498db;
+}
+
+.date-picker-popup .left-arrow,
+.date-picker-popup .right-arrow {
+    -fx-background-color: #34495e;
+}
+
+.date-picker-popup .left-button:hover .left-arrow,
+.date-picker-popup .right-button:hover .right-arrow {
+    -fx-background-color: #ffffff;
+}
+
+/* Días de la semana */
+.date-picker-popup .week-number-cell,
+.date-picker-popup .day-name-cell {
+    -fx-background-color: #f1f3f4;
+    -fx-text-fill: #5d6d7e;
+    -fx-font-family: "Segoe UI Semibold", Arial, sans-serif;
+    -fx-font-size: 12px;
+    -fx-padding: 8px;
+    -fx-alignment: center;
+}
+
+/* Celdas de los días */
+.date-picker-popup .day-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #2c3e50;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+/* Hover en días */
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #e3f2fd;
+    -fx-text-fill: #1976d2;
+}
+
+/* Día seleccionado */
+.date-picker-popup .day-cell:selected {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+/* Día actual */
+.date-picker-popup .today {
+    -fx-background-color: #fff3cd;
+    -fx-border-color: #ffc107;
+    -fx-border-width: 1px;
+    -fx-text-fill: #856404;
+    -fx-font-weight: bold;
+}
+
+/* Días de otros meses */
+.date-picker-popup .previous-month,
+.date-picker-popup .next-month {
+    -fx-text-fill: #95a5a6;
 }

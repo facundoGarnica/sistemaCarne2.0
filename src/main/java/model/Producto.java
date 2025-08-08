@@ -26,6 +26,7 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    private int codigo;
     private Double precio;
     private String tipo;
     @OneToOne(cascade = CascadeType.ALL)
@@ -42,6 +43,14 @@ public class Producto {
     List<DetalleVenta> detalleVentas;
     public Long getId() {
         return id;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public void setId(Long id) {

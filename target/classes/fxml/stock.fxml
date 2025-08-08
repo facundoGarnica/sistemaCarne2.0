@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" styleClass="mainFxmlClass"
+            xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1"
+            fx:controller="controller.StockController">
+
+    <stylesheets>
+        <URL value="@../styles/stock.css" />
+    </stylesheets>
+
+    <fx:define>
+        <ToggleGroup fx:id="stockTypeGroup" />
+    </fx:define>
+
+    <children>
+        <!-- Contenedor principal centrado -->
+        <VBox alignment="CENTER" AnchorPane.topAnchor="30.0" AnchorPane.leftAnchor="200.0"
+              AnchorPane.rightAnchor="200.0" spacing="30.0" styleClass="main-container">
+
+            <!-- Título -->
+            <Label text="Seleccionar Tipo de Stock a Ingresar" styleClass="main-title" />
+
+            <!-- Contenedor de opciones -->
+            <HBox alignment="CENTER" spacing="40.0" styleClass="options-container">
+
+                <!-- Opción Media Res -->
+                <VBox alignment="CENTER" spacing="8.0" styleClass="option-box">
+                    <RadioButton
+                        text="Media Res"
+                        toggleGroup="$stockTypeGroup"
+                        onAction="#onStockTypeSelected"
+                        styleClass="stock-option" />
+                    <Label text="Productos al por mayor" styleClass="option-subtitle" />
+                </VBox>
+
+                <!-- Opción Cajón de Pollo -->
+                <VBox alignment="CENTER" spacing="8.0" styleClass="option-box">
+                    <RadioButton
+                        text="Cajón de Pollo"
+                        toggleGroup="$stockTypeGroup"
+                        onAction="#onStockTypeSelected"
+                        styleClass="stock-option" />
+                    <Label text="Unidad de empaque" styleClass="option-subtitle" />
+                </VBox>
+
+                <!-- Opción Producto Normal -->
+                <VBox alignment="CENTER" spacing="8.0" styleClass="option-box">
+                    <RadioButton
+                        text="Producto Individual"
+                        toggleGroup="$stockTypeGroup"
+                        onAction="#onStockTypeSelected"
+                        selected="true"
+                        styleClass="stock-option" />
+                    <Label text="Ingreso estándar" styleClass="option-subtitle" />
+                </VBox>
+
+            </HBox>
+
+            <!-- FORMULARIOS DINÁMICOS -->
+
+            <!-- ========== FORMULARIO MEDIA RES ========== -->
+            <VBox visible="false" managed="false" spacing="20.0" styleClass="dynamic-form">
+                <Label text="Registro de Media Res" styleClass="form-title" />
+
+                <GridPane hgap="15.0" vgap="15.0" styleClass="form-grid">
+                    <Label text="Peso Pilón (kg):" styleClass="form-label"
+                           GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField promptText="Ingrese peso del pilón" styleClass="form-textfield"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="Peso Boleta (kg):" styleClass="form-label"
+                           GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <TextField promptText="Ingrese peso de boleta" styleClass="form-textfield"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="Peso Final (kg):" styleClass="form-label"
+                           GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <TextField editable="false" styleClass="form-textfield-readonly"
+                               promptText="Se calcula automáticamente"
+                               GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label text="Fecha:" styleClass="form-label"
+                           GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <DatePicker styleClass="form-datepicker"
+                                GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                    <Label text="Precio ($):" styleClass="form-label"
+                           GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <TextField promptText="Precio por kg" styleClass="form-textfield"
+                               GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                    <Label text="Producto:" styleClass="form-label"
+                           GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    <ComboBox promptText="Seleccione producto" styleClass="form-combobox" prefWidth="180.0"
+                              GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints minWidth="150.0" prefWidth="180.0" />
+                        <ColumnConstraints minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints minWidth="150.0" prefWidth="180.0" />
+                    </columnConstraints>
+                </GridPane>
+
+                <HBox alignment="CENTER" spacing="15.0">
+                    <Button text="Calcular Peso Final" styleClass="btn-secondary" />
+                    <Button text="Guardar Media Res" styleClass="btn-primary" />
+                </HBox>
+            </VBox>
+
+            <!-- ========== FORMULARIO CAJÓN DE POLLO ========== -->
+            <VBox visible="false" managed="false" spacing="20.0" styleClass="dynamic-form">
+                <Label text="Registro de Cajón de Pollo" styleClass="form-title" />
+
+                <GridPane hgap="15.0" vgap="15.0" styleClass="form-grid" alignment="CENTER">
+                    <Label text="Peso Cajón (kg):" styleClass="form-label"
+                           GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField promptText="Ingrese peso del cajón" styleClass="form-textfield"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="Fecha:" styleClass="form-label"
+                           GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <DatePicker styleClass="form-datepicker"
+                                GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="Precio ($):" styleClass="form-label"
+                           GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <TextField promptText="Precio por cajón" styleClass="form-textfield"
+                               GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                    <Label text="Producto:" styleClass="form-label"
+                           GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <ComboBox promptText="Seleccione producto" styleClass="form-combobox" prefWidth="180.0"
+                              GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints minWidth="150.0" prefWidth="180.0" />
+                        <ColumnConstraints minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints minWidth="150.0" prefWidth="180.0" />
+                    </columnConstraints>
+                </GridPane>
+
+                <VBox spacing="8.0" styleClass="info-section" alignment="CENTER" maxWidth="500.0">
+                    <Label text="Información del Cajón" styleClass="section-title" />
+                    <Label text="• Un cajón contiene múltiples unidades • Precio por cajón completo"
+                           styleClass="info-text" textAlignment="CENTER" wrapText="true" />
+                </VBox>
+
+                <HBox alignment="CENTER" spacing="15.0">
+                    <Button text="Guardar Cajón" styleClass="btn-primary" />
+                </HBox>
+            </VBox>
+
+            <!-- ========== FORMULARIO PRODUCTO NORMAL ========== -->
+            <VBox visible="true" managed="true" spacing="20.0" styleClass="dynamic-form">
+                <Label text="Ingreso de Stock - Producto Individual" styleClass="form-title" />
+
+                <GridPane hgap="15.0" vgap="15.0" styleClass="form-grid" alignment="CENTER">
+                    <Label text="Elegir Producto:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <ComboBox promptText="Seleccione un producto" styleClass="form-combobox" prefWidth="200.0"
+                              GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="Cantidad de Stock:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Spinner min="1" max="9999" initialValue="1" styleClass="form-spinner" prefWidth="120.0"
+                             GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="Fecha de Entrada:" styleClass="form-label" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <DatePicker styleClass="form-datepicker" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                    <Label text="Cantidad Mínima:" styleClass="form-label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <Spinner min="0" max="999" initialValue="5" styleClass="form-spinner" prefWidth="120.0"
+                             GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="140.0" prefWidth="140.0" />
+                        <ColumnConstraints minWidth="150.0" prefWidth="200.0" />
+                        <ColumnConstraints minWidth="140.0" prefWidth="140.0" />
+                        <ColumnConstraints minWidth="150.0" prefWidth="200.0" />
+                    </columnConstraints>
+                </GridPane>
+
+                <!-- Información del producto -->
+                <HBox spacing="20.0" alignment="CENTER">
+                    <VBox spacing="8.0" styleClass="info-section" minWidth="250.0">
+                        <Label text="Información del Producto" styleClass="section-title" />
+                        <GridPane hgap="10.0" vgap="5.0">
+                            <Label text="Código:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <Label text="--" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <Label text="Nombre:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <Label text="--" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label text="Precio:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                            <Label text="--" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        </GridPane>
+                    </VBox>
+
+                    <VBox spacing="8.0" styleClass="summary-section" minWidth="200.0">
+                        <Label text="Stock" styleClass="section-title" />
+                        <Label text="Actual: -- unidades" styleClass="info-text" />
+                        <Label text="Nuevo: -- unidades" styleClass="summary-text" />
+                    </VBox>
+                </HBox>
+
+                <HBox alignment="CENTER" spacing="15.0">
+                    <Button text="Ingresar Stock" styleClass="btn-primary" />
+                </HBox>
+            </VBox>
+
+            <!-- Botón cancelar general -->
+            <HBox alignment="CENTER">
+                <Button text="Cancelar" styleClass="btn-cancel" />
+            </HBox>
+
+        </VBox>
+
+        <!-- Overlay para confirmaciones o mensajes -->
+        <AnchorPane prefHeight="800.0" prefWidth="1200.0" visible="false" styleClass="overlay" />
+
+    </children>
+</AnchorPane>

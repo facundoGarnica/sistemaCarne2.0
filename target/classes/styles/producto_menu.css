@@ -1,0 +1,213 @@
+/* ==============================
+   ESTILOS GENERALES
+   ============================== */
+
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #f4f6f8;
+}
+/* ==============================
+   TÍTULOS Y TEXTOS
+   ============================== */
+
+.titulo {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+    -fx-font-size: 36px;
+    -fx-alignment: center;
+}
+
+.subtitulo {
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 24px;
+    -fx-font-weight: normal;
+}
+
+.medioPago,
+.numeroTotal {
+    -fx-text-fill: #27ae60;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+/* ==============================
+   TABLAS
+   ============================== */
+
+.tablaVenta,
+.tablaVuelto {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dcdde1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-table-cell-border-color: #ecf0f1;
+    -fx-selection-bar: #3498db;
+    -fx-selection-bar-non-focused: #bdc3c7;
+}
+
+/* Encabezado de tablas */
+.table-view .column-header-background {
+    -fx-background-color: #34495e;
+    -fx-background-radius: 5px 5px 0 0;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+/* ==============================
+   BOTONES
+   ============================== */
+
+.boton {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+    -fx-font-size: 14px;
+}
+
+.boton:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Botón deslizante (no usado acá, pero útil si se necesita en el futuro) */
+.botonDeslizante {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50%;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-cursor: hand;
+}
+
+.botonDeslizante:hover {
+    -fx-background-color: #7f8c8d;
+}
+
+/* ==============================
+   SEPARADORES Y FONDOS
+   ============================== */
+
+.fondoTitulo {
+    -fx-background-color: #34495e;
+    -fx-background-radius: 5;
+}
+
+/* Contenedor visual opcional */
+.contenedor {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-padding: 16px;
+}
+
+/* ===== GRIDPANE STYLES ===== */
+.gridPanel {
+    -fx-padding: 15;
+    -fx-hgap: 12;
+    -fx-vgap: 10;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 3, 0, 0, 1);
+}
+
+.gridPanel:hover {
+    -fx-border-color: #c0c0c0;
+    -fx-background-color: #ffffff;
+}
+
+/* Labels dentro del GridPane */
+.gridPanel .label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 5 0 5 0;
+}
+
+/* TextFields dentro del GridPane */
+.gridPanel .text-field {
+    -fx-font-size: 13px;
+    -fx-padding: 8 12 8 12;
+    -fx-background-color: white;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-border-width: 1.5;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 2, 0, 0, 1);
+}
+
+.gridPanel .text-field:focused {
+    -fx-border-color: #4a90e2;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(74,144,226,0.3), 4, 0, 0, 0);
+}
+
+.gridPanel .text-field:hover {
+    -fx-border-color: #999999;
+}
+
+/* ComboBox dentro del GridPane */
+.gridPanel .combo-box {
+    -fx-font-size: 13px;
+    -fx-background-color: white;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-border-width: 1.5;
+}
+
+.gridPanel .combo-box:focused {
+    -fx-border-color: #4a90e2;
+    -fx-effect: dropshadow(gaussian, rgba(74,144,226,0.3), 4, 0, 0, 0);
+}
+
+.gridPanel .combo-box .list-cell {
+    -fx-padding: 6 12 6 12;
+}
+/* estilo de barra de filtrado */
+.barra {
+    -fx-border-color: #999999;
+}
+
+/* ==============================
+   ESTILOS PARA ANCHORPANE BORDES
+   ============================== */
+
+/* Estilo básico para AnchorPane con borde */
+.mainFxmlClass {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #ffffff;
+}
+
+/* Variaciones de colores para diferentes contextos */
+
+/* Borde azul (principal) */
+.anchor-border-blue {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.2), 4, 0, 0, 1);
+}
