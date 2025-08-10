@@ -17,7 +17,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,6 +41,8 @@ public class Producto_menuController implements Initializable {
      */
     private Crear_productoController crearProductoController;
     private AumentarPrecioProductoController aumentarPrecioProductoController;
+    @FXML
+    private Label labelContador;
     @FXML
     private AnchorPane overlayCrearProducto;
     @FXML
@@ -65,9 +69,13 @@ public class Producto_menuController implements Initializable {
 
     private ProductoDAO productoDao;
     private List<Producto> listaProductos;
-
+    private int contador;
+    private String contadorString;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        contador = 0;
+        
         productoDao = new ProductoDAO();
         listaProductos = productoDao.buscarTodos();
 
@@ -77,8 +85,50 @@ public class Producto_menuController implements Initializable {
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colCategoria.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         colPeso.setCellValueFactory(new PropertyValueFactory<>("pesoPorUnidad"));
+
+        // Configurar la columna de precio para mostrar sin decimales
+        colPrecio.setCellFactory(column -> {
+            return new TableCell<Producto, Double>() {
+                @Override
+                protected void updateItem(Double precio, boolean empty) {
+                    super.updateItem(precio, empty);
+
+                    if (empty || precio == null) {
+                        setText(null);
+                    } else {
+                        // Mostrar como entero sin decimales
+                        setText(String.valueOf(precio.intValue()));
+                    }
+                }
+            };
+        });
+
+        // Configurar la columna de peso para mostrar con 2 decimales
+        colPeso.setCellFactory(column -> {
+            return new TableCell<Producto, Double>() {
+                @Override
+                protected void updateItem(Double peso, boolean empty) {
+                    super.updateItem(peso, empty);
+
+                    if (empty || peso == null) {
+                        setText(null);
+                    } else {
+                        // Mostrar con exactamente 2 decimales
+                        setText(String.format("%.2f", peso));
+                    }
+                }
+            };
+        });
+
         // cargar productos
         tablaProductos.setItems(FXCollections.observableArrayList(listaProductos));
+        cargarContador();
+    }
+    
+    public void cargarContador(){
+        contador = listaProductos.size();
+        contadorString = String.valueOf(contador);
+        labelContador.setText("Mostrando "+contadorString+" productos");
     }
 
     public void difuminarTodo() {
@@ -208,4 +258,28 @@ public class Producto_menuController implements Initializable {
         }
     }
 
+    //Metodo para recargar la tabla, la uso para que otro controller la llame
+    public void recargarTablaProductos() {
+        listaProductos = productoDao.buscarTodos(); // Trae productos actualizados
+        tablaProductos.setItems(FXCollections.observableArrayList(listaProductos));
+        tablaProductos.refresh();
+        cargarContador();
+    }
+
+    @FXML
+    public void eliminarSeleccionado() {
+        Producto seleccionado = tablaProductos.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            productoDao.eliminar(seleccionado.getId());
+            recargarTablaProductos();
+        } else {
+            System.out.println("No se seleccionó ningún producto.");
+        }
+        cargarContador();
+    }
+
+    @FXML
+    public void exportarComoPdf() {
+
+    }
 }

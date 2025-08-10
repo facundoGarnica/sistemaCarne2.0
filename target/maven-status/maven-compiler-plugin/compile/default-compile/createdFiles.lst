@@ -2,6 +2,7 @@ controller\StockMediaResController.class
 dao\DetallePedidoDAO.class
 model\Venta.class
 dao\DetalleMediaResDAO.class
+controller\Producto_menuController$2.class
 model\DetallePedido.class
 dao\DetalleCajonPolloDAO.class
 model\Cliente.class
@@ -40,6 +41,7 @@ controller\Crear_productoController.class
 model\DetalleVenta.class
 dao\FiadoDAO.class
 controller\AumentarPrecioProductoController.class
+controller\Producto_menuController$1.class
 model\Pedido.class
 Util\HibernateUtil.class
 controller\AumentarPrecioProductoController$2.class

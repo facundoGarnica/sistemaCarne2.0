@@ -4,11 +4,14 @@ import dao.ProductoDAO;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -52,7 +55,7 @@ public class AumentarPrecioProductoController implements Initializable {
     private ProductoDAO productoDao;
     private Double porcentajeActual = 0.0;
 
-    private final DecimalFormat df = new DecimalFormat("#,##0"); 
+    private final DecimalFormat df = new DecimalFormat("#,##0");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -139,4 +142,73 @@ public class AumentarPrecioProductoController implements Initializable {
         tablaProductos.setItems(FXCollections.observableArrayList(productosPorTipo));
         tablaProductos.refresh();
     }
+
+    @FXML
+    public void limpiar() {
+        // Limpiar ComboBox (ponerlo sin selección o valor por defecto)
+        cmbCategoria.getSelectionModel().clearSelection();
+        // O si querés que quede en "Carniceria" como al inicio:
+        // cmbCategoria.setValue("Carniceria");
+
+        // Limpiar TextField
+        txtPorcentaje.clear();
+
+        // Limpiar tabla
+        tablaProductos.getItems().clear();
+
+        // También resetear el porcentajeActual
+        porcentajeActual = 0.0;
+    }
+
+    @FXML
+    public void aplicarAumento() {
+        try {
+            porcentajeActual = Double.parseDouble(txtPorcentaje.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Porcentaje inválido");
+            return;
+        }
+
+        // Crear diálogo de confirmación
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar aumento");
+        confirmacion.setHeaderText("¿Aplicar aumento?");
+        confirmacion.setContentText("¿Está seguro que desea aplicar un aumento del "
+                + porcentajeActual + "% a todos los productos?");
+
+        // Personalizar los botones
+        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonNo = new ButtonType("No");
+        confirmacion.getButtonTypes().setAll(botonSi, botonNo);
+
+        // Mostrar diálogo y esperar respuesta
+        Optional<ButtonType> resultado = confirmacion.showAndWait();
+
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            // El usuario confirmó, proceder con el aumento
+            productoDao = new ProductoDAO();
+            for (Producto p : tablaProductos.getItems()) {
+                Double precioOriginal = p.getPrecio() != null ? p.getPrecio() : 0.0;
+                Double nuevoPrecio = precioOriginal * (1 + porcentajeActual / 100);
+                nuevoPrecio = Math.ceil(nuevoPrecio); // redondeo hacia arriba
+                p.setPrecio(nuevoPrecio);
+                productoDao.actualizar(p);
+            }
+            tablaProductos.refresh();
+            if (productoController != null) {
+                productoController.recargarTablaProductos();
+            }
+
+            // Mostrar mensaje de éxito
+            Alert exito = new Alert(Alert.AlertType.INFORMATION);
+            exito.setTitle("Aumento aplicado");
+            exito.setHeaderText(null);
+            exito.setContentText("Se aplicó el aumento del " + porcentajeActual + "% exitosamente.");
+            exito.showAndWait();
+
+            cerrarOverlay();
+        }
+        // Si el usuario seleccionó "No", no hacer nada (el diálogo se cierra automáticamente)
+    }
+
 }

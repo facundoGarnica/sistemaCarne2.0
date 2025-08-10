@@ -18,6 +18,14 @@
             <version>6.4.4.Final</version>
         </dependency>
 
+        <!-- PDF itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>7.2.5</version>
+            <type>pom</type>
+        </dependency>
+        
         <!-- H2 Database -->
         <dependency>
             <groupId>com.h2database</groupId>

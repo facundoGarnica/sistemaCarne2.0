@@ -22,9 +22,6 @@ import model.Producto;
  */
 public class Crear_productoController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
     @FXML
     private TextField txtNombre;
     @FXML
@@ -32,28 +29,23 @@ public class Crear_productoController implements Initializable {
     @FXML
     private TextField txtPrecio;
     @FXML
-    private ComboBox cbxCategoria; //combobox
+    private ComboBox cbxCategoria;
     @FXML
     private TextField txtPeso;
     @FXML
-    Spinner<Integer> spinnerCodigo; //variable spinner
+    Spinner<Integer> spinnerCodigo;
 
     private Producto_menuController productoMenuController;
     private Producto producto;
     private ProductoDAO productoDao;
-    private Producto productoActual = null; // Variable para saber si se edita o crea
+    private Producto productoActual = null;
 
     public void initialize(URL url, ResourceBundle rb) {
         productoDao = new ProductoDAO();
-        // Cargar opciones del ComboBox
         cbxCategoria.getItems().addAll(
                 "Carniceria", "Cerdo", "Pollo", "Varios", "Seco", "Preparados"
         );
-
-        // Valor por defecto
         cbxCategoria.setValue("Carniceria");
-
-        // Configurar Spinner (no crear uno nuevo)
         SpinnerValueFactory<Integer> valueFactory
                 = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
         spinnerCodigo.setValueFactory(valueFactory);
@@ -68,83 +60,85 @@ public class Crear_productoController implements Initializable {
         if (productoMenuController != null) {
             productoMenuController.CerrarDifuminarYSpa();
         }
+        limpiarFormulario();
     }
 
-    //guardar producto
-    @FXML
-    public void guardarProducto() {
-        // Validar nombre
+    private boolean guardarProductoBase() {
         if (txtNombre.getText().trim().isEmpty()) {
             System.out.println("El nombre no puede estar vacío");
-            return;
+            return false;
         }
 
-        // Validar precio
         double precio;
         try {
             precio = Double.parseDouble(txtPrecio.getText());
             if (precio <= 0) {
                 System.out.println("El precio debe ser mayor que 0");
-                return;
+                return false;
             }
         } catch (NumberFormatException e) {
             System.out.println("Precio inválido");
-            return;
+            return false;
         }
 
-        // Validar peso
         double kgPromedio;
         try {
             kgPromedio = Double.parseDouble(txtPeso.getText());
             if (kgPromedio <= 0) {
                 System.out.println("El peso debe ser mayor que 0");
-                return;
+                return false;
             }
         } catch (NumberFormatException e) {
             System.out.println("Peso inválido");
-            return;
+            return false;
         }
 
-        // Validar categoría
         if (cbxCategoria.getValue() == null) {
             System.out.println("Debe seleccionar una categoría");
-            return;
+            return false;
         }
 
-        // Validar código
         int codigo = spinnerCodigo.getValue();
         if (codigo <= 0) {
             System.out.println("Código inválido");
-            return;
+            return false;
         }
 
-        // Si productoActual es null, significa que estamos creando uno nuevo
         if (productoActual == null) {
             productoActual = new Producto();
         }
 
-        // Asignar valores al productoActual
         productoActual.setNombre(txtNombre.getText().trim());
         productoActual.setCodigo(codigo);
         productoActual.setPrecio(precio);
         productoActual.setTipo(String.valueOf(cbxCategoria.getValue()));
         productoActual.setPesoPorUnidad(kgPromedio);
 
-        // Guardar o actualizar según corresponda
-        if (productoActual.getId() == null) { // Nuevo producto
+        if (productoActual.getId() == null) {
             productoDao.guardar(productoActual);
             System.out.println("Producto guardado correctamente");
-        } else { // Producto existente
+        } else {
             productoDao.actualizar(productoActual);
             System.out.println("Producto actualizado correctamente");
         }
+        
+        if (productoMenuController != null) {
+            productoMenuController.recargarTablaProductos();
+            productoMenuController.cargarContador();
+        }
+        
+        return true;
+    }
 
-        cerrarOverlay();
-        limpiarFormulario(); // Limpio formulario para la próxima vez
+    @FXML
+    public void guardarProducto() {
+        if (guardarProductoBase()) {
+            limpiarFormulario();
+        }
     }
 
     public void asignarProductoEditable(Producto producto) {
-        this.productoActual = producto; // guardo referencia para editar
+        this.productoActual = producto;
         if (producto != null) {
             txtNombre.setText(producto.getNombre() != null ? producto.getNombre() : "");
             spinnerCodigo.getValueFactory().setValue(producto.getCodigo());
@@ -165,6 +159,13 @@ public class Crear_productoController implements Initializable {
         productoActual = null;
     }
 
+    private void limpiarFormularioParcial() {
+        txtNombre.clear();
+        txtPrecio.clear();
+        txtPeso.clear();
+        productoActual = null;
+    }
+
     public void asignarDatos(String nombre, Integer codigo, Double precio, String tipo, Double peso) {
         if (nombre != null) {
             txtNombre.setText(nombre);
@@ -175,7 +176,7 @@ public class Crear_productoController implements Initializable {
         if (codigo != null) {
             spinnerCodigo.getValueFactory().setValue(codigo);
         } else {
-            spinnerCodigo.getValueFactory().setValue(1);  // valor por defecto
+            spinnerCodigo.getValueFactory().setValue(1);
         }
 
         if (precio != null) {
@@ -197,4 +198,27 @@ public class Crear_productoController implements Initializable {
         }
     }
 
+    public void guardarYsalir() {
+        if (guardarProductoBase()) {
+            cerrarOverlay();
+            limpiarFormulario();
+        }
+    }
+
+    public void guardarYSiguiente() {
+        int codigoActual = spinnerCodigo.getValue();
+        String categoriaActual = (String) cbxCategoria.getValue();
+
+        if (guardarProductoBase()) {
+            limpiarFormularioParcial();
+            cbxCategoria.setValue(categoriaActual);
+            
+            int siguienteCodigo = codigoActual + 1;
+            if (siguienteCodigo <= 100) {
+                spinnerCodigo.getValueFactory().setValue(siguienteCodigo);
+            } else {
+                spinnerCodigo.getValueFactory().setValue(1);
+            }
+        }
+    }
 }
