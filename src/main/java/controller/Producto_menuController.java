@@ -4,20 +4,28 @@
  */
 package controller;
 
+import dao.ProductoDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import model.Producto;
 
 /**
  * FXML Controller class
@@ -37,10 +45,40 @@ public class Producto_menuController implements Initializable {
     private AnchorPane difuminar;
     private String guardarRuta;
     private String rutaAsociada;
+    @FXML
+    private TableView<Producto> tablaProductos;
+
+    @FXML
+    private TableColumn<Producto, Integer> colCodigo;
+
+    @FXML
+    private TableColumn<Producto, String> colNombre;
+
+    @FXML
+    private TableColumn<Producto, Double> colPrecio;
+
+    @FXML
+    private TableColumn<Producto, Double> colPeso;
+
+    @FXML
+    private TableColumn<Producto, String> colCategoria;
+
+    private ProductoDAO productoDao;
+    private List<Producto> listaProductos;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        productoDao = new ProductoDAO();
+        listaProductos = productoDao.buscarTodos();
+
+        // Configurar columnas
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        colCategoria.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colPeso.setCellValueFactory(new PropertyValueFactory<>("pesoPorUnidad"));
+        // cargar productos
+        tablaProductos.setItems(FXCollections.observableArrayList(listaProductos));
     }
 
     public void difuminarTodo() {
@@ -155,6 +193,18 @@ public class Producto_menuController implements Initializable {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    //metodo para editar producto seleccionado
+    public void editarProducto() {
+        Producto seleccionado = tablaProductos.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            System.out.println("Producto elegido con código: " + seleccionado.getCodigo());
+            setRutaProducto();
+            crearProductoController.asignarProductoEditable(seleccionado);
+        } else {
+            System.out.println("No se seleccionó ningún producto.");
         }
     }
 

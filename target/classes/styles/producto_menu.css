@@ -34,7 +34,6 @@
 /* ==============================
    TABLAS
    ============================== */
-
 .tablaVenta,
 .tablaVuelto {
     -fx-background-color: #ffffff;
@@ -45,6 +44,20 @@
     -fx-selection-bar: #3498db;
     -fx-selection-bar-non-focused: #bdc3c7;
 }
+
+.tablaVenta .table-cell,
+.tablaVuelto .table-cell {
+    -fx-alignment: CENTER;
+    -fx-font-size: 24px;
+}
+.tablaVenta .column-header,
+.tablaVuelto .column-header {
+    -fx-font-size: 18px; /* tamaño más grande para los headers */
+    -fx-alignment: CENTER; /* opcional: centrar texto del header */
+    -fx-font-weight: bold; /* opcional: negrita para destacar */
+}
+
+
 
 /* Encabezado de tablas */
 .table-view .column-header-background {

@@ -9,7 +9,8 @@ module carniceria.sistemacarne {
     requires java.naming;
 
     opens carniceria.sistemacarne to javafx.fxml;
-    opens model to org.hibernate.orm.core;
+    opens model to org.hibernate.orm.core, javafx.base, javafx.fxml;
+
 
     opens controller to javafx.fxml;
     exports carniceria.sistemacarne;

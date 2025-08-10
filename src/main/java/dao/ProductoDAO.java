@@ -68,4 +68,16 @@ public class ProductoDAO {
             e.printStackTrace();
         }
     }
+
+    public List<Producto> obtenerProductoPorTipo(String tipo) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Producto p WHERE p.tipo = :tipo", Producto.class)
+                    .setParameter("tipo", tipo)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

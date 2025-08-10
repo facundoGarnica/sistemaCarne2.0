@@ -1,0 +1,8 @@
+2025-08-10 11:59:29.823033-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT p FROM Producto p WHERE p.tipo = [*]:tipo"; se esperaba "ALL (, ANY (, SOME ("
+Syntax error in SQL statement "SELECT p FROM Producto p WHERE p.tipo = [*]:tipo"; expected "ALL (, ANY (, SOME ("; SQL statement:
+SELECT p FROM Producto p WHERE p.tipo = :tipo [42001-232]
+2025-08-10 11:59:53.469145-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]TIPO"; se esperaba "TRUNCATE"
+Syntax error in SQL statement "[*]TIPO"; expected "TRUNCATE"; SQL statement:
+TIPO [42001-232]

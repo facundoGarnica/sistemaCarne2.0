@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="451.0" prefWidth="500.0" styleClass="anchor-border-blue" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Crear_productoController">
+<AnchorPane id="AnchorPane" prefHeight="451.0" prefWidth="500.0" styleClass="anchor-border-blue" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Crear_productoController">
     <stylesheets>
         <URL value="@../styles/producto_menu.css" />
     </stylesheets>
@@ -62,7 +62,7 @@
             <Label styleClass="form-label" text="Kg promedio:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
             <TextField fx:id="txtPeso" promptText="Peso de unidad en Kg, ej: 1 paleta 4 kg" styleClass="form-input" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          <ComboBox fx:id="cbxCategoria" prefHeight="33.0" prefWidth="264.0" promptText="Elegir categoria" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         <Spinner prefHeight="37.0" prefWidth="253.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         <Spinner fx:id="spinnerCodigo" prefHeight="37.0" prefWidth="253.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         </GridPane>
         
         <!-- Spacer -->
@@ -70,7 +70,7 @@
         
         <!-- Buttons -->
         <HBox alignment="CENTER" spacing="20.0" styleClass="button-container">
-            <Button fx:id="btnGuardar" prefWidth="120.0" styleClass="boton" text="💾 Guardar" />
+            <Button fx:id="btnGuardar" onAction="#guardarProducto" prefWidth="120.0" styleClass="boton" text="💾 Guardar" />
             <Button fx:id="btnCancelar" onAction="#cerrarOverlay" prefWidth="120.0" styleClass="boton" text="✖ Cancelar" />
         </HBox>
     </VBox>

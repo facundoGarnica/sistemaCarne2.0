@@ -32,7 +32,7 @@ public class Producto {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "stock_id", referencedColumnName = "id")
     private Stock stock;
-    Double pesoPorUnidad; //Este atributo es un promedio que pesa un producto, ejemplo un vacio tiene un promedio de 4 kg
+    private Double pesoPorUnidad; //Este atributo es un promedio que pesa un producto, ejemplo un vacio tiene un promedio de 4 kg
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<DetallePedido> detallePedidos;
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
