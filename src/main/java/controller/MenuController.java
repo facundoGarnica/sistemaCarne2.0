@@ -47,6 +47,8 @@ public class MenuController implements Initializable {
     @FXML
     private VBox productoSection;
     @FXML
+    private VBox stockSection;
+    @FXML
     private VBox ventasSection;
     @FXML
     private VBox configSection;
@@ -57,6 +59,8 @@ public class MenuController implements Initializable {
     @FXML
     private Button btnProducto;
     @FXML
+    private Button btnStock;
+    @FXML
     private Button btnVentas;
     @FXML
     private Button btnConfiguracion;
@@ -66,6 +70,8 @@ public class MenuController implements Initializable {
     private VBox clienteSubmenu;
     @FXML
     private VBox productoSubmenu;
+    @FXML
+    private VBox stockSubmenu;
     @FXML
     private VBox ventasSubmenu;
 
@@ -78,18 +84,21 @@ public class MenuController implements Initializable {
     // Botones de submenú - Producto
     @FXML
     private Button btnVisualizarProductos;
+
+    // Botones de submenú - Stock
     @FXML
-    private Button btnAgregarStock;
+    private Button btnMediaRes;
     @FXML
-    private Button btnGestionarProductos;
+    private Button btnPollo;
+    @FXML
+    private Button btnIngresarIndividual;
 
     // Botones de submenú - Ventas
     @FXML
     private Button btnCrearVenta;
     @FXML
     private Button btnHistorialVentas;
-    @FXML
-    private Button btnReportes;
+    
     //anchorPane para usarlo de Overlay o SPA
     @FXML
     private AnchorPane overlayClientes;
@@ -107,21 +116,23 @@ public class MenuController implements Initializable {
         // Inicializar todos los submenús como ocultos
         clienteSubmenu.setVisible(false);
         productoSubmenu.setVisible(false);
+        stockSubmenu.setVisible(false);
         ventasSubmenu.setVisible(false);
 
         // Configurar la altura inicial de los submenús
         clienteSubmenu.setMaxHeight(0);
         productoSubmenu.setMaxHeight(0);
+        stockSubmenu.setMaxHeight(0);
         ventasSubmenu.setMaxHeight(0);
-
     }
-// Métodos para toggle de submenús
 
+    // Métodos para toggle de submenús
     @FXML
     private void toggleClienteMenu() {
         toggleSubmenu(clienteSubmenu);
         // Cerrar otros submenús
         closeSubmenu(productoSubmenu);
+        closeSubmenu(stockSubmenu);
         closeSubmenu(ventasSubmenu);
     }
 
@@ -130,6 +141,16 @@ public class MenuController implements Initializable {
         toggleSubmenu(productoSubmenu);
         // Cerrar otros submenús
         closeSubmenu(clienteSubmenu);
+        closeSubmenu(stockSubmenu);
+        closeSubmenu(ventasSubmenu);
+    }
+
+    @FXML
+    private void toggleStockMenu() {
+        toggleSubmenu(stockSubmenu);
+        // Cerrar otros submenús
+        closeSubmenu(clienteSubmenu);
+        closeSubmenu(productoSubmenu);
         closeSubmenu(ventasSubmenu);
     }
 
@@ -139,6 +160,7 @@ public class MenuController implements Initializable {
         // Cerrar otros submenús
         closeSubmenu(clienteSubmenu);
         closeSubmenu(productoSubmenu);
+        closeSubmenu(stockSubmenu);
     }
 
     // Método auxiliar para toggle de submenús con animación
@@ -175,33 +197,55 @@ public class MenuController implements Initializable {
     @FXML
     private void handleFiado() {
         System.out.println("Navegando a Fiado...");
-        // Aquí cargarías la vista correspondiente
-        // loadView("fiado.fxml");
+        // Método duplicado será manejado por handleFiado(ActionEvent event)
     }
 
     @FXML
     private void handlePedido() {
         System.out.println("Navegando a Pedido...");
-        // loadView("pedido.fxml");
+        // Método duplicado será manejado por handlePedido(ActionEvent event)
     }
 
     // Handlers para Producto
     @FXML
     private void handleVisualizarProductos() {
         try {
-            // Cargar clientes.fxml
+            // Cargar producto_menu.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/producto_menu.fxml"));
-            AnchorPane vistaClientes = loader.load();
+            AnchorPane vistaProductos = loader.load();
 
             // Limpiar lo anterior y añadir la nueva vista
             overlayClientes.getChildren().clear();
-            overlayClientes.getChildren().add(vistaClientes);
+            overlayClientes.getChildren().add(vistaProductos);
 
             // Hacer que se ajuste al tamaño del overlay
-            AnchorPane.setTopAnchor(vistaClientes, 0.0);
-            AnchorPane.setBottomAnchor(vistaClientes, 0.0);
-            AnchorPane.setLeftAnchor(vistaClientes, 0.0);
-            AnchorPane.setRightAnchor(vistaClientes, 0.0);
+            AnchorPane.setTopAnchor(vistaProductos, 0.0);
+            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+            AnchorPane.setRightAnchor(vistaProductos, 0.0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Handlers para Stock
+    @FXML
+    private void handleMediaRes() {
+         try {
+            // Cargar producto_menu.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockMediaRes.fxml"));
+            AnchorPane vistaProductos = loader.load();
+
+            // Limpiar lo anterior y añadir la nueva vista
+            overlayClientes.getChildren().clear();
+            overlayClientes.getChildren().add(vistaProductos);
+
+            // Hacer que se ajuste al tamaño del overlay
+            AnchorPane.setTopAnchor(vistaProductos, 0.0);
+            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+            AnchorPane.setRightAnchor(vistaProductos, 0.0);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -209,15 +253,47 @@ public class MenuController implements Initializable {
     }
 
     @FXML
-    private void handleAgregarStock() {
-        System.out.println("Navegando a Agregar Stock...");
-        // loadView("agregarStock.fxml");
+    private void handlePollo() {
+         try {
+            // Cargar producto_menu.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockCajonPollo.fxml"));
+            AnchorPane vistaProductos = loader.load();
+
+            // Limpiar lo anterior y añadir la nueva vista
+            overlayClientes.getChildren().clear();
+            overlayClientes.getChildren().add(vistaProductos);
+
+            // Hacer que se ajuste al tamaño del overlay
+            AnchorPane.setTopAnchor(vistaProductos, 0.0);
+            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+            AnchorPane.setRightAnchor(vistaProductos, 0.0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void handleGestionarProductos() {
-        System.out.println("Navegando a Gestionar Productos...");
-        // loadView("gestionarProductos.fxml");
+    private void handleIngresarIndividual() {
+         try {
+            // Cargar producto_menu.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockProducto.fxml"));
+            AnchorPane vistaProductos = loader.load();
+
+            // Limpiar lo anterior y añadir la nueva vista
+            overlayClientes.getChildren().clear();
+            overlayClientes.getChildren().add(vistaProductos);
+
+            // Hacer que se ajuste al tamaño del overlay
+            AnchorPane.setTopAnchor(vistaProductos, 0.0);
+            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+            AnchorPane.setRightAnchor(vistaProductos, 0.0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Handlers para Ventas
@@ -240,14 +316,24 @@ public class MenuController implements Initializable {
 
     @FXML
     private void handleHistorialVentas() {
-        System.out.println("Navegando a Historial de Ventas...");
-        // loadView("historialVentas.fxml");
-    }
+        try {
+            // Cargar producto_menu.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/historialVentas.fxml"));
+            AnchorPane vistaProductos = loader.load();
 
-    @FXML
-    private void handleReportes() {
-        System.out.println("Navegando a Reportes...");
-        // loadView("reportes.fxml");
+            // Limpiar lo anterior y añadir la nueva vista
+            overlayClientes.getChildren().clear();
+            overlayClientes.getChildren().add(vistaProductos);
+
+            // Hacer que se ajuste al tamaño del overlay
+            AnchorPane.setTopAnchor(vistaProductos, 0.0);
+            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+            AnchorPane.setRightAnchor(vistaProductos, 0.0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Handler para Configuración
@@ -295,7 +381,7 @@ public class MenuController implements Initializable {
     @FXML
     private void handlePedido(ActionEvent event) {
         try {
-            // Cargar clientes.fxml
+            // Cargar cliente_pedido.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/cliente_pedido.fxml"));
             AnchorPane vistaClientes = loader.load();
 

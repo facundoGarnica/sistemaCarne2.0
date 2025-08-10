@@ -58,9 +58,33 @@
                            <children>
                               <Button fx:id="btnVisualizarProductos" mnemonicParsing="false" onAction="#handleVisualizarProductos" prefWidth="300.0" styleClass="submenu-button" text="👁️ Visualizar Productos">
                               </Button>
-                              <Button fx:id="btnAgregarStock" mnemonicParsing="false" onAction="#handleAgregarStock" prefWidth="300.0" styleClass="submenu-button" text="📈 Agregar Stock">
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Sección Stock -->
+                  <VBox fx:id="stockSection" styleClass="menu-section">
+                     <children>
+                        <Button fx:id="btnStock" mnemonicParsing="false" onAction="#toggleStockMenu" prefWidth="300.0" styleClass="menu-button-main" text="📈 STOCK">
+                        </Button>
+                        
+                        <VBox fx:id="stockSubmenu" styleClass="submenu" visible="false">
+                           <children>
+                              <Button fx:id="btnMediaRes" mnemonicParsing="false" onAction="#handleMediaRes" prefWidth="300.0" styleClass="submenu-button" text="🥩 Media Res">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                               </Button>
-                              <Button fx:id="btnGestionarProductos" mnemonicParsing="false" onAction="#handleGestionarProductos" prefWidth="300.0" styleClass="submenu-button" text="⚙️ Gestionar Productos">
+                              <Button fx:id="btnPollo" mnemonicParsing="false" onAction="#handlePollo" prefWidth="300.0" styleClass="submenu-button" text="🐔 Pollo">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnIngresarIndividual" mnemonicParsing="false" onAction="#handleIngresarIndividual" prefWidth="300.0" styleClass="submenu-button" text="➕ Ingresar Individual">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                               </Button>
                            </children>
                         </VBox>
@@ -78,8 +102,6 @@
                               <Button fx:id="btnCrearVenta" mnemonicParsing="false" onAction="#handleCrearVenta" prefWidth="300.0" styleClass="submenu-button" text="➕ Crear Venta">
                               </Button>
                               <Button fx:id="btnHistorialVentas" mnemonicParsing="false" onAction="#handleHistorialVentas" prefWidth="300.0" styleClass="submenu-button" text="📊 Historial de Ventas">
-                              </Button>
-                              <Button fx:id="btnReportes" mnemonicParsing="false" onAction="#handleReportes" prefWidth="300.0" styleClass="submenu-button" text="📈 Reportes">
                               </Button>
                            </children>
                         </VBox>

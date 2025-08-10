@@ -30,7 +30,7 @@
                 <Label styleClass="subtitulo" text="Gestión de Productos" />
             </VBox>
             
-            <Separator styleClass="main-separator" />
+            <Separator />
             
             <!-- Stats Section -->
             <HBox spacing="20.0" styleClass="stats-container">

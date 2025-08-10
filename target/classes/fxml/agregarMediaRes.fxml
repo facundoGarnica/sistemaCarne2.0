@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="496.0" prefWidth="577.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AgregarMediaResController">
+    <stylesheets>
+        <URL value="@../styles/stock.css" />
+    </stylesheets>
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="21.0" layoutY="19.0" prefHeight="487.0" prefWidth="562.0" spacing="20.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="17.0">
+         <children>
+            <Label prefHeight="43.0" prefWidth="294.0" styleClass="titulo" text="Agregar media">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Separator />
+            
+            <GridPane alignment="CENTER" hgap="10.0" styleClass="gridPanel" vgap="15.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" prefWidth="150.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Fecha:" />
+                  
+                  <Label text="Proveedor:" GridPane.rowIndex="1" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  
+                  <Label text="Peso boleta:" GridPane.rowIndex="2" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  
+                  <Label text="Peso balanza:" GridPane.rowIndex="3" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  
+                  <Label text="Precio por kilo:" GridPane.rowIndex="4" />
+                  
+                  <Label text="Peso final:" GridPane.rowIndex="5" />
+                  <Label text="Total:" GridPane.rowIndex="6" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label text="---" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <DatePicker prefHeight="37.0" prefWidth="360.0" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            
+            <HBox alignment="CENTER" spacing="20.0">
+               <children>
+                  <Button mnemonicParsing="false" styleClass="boton" text="Guardar y finalizar" />
+                  <Button mnemonicParsing="false" styleClass="boton" text="Guardar y agregar siguiente -&gt;" />
+                  <Button mnemonicParsing="false" styleClass="boton" text="Cancelar" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

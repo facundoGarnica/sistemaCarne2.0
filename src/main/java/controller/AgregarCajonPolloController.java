@@ -6,6 +6,7 @@ package controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -13,14 +14,23 @@ import javafx.fxml.Initializable;
  *
  * @author garca
  */
-public class StockController implements Initializable {
+public class AgregarCajonPolloController implements Initializable {
 
     /**
      * Initializes the controller class.
      */
+    private StockCajonPolloController stockCajonPolloController;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
-    
+    public void setSpa_stockCajonPolloController(StockCajonPolloController s){
+        stockCajonPolloController = s;
+    }
+    @FXML
+    public void cerrarOverlay() {
+        if (stockCajonPolloController != null) {
+            stockCajonPolloController.CerrarDifuminarYSpa();
+        }
+    }
 }
