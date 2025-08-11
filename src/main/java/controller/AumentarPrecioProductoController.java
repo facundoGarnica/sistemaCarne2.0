@@ -61,7 +61,7 @@ public class AumentarPrecioProductoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // Cargar opciones del ComboBox
         cmbCategoria.getItems().addAll(
-                "Carniceria", "Cerdo", "Pollo", "Varios", "Seco", "Preparados"
+                "Carniceria", "Cerdo", "Pollo", "Varios", "Seco", "Preparados", "Achuras"
         );
 
         // Valor por defecto

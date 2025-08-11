@@ -43,7 +43,7 @@ public class Crear_productoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         productoDao = new ProductoDAO();
         cbxCategoria.getItems().addAll(
-                "Carniceria", "Cerdo", "Pollo", "Varios", "Seco", "Preparados"
+                "Carniceria", "Cerdo", "Pollo", "Varios", "Seco", "Preparados", "Achuras"
         );
         cbxCategoria.setValue("Carniceria");
         SpinnerValueFactory<Integer> valueFactory
@@ -121,12 +121,12 @@ public class Crear_productoController implements Initializable {
             productoDao.actualizar(productoActual);
             System.out.println("Producto actualizado correctamente");
         }
-        
+
         if (productoMenuController != null) {
             productoMenuController.recargarTablaProductos();
             productoMenuController.cargarContador();
         }
-        
+
         return true;
     }
 
@@ -163,7 +163,7 @@ public class Crear_productoController implements Initializable {
         txtNombre.clear();
         txtPrecio.clear();
         txtPeso.clear();
-        productoActual = null;
+        productoActual = null; // Esto es importante para el siguiente producto
     }
 
     public void asignarDatos(String nombre, Integer codigo, Double precio, String tipo, Double peso) {
@@ -206,19 +206,26 @@ public class Crear_productoController implements Initializable {
     }
 
     public void guardarYSiguiente() {
-        int codigoActual = spinnerCodigo.getValue();
-        String categoriaActual = (String) cbxCategoria.getValue();
-
         if (guardarProductoBase()) {
+            // PRIMERO: Capturar los valores ANTES de que se modifique productoActual
+            String categoriaActual = (String) cbxCategoria.getValue(); // Mejor usar el ComboBox directamente
+            int codigoActual = spinnerCodigo.getValue(); // Usar el Spinner directamente
+
+            // SEGUNDO: Limpiar el formulario parcialmente
             limpiarFormularioParcial();
-            cbxCategoria.setValue(categoriaActual);
-            
+
+            // TERCERO: Asignar los valores para el siguiente producto
+            // Incrementar código
             int siguienteCodigo = codigoActual + 1;
             if (siguienteCodigo <= 100) {
                 spinnerCodigo.getValueFactory().setValue(siguienteCodigo);
             } else {
                 spinnerCodigo.getValueFactory().setValue(1);
             }
+
+            // Mantener la categoría anterior
+            cbxCategoria.setValue(categoriaActual);
         }
     }
+
 }

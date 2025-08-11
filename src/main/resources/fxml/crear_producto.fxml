@@ -71,7 +71,7 @@
         <!-- Buttons -->
         <HBox alignment="CENTER" spacing="20.0" styleClass="button-container">
             <Button fx:id="btnGuardar" onAction="#guardarYsalir" prefWidth="120.0" styleClass="boton" text="💾 Guardar" />
-         <Button fx:id="btnGuardarYSig" onAction="#guardarProducto" prefHeight="34.0" prefWidth="208.0" styleClass="boton" text="-&gt; Guardar y siguiente" />
+         <Button fx:id="btnGuardarYSig" onAction="#guardarYSiguiente" prefHeight="34.0" prefWidth="208.0" styleClass="boton" text="-&gt; Guardar y siguiente" />
             <Button fx:id="btnCancelar" onAction="#cerrarOverlay" prefWidth="120.0" styleClass="boton" text="✖ Cancelar" />
         </HBox>
     </VBox>
