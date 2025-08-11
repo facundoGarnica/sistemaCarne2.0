@@ -66,6 +66,7 @@ public class StockProductoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         productoDao = new ProductoDAO();
         listaProductos = productoDao.buscarTodos();
+        editable = false;
         cbxSeleccionProducto.getItems().addAll(listaProductos);
 
         cbxSeleccionProducto.setConverter(new StringConverter<Producto>() {

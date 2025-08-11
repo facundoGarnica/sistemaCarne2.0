@@ -21,12 +21,14 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "stock")
 public class Stock {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "producto_id", referencedColumnName = "id")
     private Producto producto;
+
     private LocalDate fecha;
     private double cantidad;
     private double cantidadMinima;
@@ -70,7 +72,5 @@ public class Stock {
     public void setCantidadMinima(double cantidadMinima) {
         this.cantidadMinima = cantidadMinima;
     }
-    
-    
 
 }

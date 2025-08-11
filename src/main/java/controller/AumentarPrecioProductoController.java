@@ -205,7 +205,7 @@ public class AumentarPrecioProductoController implements Initializable {
             exito.setHeaderText(null);
             exito.setContentText("Se aplicó el aumento del " + porcentajeActual + "% exitosamente.");
             exito.showAndWait();
-
+            productoController.ordenarTabla();
             cerrarOverlay();
         }
         // Si el usuario seleccionó "No", no hacer nada (el diálogo se cierra automáticamente)

@@ -200,6 +200,7 @@ public class Crear_productoController implements Initializable {
 
     public void guardarYsalir() {
         if (guardarProductoBase()) {
+            productoMenuController.ordenarTabla();
             cerrarOverlay();
             limpiarFormulario();
         }
@@ -226,6 +227,7 @@ public class Crear_productoController implements Initializable {
             // Mantener la categoría anterior
             cbxCategoria.setValue(categoriaActual);
         }
+        productoMenuController.ordenarTabla();
     }
 
 }

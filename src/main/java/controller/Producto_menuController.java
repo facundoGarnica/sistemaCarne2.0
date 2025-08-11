@@ -7,7 +7,9 @@ package controller;
 import dao.ProductoDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -17,6 +19,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TableCell;
@@ -71,11 +75,11 @@ public class Producto_menuController implements Initializable {
     private List<Producto> listaProductos;
     private int contador;
     private String contadorString;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         contador = 0;
-        
+
         productoDao = new ProductoDAO();
         listaProductos = productoDao.buscarTodos();
 
@@ -120,15 +124,28 @@ public class Producto_menuController implements Initializable {
             };
         });
 
-        // cargar productos
+        // Poner la lista ordenada en la tabla
         tablaProductos.setItems(FXCollections.observableArrayList(listaProductos));
+
+        // Opcional: Mostrar orden visual por la columna codigo ascendente
+        colCodigo.setSortType(TableColumn.SortType.ASCENDING);
+        tablaProductos.getSortOrder().add(colCodigo);
+        tablaProductos.sort();
+
         cargarContador();
+        ordenarTabla();
     }
-    
-    public void cargarContador(){
+
+    public void ordenarTabla() {
+        colCodigo.setSortType(TableColumn.SortType.ASCENDING);
+        tablaProductos.getSortOrder().setAll(colCodigo);
+        tablaProductos.sort();
+    }
+
+    public void cargarContador() {
         contador = listaProductos.size();
         contadorString = String.valueOf(contador);
-        labelContador.setText("Mostrando "+contadorString+" productos");
+        labelContador.setText("Mostrando " + contadorString + " productos");
     }
 
     public void difuminarTodo() {
@@ -256,6 +273,7 @@ public class Producto_menuController implements Initializable {
         } else {
             System.out.println("No se seleccionó ningún producto.");
         }
+        ordenarTabla();
     }
 
     //Metodo para recargar la tabla, la uso para que otro controller la llame
@@ -269,13 +287,28 @@ public class Producto_menuController implements Initializable {
     @FXML
     public void eliminarSeleccionado() {
         Producto seleccionado = tablaProductos.getSelectionModel().getSelectedItem();
-        if (seleccionado != null) {
+
+        if (seleccionado == null) {
+            System.out.println("No se seleccionó ningún producto.");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación de eliminación");
+        alert.setHeaderText("¿Eliminar producto?");
+        alert.setContentText("¿Borrar producto con código: "
+                + seleccionado.getCodigo() + "?");
+
+        // Mostrar y esperar respuesta
+        Optional<ButtonType> resultado = alert.showAndWait();
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             productoDao.eliminar(seleccionado.getId());
             recargarTablaProductos();
+            cargarContador();
+            ordenarTabla();
         } else {
-            System.out.println("No se seleccionó ningún producto.");
+            System.out.println("Eliminación cancelada.");
         }
-        cargarContador();
     }
 
     @FXML

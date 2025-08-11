@@ -28,6 +28,7 @@ public class MediaRes {
     private Double pesoPilon;
     private Double pesoBoleta;
     private Double pesoFinal;
+    private String proveedor;
     private LocalDateTime fecha;
     private Double precio;
     @OneToMany(mappedBy = "mediaRes", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -41,6 +42,15 @@ public class MediaRes {
         this.id = id;
     }
 
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    
     public Double getPesoPilon() {
         return pesoPilon;
     }
