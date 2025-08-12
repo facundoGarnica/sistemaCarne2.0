@@ -7,12 +7,12 @@ package controller;
 import dao.ProductoDAO;
 import dao.StockDAO;
 import java.net.URL;
-import java.time.LocalDate;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -59,9 +60,9 @@ public class StockProductoController implements Initializable {
     @FXML
     private TableColumn<Stock, String> colProducto;
     @FXML
-    private TableColumn<Stock, Integer> colCantidad;
+    private TableColumn<Stock, Double> colCantidad;
     @FXML
-    private TableColumn<Stock, Integer> colCantidadMinima;
+    private TableColumn<Stock, Double> colCantidadMinima;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -81,16 +82,41 @@ public class StockProductoController implements Initializable {
                 return null; // No lo usamos
             }
         });
-
+        DecimalFormat df = new DecimalFormat("#0.00");
         // Configurar las columnas
         colProducto.setCellValueFactory(cellData
                 -> new SimpleStringProperty(cellData.getValue().getProducto().getNombre()));
 
-        colCantidad.setCellValueFactory(cellData
-                -> new SimpleIntegerProperty((int) cellData.getValue().getCantidad()).asObject());
-
+        // Cambiar tipo de la columna en la definición (FXML o código) a TableColumn<Stock, Double>
         colCantidadMinima.setCellValueFactory(cellData
-                -> new SimpleIntegerProperty((int) cellData.getValue().getCantidadMinima()).asObject());
+                -> new SimpleDoubleProperty(cellData.getValue().getCantidadMinima()).asObject());
+
+        colCantidadMinima.setCellFactory(column -> new TableCell<Stock, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(df.format(item));
+                }
+            }
+        });
+
+        colCantidad.setCellValueFactory(cellData
+                -> new SimpleDoubleProperty(cellData.getValue().getCantidad()).asObject());
+
+        colCantidad.setCellFactory(column -> new TableCell<Stock, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(df.format(item));
+                }
+            }
+        });
 
         cargarDatosTabla();
 
@@ -131,13 +157,14 @@ public class StockProductoController implements Initializable {
         // Cargar datos en el formulario
         cbxSeleccionProducto.setValue(seleccionado.getProducto());
         productoSeleccionado = seleccionado.getProducto();
-        txtAgregarStock.setText(String.valueOf((int) seleccionado.getCantidad()));
-        txtCantidadMinima.setText(String.valueOf((int) seleccionado.getCantidadMinima()));
 
-        editable = true; // Ahora estamos en modo edición
+        txtAgregarStock.setText(String.format("%.2f", seleccionado.getCantidad()));
+        txtCantidadMinima.setText(String.format("%.2f", seleccionado.getCantidadMinima())); // CAMBIO: formato decimal
+
+        editable = true;
     }
-
 // Método unificado para guardar o editar
+
     public void GuardarOEditar() {
         if (editable) {
             editarSeleccionado();
@@ -154,9 +181,11 @@ public class StockProductoController implements Initializable {
             return;
         }
 
-        int cantidad, cantidadMinima;
+        double cantidad;
+        double cantidadMinima; // CAMBIO: de int a double
         try {
-            cantidad = Integer.parseInt(txtAgregarStock.getText());
+            String textoCantidad = txtAgregarStock.getText().replace(',', '.');
+            cantidad = Double.parseDouble(textoCantidad);
             if (cantidad < 0) {
                 System.out.println("La cantidad no puede ser negativa.");
                 return;
@@ -167,7 +196,8 @@ public class StockProductoController implements Initializable {
         }
 
         try {
-            cantidadMinima = Integer.parseInt(txtCantidadMinima.getText());
+            String textoCantidadMinima = txtCantidadMinima.getText().replace(',', '.');
+            cantidadMinima = Double.parseDouble(textoCantidadMinima); // CAMBIO: parseDouble directo
             if (cantidadMinima < 0) {
                 System.out.println("La cantidad mínima no puede ser negativa.");
                 return;
@@ -178,7 +208,7 @@ public class StockProductoController implements Initializable {
         }
 
         seleccionado.setCantidad(cantidad);
-        seleccionado.setCantidadMinima(cantidadMinima);
+        seleccionado.setCantidadMinima(cantidadMinima); // CAMBIO: ahora es double
         seleccionado.setFecha(LocalDateTime.now());
 
         stockDao.actualizar(seleccionado);
@@ -187,7 +217,7 @@ public class StockProductoController implements Initializable {
         cargarDatosTabla();
         limpiarFormulario();
 
-        editable = false;  // Salir modo edición
+        editable = false;
     }
 
 // En agregarStock, limpiar formulario y asegurar editable = false después de agregar
@@ -197,9 +227,9 @@ public class StockProductoController implements Initializable {
             return;
         }
 
-        int cantidad;
+        double cantidad;
         try {
-            cantidad = Integer.parseInt(txtAgregarStock.getText());
+            cantidad = Double.parseDouble(txtAgregarStock.getText());
             if (cantidad < 0) {
                 System.out.println("La cantidad no puede ser negativa.");
                 return;
@@ -209,9 +239,10 @@ public class StockProductoController implements Initializable {
             return;
         }
 
-        int cantidadMinima;
+        double cantidadMinima; // CAMBIO: de int a double
         try {
-            cantidadMinima = Integer.parseInt(txtCantidadMinima.getText());
+            String textoCantidadMinima = txtCantidadMinima.getText().replace(',', '.');
+            cantidadMinima = Double.parseDouble(textoCantidadMinima); // CAMBIO: parseDouble directo
             if (cantidadMinima < 0) {
                 System.out.println("La cantidad mínima no puede ser negativa.");
                 return;
@@ -221,18 +252,21 @@ public class StockProductoController implements Initializable {
             return;
         }
 
-        Stock nuevoStock = new Stock();
-        nuevoStock.setProducto(productoSeleccionado);
-        nuevoStock.setCantidad(cantidad);
-        nuevoStock.setFecha(LocalDateTime.now());
-        nuevoStock.setCantidadMinima(cantidadMinima);
+        // Usar el método que suma o crea stock
+        stockDao.sumarOCrearStockPorNombreProducto(productoSeleccionado.getNombre(), cantidad);
 
-        stockDao.guardar(nuevoStock);
+        // Actualizar cantidad mínima para el producto
+        Stock stockActual = stockDao.buscarPorProducto(productoSeleccionado);
+        if (stockActual != null) {
+            stockActual.setCantidadMinima(cantidadMinima); // CAMBIO: ahora es double
+            stockDao.actualizar(stockActual);
+        }
+
         cargarDatosTabla();
-        System.out.println("Stock agregado correctamente.");
+        System.out.println("Stock agregado o actualizado correctamente.");
         limpiarFormulario();
 
-        editable = false; // Confirmar que estamos en modo nuevo
+        editable = false;
     }
 
 // Limpieza del formulario (opcional: también limpiar el booleano editable)

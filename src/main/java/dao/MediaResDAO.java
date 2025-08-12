@@ -9,6 +9,8 @@ package dao;
  * @author garca
  */
 import Util.HibernateUtil;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import model.MediaRes;
 import org.hibernate.Session;
@@ -68,4 +70,31 @@ public class MediaResDAO {
             e.printStackTrace();
         }
     }
+
+    public List<MediaRes> buscarPorFecha(LocalDate fecha) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            LocalDateTime inicioDelDia = fecha.atStartOfDay();
+            LocalDateTime finDelDia = fecha.atTime(23, 59, 59);
+
+            return session.createQuery(
+                    "FROM MediaRes m WHERE m.fecha BETWEEN :inicio AND :fin", MediaRes.class)
+                    .setParameter("inicio", inicioDelDia)
+                    .setParameter("fin", finDelDia)
+                    .list();
+        }
+    }
+
+    public List<MediaRes> buscarEntreFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            LocalDateTime inicioDelDia = fechaInicio.atStartOfDay();
+            LocalDateTime finDelDia = fechaFin.atTime(23, 59, 59);
+
+            return session.createQuery(
+                    "FROM MediaRes m WHERE m.fecha BETWEEN :inicio AND :fin", MediaRes.class)
+                    .setParameter("inicio", inicioDelDia)
+                    .setParameter("fin", finDelDia)
+                    .list();
+        }
+    }
+
 }

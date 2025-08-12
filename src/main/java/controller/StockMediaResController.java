@@ -9,6 +9,8 @@ import dao.MediaResDAO;
 import dao.StockDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -18,6 +20,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,6 +30,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -53,6 +57,12 @@ public class StockMediaResController implements Initializable {
     private AgregarMediaResController agregarMediaResController;
     @FXML
     private AnchorPane overlayAgregarMedia;
+    @FXML
+    private DatePicker datePickerBuscar;
+    @FXML
+    private DatePicker datePickerDesde;
+    @FXML
+    private DatePicker datePickerHasta;
     @FXML
     private AnchorPane difuminar;
     private MediaRes mediaRes;
@@ -138,16 +148,39 @@ public class StockMediaResController implements Initializable {
         );
 
         // Stock agregado
+        DecimalFormat df = new DecimalFormat("#0.00");
+
         colStockAgregado.setCellValueFactory(data -> {
             DetalleMediaRes detalle = data.getValue();
             double stockCantidad = obtenerCantidadStock(detalle.getProducto());
             return new SimpleDoubleProperty(stockCantidad).asObject();
         });
+
+        colStockAgregado.setCellFactory(column -> new TableCell<DetalleMediaRes, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(df.format(item));
+                }
+            }
+        });
         tblRegistroMediaRes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             cargarDetallesDeMediaSeleccionada();
         });
-
+        // Fecha actual en el DatePicker
+        datePickerBuscar.setValue(LocalDate.now());
         recargarTablaProductos();
+    }
+
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 
     private double obtenerCantidadStock(Producto producto) {
@@ -289,6 +322,68 @@ public class StockMediaResController implements Initializable {
         detalleMediaResDao = new DetalleMediaResDAO();
         List<DetalleMediaRes> detalles = detalleMediaResDao.obtenerPorMediaRes(seleccionada.getId());
         tblStockProductos.setItems(FXCollections.observableArrayList(detalles));
+    }
+
+    public void buscarMediaPorRango() {
+        LocalDate fechaInicio = datePickerDesde.getValue();
+        LocalDate fechaFin = datePickerHasta.getValue();
+
+        if (fechaInicio == null || fechaFin == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Búsqueda por rango", "Debe seleccionar ambas fechas.");
+            return;
+        }
+
+        if (fechaInicio.isAfter(fechaFin)) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Búsqueda por rango", "La fecha de inicio no puede ser posterior a la fecha de fin.");
+            return;
+        }
+
+        List<MediaRes> resultados = mediaResDao.buscarEntreFechas(fechaInicio, fechaFin);
+
+        if (resultados == null || resultados.isEmpty()) {
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Sin resultados", "No se encontraron medias res en el rango seleccionado.");
+            tblRegistroMediaRes.getItems().clear();
+        } else {
+            tblRegistroMediaRes.setItems(FXCollections.observableArrayList(resultados));
+        }
+    }
+
+    public void buscarMediaPorFecha() {
+        LocalDate fechaSeleccionada = datePickerBuscar.getValue();
+
+        if (fechaSeleccionada == null) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("Buscar por fecha");
+            alerta.setHeaderText(null);
+            alerta.setContentText("Por favor seleccione una fecha.");
+            alerta.showAndWait();
+            return;
+        }
+
+        // Traer resultados del DAO
+        List<MediaRes> resultados = mediaResDao.buscarPorFecha(fechaSeleccionada);
+
+        if (resultados == null || resultados.isEmpty()) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Sin resultados");
+            alerta.setHeaderText(null);
+            alerta.setContentText("No se encontraron medias res para la fecha seleccionada.");
+            alerta.showAndWait();
+            tblRegistroMediaRes.setItems(FXCollections.emptyObservableList());
+        } else {
+            tblRegistroMediaRes.setItems(FXCollections.observableArrayList(resultados));
+        }
+
+        tblRegistroMediaRes.refresh();
+    }
+
+    public void mostrarTodo() {
+        MediaResDAO dao = new MediaResDAO();
+        List<MediaRes> lista = dao.buscarTodos(); // Paso 1: traer todos los registros
+
+        ObservableList<MediaRes> observableList = FXCollections.observableArrayList(lista); // Paso 2
+
+        tblRegistroMediaRes.setItems(observableList); // Paso 3
     }
 
 }

@@ -13,6 +13,7 @@ carniceria\sistemacarne\AppTester.class
 dao\VentaDAO.class
 carniceria\sistemacarne\App.class
 controller\StockProductoController.class
+controller\StockProductoController$2.class
 controller\Producto_menuController.class
 model\Producto.class
 controller\ClientesController.class
@@ -41,6 +42,7 @@ dao\DetalleVentaDAO.class
 model\DetalleMediaRes.class
 controller\Crear_productoController.class
 model\DetalleVenta.class
+controller\StockProductoController$3.class
 dao\FiadoDAO.class
 controller\AumentarPrecioProductoController.class
 controller\Producto_menuController$1.class
@@ -49,6 +51,7 @@ Util\HibernateUtil.class
 controller\AumentarPrecioProductoController$2.class
 controller\Crear_ventasController.class
 model\Fiado.class
+controller\StockMediaResController$2.class
 carniceria\sistemacarne\SecondaryController.class
 dao\MediaResDAO.class
 dao\ProductoDAO.class

@@ -187,4 +187,16 @@ public class StockDAO {
         }
     }
 
+    public Stock buscarPorProducto(Producto producto) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "FROM Stock s WHERE s.producto.id = :productoId", Stock.class)
+                    .setParameter("productoId", producto.getId())
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
