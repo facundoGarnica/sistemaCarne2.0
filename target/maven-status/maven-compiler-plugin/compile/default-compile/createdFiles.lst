@@ -25,6 +25,7 @@ dao\StockDAO.class
 controller\HistorialVentasController.class
 controller\AgregarPago_clienteController.class
 model\DetalleCajonPollo.class
+controller\StockMediaResController$1.class
 model\FiadoParcial.class
 controller\StockCajonPolloController.class
 controller\AgregarCajonPolloController.class

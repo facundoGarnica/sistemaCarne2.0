@@ -68,4 +68,14 @@ public class DetalleMediaResDAO {
             e.printStackTrace();
         }
     }
+
+    public List<DetalleMediaRes> obtenerPorMediaRes(Long mediaId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM DetalleMediaRes d WHERE d.mediaRes.id = :mediaId";
+            return session.createQuery(hql, DetalleMediaRes.class)
+                    .setParameter("mediaId", mediaId)
+                    .list();
+        }
+    }
+
 }

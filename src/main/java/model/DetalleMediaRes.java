@@ -31,6 +31,9 @@ public class DetalleMediaRes {
     private Double porcentajeCorte; /*Este atributo va a calcular cuando % va a tener el corte en la media,
                                         usando como base el peso del producto*/
 
+    public String getNombreProducto(){
+        return producto.getNombre();
+    }
     public Long getId() {
         return id;
     }

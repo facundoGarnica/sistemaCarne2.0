@@ -68,4 +68,16 @@ public class StockDAO {
             e.printStackTrace();
         }
     }
+
+    public Stock obtenerPorProducto(Long productoId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Stock s WHERE s.producto.id = :prodId", Stock.class)
+                    .setParameter("prodId", productoId)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

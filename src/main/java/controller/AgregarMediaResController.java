@@ -64,6 +64,7 @@ public class AgregarMediaResController implements Initializable {
         txtPrecioPorKilo.textProperty().addListener(recalcularListener);
     }
 
+
     private void calcularYMostrarTotales() {
         try {
             if (txtPesoBalanza.getText().isEmpty() || txtPesoBoleta.getText().isEmpty() || txtPrecioPorKilo.getText().isEmpty()) {
@@ -104,6 +105,7 @@ public class AgregarMediaResController implements Initializable {
     public void cerrarOverlay() {
         if (stockMediaResController != null) {
             stockMediaResController.CerrarDifuminarYSpa();
+            stockMediaResController.recargarTablaProductos();
         }
     }
 
