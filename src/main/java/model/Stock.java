@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -29,7 +30,7 @@ public class Stock {
     @JoinColumn(name = "producto_id", referencedColumnName = "id")
     private Producto producto;
 
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private double cantidad;
     private double cantidadMinima;
 
@@ -49,11 +50,11 @@ public class Stock {
         this.producto = producto;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

@@ -8,6 +8,7 @@ import dao.ProductoDAO;
 import dao.StockDAO;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -178,7 +179,7 @@ public class StockProductoController implements Initializable {
 
         seleccionado.setCantidad(cantidad);
         seleccionado.setCantidadMinima(cantidadMinima);
-        seleccionado.setFecha(LocalDate.now());
+        seleccionado.setFecha(LocalDateTime.now());
 
         stockDao.actualizar(seleccionado);
         System.out.println("Stock actualizado correctamente.");
@@ -223,7 +224,7 @@ public class StockProductoController implements Initializable {
         Stock nuevoStock = new Stock();
         nuevoStock.setProducto(productoSeleccionado);
         nuevoStock.setCantidad(cantidad);
-        nuevoStock.setFecha(LocalDate.now());
+        nuevoStock.setFecha(LocalDateTime.now());
         nuevoStock.setCantidadMinima(cantidadMinima);
 
         stockDao.guardar(nuevoStock);

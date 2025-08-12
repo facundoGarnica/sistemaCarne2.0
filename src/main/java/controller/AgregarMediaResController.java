@@ -7,6 +7,7 @@ package controller;
 import dao.DetalleMediaResDAO;
 import dao.MediaResDAO;
 import dao.ProductoDAO;
+import dao.StockDAO;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import javafx.scene.control.TextField;
 import model.DetalleMediaRes;
 import model.MediaRes;
 import model.Producto;
+import model.Stock;
 
 /**
  * FXML Controller class
@@ -33,6 +35,8 @@ public class AgregarMediaResController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private Stock stock;
+    private StockDAO stockDao;
     private MediaResDAO mediaResDao;
     private List<Producto> productosCarniceria;
     private ProductoDAO productoDao;
@@ -63,7 +67,6 @@ public class AgregarMediaResController implements Initializable {
         txtPesoBoleta.textProperty().addListener(recalcularListener);
         txtPrecioPorKilo.textProperty().addListener(recalcularListener);
     }
-
 
     private void calcularYMostrarTotales() {
         try {
@@ -199,6 +202,11 @@ public class AgregarMediaResController implements Initializable {
                 detalleMediaRes.setPorcentajeCorte(pesoAjustadoRedondeado);
 
                 detalleDAO.guardar(detalleMediaRes);
+                stockDao = new StockDAO();
+                stockDao.sumarOCrearStockPorNombreProducto(p.getNombre(), pesoAjustadoRedondeado);
+                
+
+                
             }
 
             System.out.println("Media res guardada correctamente.");

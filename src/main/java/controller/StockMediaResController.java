@@ -181,8 +181,14 @@ public class StockMediaResController implements Initializable {
 
         Optional<ButtonType> resultado = confirmacion.showAndWait();
         if (resultado.isPresent() && resultado.get() == botonSi) {
+            // Restar stock según detalles de la media res
+            StockDAO stockDao = new StockDAO();
+            stockDao.restarStockPorMediaRes(seleccionada);
+
+            // Luego eliminar la media res
             mediaResDao = new MediaResDAO();
             mediaResDao.eliminar(seleccionada.getId());
+
             recargarTablaProductos();
         }
     }
