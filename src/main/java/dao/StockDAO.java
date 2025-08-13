@@ -11,6 +11,8 @@ package dao;
 import Util.HibernateUtil;
 import java.time.LocalDateTime;
 import java.util.List;
+import model.CajonPollo;
+import model.DetalleCajonPollo;
 import model.DetalleMediaRes;
 import model.MediaRes;
 import model.Producto;
@@ -183,6 +185,71 @@ public class StockDAO {
             if (tx != null) {
                 tx.rollback();
             }
+            e.printStackTrace();
+        }
+    }
+
+    public void restarStockPorCajonPollo(CajonPollo cajonPollo) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            // Obtengo la lista de detalles asociados al cajonPollo
+            List<DetalleCajonPollo> detalles = session.createQuery(
+                    "FROM DetalleCajonPollo d WHERE d.cajonPollo.id = :cajonId", DetalleCajonPollo.class)
+                    .setParameter("cajonId", cajonPollo.getId())
+                    .list();
+
+            // USAR LA MISMA LÓGICA QUE EN EL CONTROLLER
+            // Porcentaje de aprovechamiento: (18.033 / 19) = 94.91%
+            double porcentajeAprovechamiento = 0.9491;
+
+            // Peso aprovechable del cajón (descontando desperdicio)
+            double pesoAprovechable = cajonPollo.getPesoCajon() * porcentajeAprovechamiento;
+
+            // Peso de referencia de productos vendibles
+            double pesoReferenciaAprovechable = 18.033;
+
+            System.out.println(String.format("RESTANDO STOCK - Cajón: %.2f kg - Peso aprovechable: %.2f kg",
+                    cajonPollo.getPesoCajon(), pesoAprovechable));
+
+            for (DetalleCajonPollo detalle : detalles) {
+                Producto producto = detalle.getProducto();
+
+                Stock stock = session.createQuery(
+                        "FROM Stock s WHERE s.producto.id = :prodId", Stock.class)
+                        .setParameter("prodId", producto.getId())
+                        .uniqueResult();
+
+                if (stock != null) {
+                    // CALCULAR EL PESO EXACTO QUE SE AGREGÓ AL STOCK (misma fórmula del controller)
+                    double pesoAjustadoProducto = producto.getPesoPorUnidad() * (pesoAprovechable / pesoReferenciaAprovechable);
+                    double pesoAjustadoRedondeado = Math.round(pesoAjustadoProducto * 100.0) / 100.0;
+
+                    double nuevaCantidad = stock.getCantidad() - pesoAjustadoRedondeado;
+                    nuevaCantidad = Math.round(nuevaCantidad * 100.0) / 100.0;
+
+                    System.out.println(String.format("Producto: %s - Stock actual: %.3f kg - A restar: %.3f kg - Nuevo stock: %.3f kg",
+                            producto.getNombre(), stock.getCantidad(), pesoAjustadoRedondeado, nuevaCantidad));
+
+                    if (nuevaCantidad <= 0) {
+                        System.out.println("Eliminando stock de: " + producto.getNombre() + " (cantidad <= 0)");
+                        session.delete(stock);
+                    } else {
+                        stock.setCantidad(nuevaCantidad);
+                        session.update(stock);
+                    }
+                } else {
+                    System.out.println("No se encontró stock para el producto: " + producto.getNombre());
+                }
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            System.out.println("Error al restar stock por cajón de pollo: " + e.getMessage());
             e.printStackTrace();
         }
     }

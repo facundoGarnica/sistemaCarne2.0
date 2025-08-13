@@ -43,7 +43,7 @@ public class Crear_productoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         productoDao = new ProductoDAO();
         cbxCategoria.getItems().addAll(
-                "Carniceria", "Cerdo", "Pollo", "Varios", "Seco", "Preparados", "Achuras"
+                "Carniceria", "Cerdo", "Pollo", "Varios", "Seco", "Preparados", "Achuras","promociones"
         );
         cbxCategoria.setValue("Carniceria");
         SpinnerValueFactory<Integer> valueFactory

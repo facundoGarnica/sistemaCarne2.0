@@ -28,6 +28,7 @@ public class CajonPollo {
     private Double pesoCajon;
     private LocalDate fecha;
     private Double precio;
+    private String proveedor;
     @OneToMany(mappedBy = "cajonPollo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetalleCajonPollo> detalleCajonPollos;
 
@@ -37,6 +38,14 @@ public class CajonPollo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
     }
 
     public Double getPesoCajon() {

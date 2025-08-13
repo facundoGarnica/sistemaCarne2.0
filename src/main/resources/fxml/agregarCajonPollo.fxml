@@ -2,6 +2,7 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -31,6 +32,7 @@
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -41,19 +43,20 @@
                <children>
                   <Label text="Fecha:" />
                   <Label text="Precio cajon:" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtPrecioCajon" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Peso de cajon:" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtPesoCajon" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtProveedor" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label text="Proveedor:" GridPane.rowIndex="3" />
-                  <DatePicker prefHeight="37.0" prefWidth="294.0" styleClass="dat" GridPane.columnIndex="1" />
+                  <DatePicker fx:id="datePickerFecha" prefHeight="37.0" prefWidth="294.0" styleClass="dat" GridPane.columnIndex="1" />
+                  <CheckBox fx:id="checkEditar" mnemonicParsing="false" text="editar" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Button mnemonicParsing="false" styleClass="boton" text="Guardar y finalizar" />
-                  <Button mnemonicParsing="false" styleClass="boton" text="Guardar y agregar siguiente -&gt;" />
-                  <Button mnemonicParsing="false" styleClass="boton" text="Cancelar" />
+                  <Button mnemonicParsing="false" onAction="#guardarYSalir" styleClass="boton" text="Guardar y finalizar" />
+                  <Button mnemonicParsing="false" onAction="#guardarYsiguiente" styleClass="boton" text="Guardar y agregar siguiente -&gt;" />
+                  <Button mnemonicParsing="false" onAction="#cerrarOverlay" styleClass="boton" text="Cancelar" />
                </children>
             </HBox>
          </children>

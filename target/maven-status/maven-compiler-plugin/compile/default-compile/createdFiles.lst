@@ -30,6 +30,7 @@ controller\StockMediaResController$1.class
 model\FiadoParcial.class
 controller\StockCajonPolloController.class
 controller\AgregarCajonPolloController.class
+controller\StockCajonPolloController$1.class
 controller\Cliente_pedidoController.class
 dao\PedidoDAO.class
 controller\AumentarPrecioProductoController$1.class

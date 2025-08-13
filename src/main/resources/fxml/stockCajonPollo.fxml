@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StockCajonPolloController">
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StockCajonPolloController">
    <stylesheets>
       <URL value="@../styles/stock.css" />
    </stylesheets>
@@ -45,7 +45,7 @@
                <Font name="System Bold" size="14.0" />
             </font>
          </Label>
-         <DatePicker prefWidth="200.0" GridPane.columnIndex="1" />
+         <DatePicker fx:id="datePickerFecha" prefWidth="200.0" GridPane.columnIndex="1" />
          <Button prefHeight="34.0" prefWidth="84.0" styleClass="boton" text="Buscar" GridPane.columnIndex="2" />
       </children>
    </GridPane>
@@ -68,13 +68,13 @@
                <Font name="System Bold" size="14.0" />
             </font>
          </Label>
-         <DatePicker prefWidth="140.0" GridPane.columnIndex="1" />
+         <DatePicker fx:id="datePickerDesde" prefWidth="140.0" GridPane.columnIndex="1" />
          <Label fx:id="lblRegistroMediaRes12" text="hasta:" GridPane.columnIndex="2">
             <font>
                <Font name="System Bold" size="14.0" />
             </font>
          </Label>
-         <DatePicker prefWidth="140.0" GridPane.columnIndex="3" />
+         <DatePicker fx:id="datePickerHasta" prefWidth="140.0" GridPane.columnIndex="3" />
          <Button prefHeight="34.0" prefWidth="137.0" styleClass="boton" text="Buscar rango" GridPane.columnIndex="4" />
       </children>
    </GridPane>
@@ -83,10 +83,11 @@
    <Button layoutX="31.0" layoutY="132.0" prefHeight="34.0" prefWidth="207.0" styleClass="boton" text="Mostrar todos los cajones" />
    
    <!-- Tabla de Registro de Cajon Pollo -->
-   <TableView fx:id="tblRegistroMediaRes" layoutX="30.0" layoutY="170.0" prefHeight="210.0" prefWidth="1140.0" styleClass="tablaVenta">
+   <TableView fx:id="tblRegistroCajonPollo" layoutX="30.0" layoutY="170.0" prefHeight="210.0" prefWidth="1140.0" styleClass="tablaVenta">
       <columns>
-         <TableColumn fx:id="colPesoBoleta" prefWidth="150.0" text="Precio del cajon" />
-         <TableColumn fx:id="colPesoFinal" prefWidth="150.0" text="Peso de cajon" />
+          <TableColumn fx:id="colProveedor" prefWidth="150.0" text="Proveedor" />
+         <TableColumn fx:id="colPrecioCajon" prefWidth="150.0" text="Precio del cajon" />
+         <TableColumn fx:id="colPeso" prefWidth="150.0" text="Peso de cajon" />
          <TableColumn fx:id="colPrecioPorKg" prefWidth="150.0" text="Precio por Kg" />
          <TableColumn fx:id="colFecha" prefWidth="200.0" text="Fecha" />
       </columns>
@@ -99,8 +100,7 @@
    <HBox layoutX="30.0" layoutY="390.0" spacing="10.0">
       <children>
          <Button onAction="#difuminarTodo" prefHeight="34.0" prefWidth="199.0" styleClass="boton" text="Agregar Cajon de pollo" />
-         <Button prefHeight="34.0" prefWidth="168.0" styleClass="boton" text="Editar Seleccionado" />
-         <Button prefHeight="34.0" prefWidth="181.0" styleClass="boton" text="Eliminar Seleccionado" />
+         <Button onAction="#eliminarPollo" prefHeight="34.0" prefWidth="181.0" styleClass="boton" text="Eliminar Seleccionado" />
       </children>
    </HBox>
    
@@ -122,7 +122,7 @@
       <columns>
          <TableColumn fx:id="colNombreProducto" prefWidth="180.0" text="Nombre del producto" />
          <TableColumn fx:id="colKilosObtenidos" prefWidth="150.0" text="Kilos obtenidos" />
-         <TableColumn fx:id="colPorcentajeMedia" prefWidth="150.0" text="Porcentaje en cajon" />
+         <TableColumn fx:id="colPorcentajeCajon" prefWidth="150.0" text="Porcentaje en cajon" />
          <TableColumn fx:id="colStockFinal" prefWidth="150.0" text="Stock final (kg)" />
          <TableColumn fx:id="colPrecioVenta" prefWidth="150.0" text="Precio venta" />
          <TableColumn fx:id="colValorStock" prefWidth="150.0" text=" stock en dinero" />
