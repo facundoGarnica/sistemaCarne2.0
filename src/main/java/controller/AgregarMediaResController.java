@@ -61,6 +61,7 @@ public class AgregarMediaResController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        DatePickerFecha.setValue(LocalDate.now());
         ChangeListener<String> recalcularListener = (obs, oldVal, newVal) -> calcularYMostrarTotales();
 
         txtPesoBalanza.textProperty().addListener(recalcularListener);
@@ -118,7 +119,7 @@ public class AgregarMediaResController implements Initializable {
         txtPrecioPorKilo.clear();
         labelPesoFinal.setText("---");
         txtProveedor.clear();
-        DatePickerFecha.setValue(null);
+        DatePickerFecha.setValue(LocalDate.now());
     }
 
     public void guardarYSalir() {

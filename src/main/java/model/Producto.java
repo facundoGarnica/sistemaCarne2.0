@@ -28,6 +28,7 @@ public class Producto {
     private String nombre;
     private int codigo;
     private Double precio;
+    private Double pesoParaVender;
     private String tipo;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "stock_id", referencedColumnName = "id")
@@ -47,6 +48,14 @@ public class Producto {
 
     public int getCodigo() {
         return codigo;
+    }
+
+    public Double getPesoParaVender() {
+        return pesoParaVender;
+    }
+
+    public void setPesoParaVender(Double pesoParaVender) {
+        this.pesoParaVender = pesoParaVender;
     }
 
     public void setCodigo(int codigo) {

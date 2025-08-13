@@ -80,4 +80,24 @@ public class ProductoDAO {
         }
     }
 
+    public Producto obtenerProductoPorId(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Producto.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Producto buscarPorCodigo(int codigo) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Producto p WHERE p.codigo = :codigo", Producto.class)
+                    .setParameter("codigo", codigo)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

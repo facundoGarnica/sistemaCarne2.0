@@ -31,6 +31,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -70,6 +71,9 @@ public class StockMediaResController implements Initializable {
     private DetalleMediaResDAO detalleMediaResDao;
     private List<MediaRes> listaMediasRes;
     private MediaRes seleccionada;
+    @FXML
+    private Label lblganancia;
+    private Double sumaGanancia = 0.0;
     //tabla
     @FXML
     private TableView<MediaRes> tblRegistroMediaRes;
@@ -89,7 +93,7 @@ public class StockMediaResController implements Initializable {
     private TableColumn<MediaRes, LocalDateTime> colFecha;
 
     @FXML
-    private TableView tblStockProductos;
+    private TableView<DetalleMediaRes> tblStockProductos;
     @FXML
     private TableColumn<DetalleMediaRes, String> colNombreProducto;
     @FXML
@@ -98,17 +102,23 @@ public class StockMediaResController implements Initializable {
     private TableColumn<DetalleMediaRes, Double> colPorcentajeMedia;
     @FXML
     private TableColumn<DetalleMediaRes, Double> colStockAgregado;
+    @FXML
+    private TableColumn<DetalleMediaRes, Double> colStockEnDinero;
+    @FXML
+    private TableColumn<DetalleMediaRes, Double> colPrecioVenta;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         mediaResDao = new MediaResDAO();
-        // Configurar columnas
+
+        // Configurar columnas de la primera tabla (MediaRes)
         colProveedor.setCellValueFactory(new PropertyValueFactory<>("proveedor"));
         colPesoBoleta.setCellValueFactory(new PropertyValueFactory<>("pesoBoleta"));
         colPrecioPorKg.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colPesoBalanza.setCellValueFactory(new PropertyValueFactory<>("pesoPilon"));
         colPesoFinal.setCellValueFactory(new PropertyValueFactory<>("pesoFinal"));
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         colFecha.setCellFactory(column -> {
@@ -124,12 +134,14 @@ public class StockMediaResController implements Initializable {
                 }
             };
         });
+
         colTotal.setCellValueFactory(cellData -> {
             MediaRes media = cellData.getValue();
             double total = media.getPesoFinal() * media.getPrecio();
             return new javafx.beans.property.SimpleDoubleProperty(total).asObject();
         });
 
+        // Configuración de la segunda tabla (Detalles de productos)
         // Nombre del producto
         colNombreProducto.setCellValueFactory(data
                 -> new SimpleStringProperty(data.getValue().getNombreProducto())
@@ -147,15 +159,43 @@ public class StockMediaResController implements Initializable {
                 -> new SimpleDoubleProperty(data.getValue().getPorcentajeCorte()).asObject()
         );
 
-        // Stock agregado
-        DecimalFormat df = new DecimalFormat("#0.00");
-
+        // Stock agregado (stock actual del producto)
         colStockAgregado.setCellValueFactory(data -> {
             DetalleMediaRes detalle = data.getValue();
             double stockCantidad = obtenerCantidadStock(detalle.getProducto());
             return new SimpleDoubleProperty(stockCantidad).asObject();
         });
 
+        // Precio de venta del producto
+        colPrecioVenta.setCellValueFactory(data
+                -> new SimpleDoubleProperty(data.getValue().getProducto().getPrecio()).asObject()
+        );
+
+        // Stock en dinero (calculado: stockAgregado * precioVenta)
+        colStockEnDinero.setCellValueFactory(data -> {
+            DetalleMediaRes detalle = data.getValue();
+            double stockCantidad = obtenerCantidadStock(detalle.getProducto());
+            double valorStock = stockCantidad * detalle.getProducto().getPrecio();
+            return new SimpleDoubleProperty(valorStock).asObject();
+        });
+
+        // Formatear columnas numéricas con 2 decimales
+        DecimalFormat df = new DecimalFormat("#0.00");
+
+        // Formatear porcentaje en media
+        colPorcentajeMedia.setCellFactory(column -> new TableCell<DetalleMediaRes, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(df.format(item) + "%");
+                }
+            }
+        });
+
+        // Formatear stock agregado
         colStockAgregado.setCellFactory(column -> new TableCell<DetalleMediaRes, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
@@ -163,13 +203,42 @@ public class StockMediaResController implements Initializable {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(df.format(item));
+                    setText(df.format(item) + " kg");
                 }
             }
         });
+
+        // Formatear precio de venta
+        colPrecioVenta.setCellFactory(column -> new TableCell<DetalleMediaRes, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("$" + df.format(item));
+                }
+            }
+        });
+
+        // Formatear stock en dinero
+        colStockEnDinero.setCellFactory(column -> new TableCell<DetalleMediaRes, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("$" + df.format(item));
+                }
+            }
+        });
+
+        // Listener para cargar detalles cuando se selecciona una media res
         tblRegistroMediaRes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             cargarDetallesDeMediaSeleccionada();
         });
+
         // Fecha actual en el DatePicker
         datePickerBuscar.setValue(LocalDate.now());
         recargarTablaProductos();
@@ -316,12 +385,32 @@ public class StockMediaResController implements Initializable {
         seleccionada = tblRegistroMediaRes.getSelectionModel().getSelectedItem();
         if (seleccionada == null) {
             tblStockProductos.setItems(FXCollections.emptyObservableList());
+            sumaGanancia = 0.0;
+            lblganancia.setText("Ganancia: $0.00");
             return;
         }
 
         detalleMediaResDao = new DetalleMediaResDAO();
         List<DetalleMediaRes> detalles = detalleMediaResDao.obtenerPorMediaRes(seleccionada.getId());
-        tblStockProductos.setItems(FXCollections.observableArrayList(detalles));
+
+        ObservableList<DetalleMediaRes> listaDetalles = FXCollections.observableArrayList(detalles);
+        tblStockProductos.setItems(listaDetalles);
+
+        // Total en dinero (precio de venta de todo el stock)
+        double totalStockEnDinero = listaDetalles.stream()
+                .mapToDouble(detalle -> {
+                    double stockCantidad = obtenerCantidadStock(detalle.getProducto());
+                    return stockCantidad * detalle.getProducto().getPrecio();
+                })
+                .sum();
+
+        // Costo original de la media res
+        double costoMediaRes = seleccionada.getPesoFinal() * seleccionada.getPrecio();
+
+        // Ganancia = venta - costo
+        sumaGanancia = totalStockEnDinero - costoMediaRes;
+
+        lblganancia.setText(String.format("Ganancia: $%.2f", sumaGanancia));
     }
 
     public void buscarMediaPorRango() {

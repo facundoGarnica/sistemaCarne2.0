@@ -15,23 +15,42 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class DetalleCajonPolloDAO {
-
+    
     public List<DetalleCajonPollo> buscarTodos() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM DetalleCajonPollo", DetalleCajonPollo.class).list();
         }
     }
-
+    
+    public List<DetalleCajonPollo> obtenerPorCajonPollo(Long idCajonPollo) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM DetalleCajonPollo d WHERE d.cajonPollo.id = :idCajonPollo";
+            return session.createQuery(hql, DetalleCajonPollo.class)
+                         .setParameter("idCajonPollo", idCajonPollo)
+                         .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public DetalleCajonPollo obtenerPorId(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(DetalleCajonPollo.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
     public void eliminar(Long id) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-
             DetalleCajonPollo detalle = session.get(DetalleCajonPollo.class, id);
             if (detalle != null) {
                 session.delete(detalle);
             }
-
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -40,7 +59,7 @@ public class DetalleCajonPolloDAO {
             e.printStackTrace();
         }
     }
-
+    
     public void guardar(DetalleCajonPollo detalle) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -54,7 +73,7 @@ public class DetalleCajonPolloDAO {
             e.printStackTrace();
         }
     }
-
+    
     public void actualizar(DetalleCajonPollo detalle) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

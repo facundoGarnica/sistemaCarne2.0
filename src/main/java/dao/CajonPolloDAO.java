@@ -9,8 +9,11 @@ package dao;
  * @author garca
  */
 import Util.HibernateUtil;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import model.CajonPollo;
+import model.MediaRes;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -68,4 +71,24 @@ public class CajonPolloDAO {
             e.printStackTrace();
         }
     }
+
+    public List<CajonPollo> buscarPorFecha(LocalDate fecha) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "FROM CajonPollo m WHERE m.fecha = :fecha", CajonPollo.class)
+                    .setParameter("fecha", fecha)
+                    .list();
+        }
+    }
+
+    public List<CajonPollo> buscarEntreFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "FROM CajonPollo m WHERE m.fecha BETWEEN :inicio AND :fin", CajonPollo.class)
+                    .setParameter("inicio", fechaInicio)
+                    .setParameter("fin", fechaFin)
+                    .list();
+        }
+    }
+
 }

@@ -3,15 +3,18 @@ controller\StockMediaResController.class
 dao\DetallePedidoDAO.class
 model\Venta.class
 dao\DetalleMediaResDAO.class
+controller\StockMediaResController$3.class
 controller\Producto_menuController$2.class
 model\DetallePedido.class
 dao\DetalleCajonPolloDAO.class
 model\Cliente.class
 controller\Spa_clientesController.class
 dao\ClienteDAO.class
+controller\StockCajonPolloController$3.class
 carniceria\sistemacarne\AppTester.class
 dao\VentaDAO.class
 carniceria\sistemacarne\App.class
+controller\StockCajonPolloController$4.class
 controller\StockProductoController.class
 controller\StockProductoController$2.class
 controller\Producto_menuController.class
@@ -22,6 +25,7 @@ model\Stock.class
 controller\MenuController.class
 controller\NombreFiadoClienteController.class
 dao\CajonPolloDAO.class
+controller\StockMediaResController$4.class
 dao\StockDAO.class
 controller\HistorialVentasController.class
 controller\AgregarPago_clienteController.class
@@ -29,6 +33,8 @@ model\DetalleCajonPollo.class
 controller\StockMediaResController$1.class
 model\FiadoParcial.class
 controller\StockCajonPolloController.class
+controller\Crear_ventasController$1.class
+controller\StockCajonPolloController$5.class
 controller\AgregarCajonPolloController.class
 controller\StockCajonPolloController$1.class
 controller\Cliente_pedidoController.class
@@ -36,6 +42,7 @@ dao\PedidoDAO.class
 controller\AumentarPrecioProductoController$1.class
 controller\Cliente_CrearPedidoController.class
 module-info.class
+controller\StockMediaResController$5.class
 dao\FiadoParcialDAO.class
 carniceria\sistemacarne\PrimaryController.class
 model\CajonPollo.class
@@ -50,8 +57,10 @@ controller\Producto_menuController$1.class
 model\Pedido.class
 Util\HibernateUtil.class
 controller\AumentarPrecioProductoController$2.class
+controller\StockCajonPolloController$2.class
 controller\Crear_ventasController.class
 model\Fiado.class
+controller\StockCajonPolloController$6.class
 controller\StockMediaResController$2.class
 carniceria\sistemacarne\SecondaryController.class
 dao\MediaResDAO.class

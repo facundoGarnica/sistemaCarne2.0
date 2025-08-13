@@ -4,6 +4,7 @@
  */
 package controller;
 
+import Util.HibernateUtil;
 import dao.ProductoDAO;
 import dao.StockDAO;
 import java.net.URL;
@@ -27,6 +28,8 @@ import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import model.Producto;
 import model.Stock;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * FXML Controller class
@@ -128,6 +131,8 @@ public class StockProductoController implements Initializable {
         tablaStock.getItems().setAll(listaStock);
     }
 
+
+
     public void mostrarStockProducto() {
         productoSeleccionado = cbxSeleccionProducto.getValue();
 
@@ -146,6 +151,7 @@ public class StockProductoController implements Initializable {
         // Mostrar cantidad de stock
         String stock = String.valueOf(productoSeleccionado.getStock().getCantidad());
         labelStock.setText(stock);
+        System.out.println("Stock " + productoSeleccionado.getNombre() + ", " + stock);
     }
 
     public void cargarParaEditar() {
@@ -182,7 +188,7 @@ public class StockProductoController implements Initializable {
         }
 
         double cantidad;
-        double cantidadMinima; // CAMBIO: de int a double
+        double cantidadMinima;
         try {
             String textoCantidad = txtAgregarStock.getText().replace(',', '.');
             cantidad = Double.parseDouble(textoCantidad);
@@ -229,7 +235,7 @@ public class StockProductoController implements Initializable {
 
         double cantidad;
         try {
-            cantidad = Double.parseDouble(txtAgregarStock.getText());
+            cantidad = Double.parseDouble(txtAgregarStock.getText().replace(',', '.'));
             if (cantidad < 0) {
                 System.out.println("La cantidad no puede ser negativa.");
                 return;
@@ -239,10 +245,9 @@ public class StockProductoController implements Initializable {
             return;
         }
 
-        double cantidadMinima; // CAMBIO: de int a double
+        double cantidadMinima;
         try {
-            String textoCantidadMinima = txtCantidadMinima.getText().replace(',', '.');
-            cantidadMinima = Double.parseDouble(textoCantidadMinima); // CAMBIO: parseDouble directo
+            cantidadMinima = Double.parseDouble(txtCantidadMinima.getText().replace(',', '.'));
             if (cantidadMinima < 0) {
                 System.out.println("La cantidad mínima no puede ser negativa.");
                 return;
@@ -252,21 +257,29 @@ public class StockProductoController implements Initializable {
             return;
         }
 
-        // Usar el método que suma o crea stock
-        stockDao.sumarOCrearStockPorNombreProducto(productoSeleccionado.getNombre(), cantidad);
+        try {
+            // Crear o sumar stock (esto ya maneja la relación producto-stock)
+            stockDao.sumarOCrearStockPorNombreProducto(productoSeleccionado.getNombre(), cantidad);
 
-        // Actualizar cantidad mínima para el producto
-        Stock stockActual = stockDao.buscarPorProducto(productoSeleccionado);
-        if (stockActual != null) {
-            stockActual.setCantidadMinima(cantidadMinima); // CAMBIO: ahora es double
-            stockDao.actualizar(stockActual);
+            // DESPUÉS actualizar la cantidad mínima si es necesario
+            Stock stockActualizado = stockDao.buscarPorProducto(productoSeleccionado);
+            if (stockActualizado != null && cantidadMinima != stockActualizado.getCantidadMinima()) {
+                stockActualizado.setCantidadMinima(cantidadMinima);
+                stockDao.actualizar(stockActualizado);
+            }
+
+            // Actualizar la referencia local del producto para reflejar los cambios
+            productoSeleccionado = productoDao.obtenerProductoPorId(productoSeleccionado.getId());
+
+            cargarDatosTabla();
+            System.out.println("Stock agregado o actualizado correctamente.");
+            limpiarFormulario();
+            editable = false;
+
+        } catch (Exception e) {
+            System.out.println("Error al agregar stock: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        cargarDatosTabla();
-        System.out.println("Stock agregado o actualizado correctamente.");
-        limpiarFormulario();
-
-        editable = false;
     }
 
 // Limpieza del formulario (opcional: también limpiar el booleano editable)
@@ -289,18 +302,51 @@ public class StockProductoController implements Initializable {
         Alert alertaConfirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         alertaConfirmacion.setTitle("Confirmar eliminación");
         alertaConfirmacion.setHeaderText(null);
-        alertaConfirmacion.setContentText("¿Está seguro que desea eliminar el stock seleccionado?");
+        alertaConfirmacion.setContentText("¿Está seguro que desea eliminar el stock seleccionado?\nEl producto se mantendrá sin stock.");
 
         Optional<ButtonType> resultado = alertaConfirmacion.showAndWait();
 
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            stockDao.eliminar(seleccionado.getId());
-            System.out.println("Stock eliminado correctamente.");
-            cargarDatosTabla();
-            limpiarFormulario();
+            Transaction tx = null;
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                tx = session.beginTransaction();
+
+                // Obtener el stock y producto de la sesión
+                Stock stock = session.get(Stock.class, seleccionado.getId());
+                if (stock != null && stock.getProducto() != null) {
+                    Producto producto = session.get(Producto.class, stock.getProducto().getId());
+
+                    // PASO 1: Desasociar la relación bidireccional
+                    // Quitar la referencia del producto al stock
+                    producto.setStock(null);
+                    session.update(producto);
+
+                    // PASO 2: Quitar la referencia del stock al producto
+                    stock.setProducto(null);
+                    session.update(stock);
+
+                    // PASO 3: Ahora sí eliminar el stock
+                    session.delete(stock);
+
+                    System.out.println("Stock eliminado correctamente. El producto '"
+                            + producto.getNombre() + "' quedó sin stock.");
+                } else {
+                    System.out.println("No se pudo encontrar el stock o su producto asociado.");
+                }
+
+                tx.commit();
+                cargarDatosTabla();
+                limpiarFormulario();
+
+            } catch (Exception e) {
+                if (tx != null) {
+                    tx.rollback();
+                }
+                System.out.println("Error al eliminar stock: " + e.getMessage());
+                e.printStackTrace();
+            }
         } else {
             System.out.println("Eliminación cancelada.");
         }
     }
-
 }

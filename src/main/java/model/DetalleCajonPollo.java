@@ -19,16 +19,19 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "detalleCajonPollo")
 public class DetalleCajonPollo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn (name = "cajonPollo_id")
+    @JoinColumn(name = "cajonPollo_id")
     private CajonPollo cajonPollo;
     @ManyToOne
-    @JoinColumn (name = "producto_id")
+    @JoinColumn(name = "producto_id")
     private Producto producto;
-    private Double porcentajeCorte;  /*Este atributo va a calcular cuando % va a tener el corte en la media,
+    private Double porcentajeCorte;
+
+    /*Este atributo va a calcular cuando % va a tener el corte en la media,
                                         usando como base el peso del producto*/
 
     public Long getId() {
@@ -37,6 +40,10 @@ public class DetalleCajonPollo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNombreProducto() {
+        return producto.getNombre();
     }
 
     public CajonPollo getCajonPollo() {
@@ -62,6 +69,5 @@ public class DetalleCajonPollo {
     public void setPorcentajeCorte(Double porcentajeCorte) {
         this.porcentajeCorte = porcentajeCorte;
     }
-    
-    
+
 }

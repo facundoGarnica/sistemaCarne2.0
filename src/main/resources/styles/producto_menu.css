@@ -224,3 +224,11 @@
     -fx-background-color: #ffffff;
     -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.2), 4, 0, 0, 1);
 }
+.anchor-pane-blanco {
+    -fx-background-color: white;       /* Fondo blanco */
+    -fx-border-color: #cccccc;         /* Color del borde */
+    -fx-border-width: 2;               /* Grosor del borde */
+    -fx-border-radius: 15;             /* Bordes redondeados */
+    -fx-background-radius: 15;         /* Redondear el fondo para que coincida */
+    -fx-padding: 10;                   /* Espacio interno opcional */
+}

@@ -111,12 +111,12 @@ public class StockDAO {
                     .uniqueResult();
 
             if (stock != null) {
-                // Sumar cantidad
+                // Si existe stock, solo sumar la cantidad
                 stock.setCantidad(stock.getCantidad() + cantidadASumar);
+                stock.setFecha(LocalDateTime.now()); // Actualizar fecha
                 session.update(stock);
             } else {
                 // No existe stock, crear uno nuevo
-
                 // Primero buscar el producto por nombre
                 Producto producto = session.createQuery(
                         "FROM Producto p WHERE p.nombre = :nombre", Producto.class)
@@ -128,12 +128,19 @@ public class StockDAO {
                     nuevoStock.setProducto(producto);
                     nuevoStock.setCantidad(cantidadASumar);
                     nuevoStock.setFecha(LocalDateTime.now());
-                    // Podés setear cantidadMinima si querés, o dejar 0
-                    nuevoStock.setCantidadMinima(0);
+                    nuevoStock.setCantidadMinima(0); // Valor por defecto
 
+                    // Establecer la relación bidireccional
+                    producto.setStock(nuevoStock);
+
+                    // Guardar ambas entidades
                     session.save(nuevoStock);
+                    session.update(producto);
+
+                    System.out.println("Stock creado para producto: " + nombreProducto + " con cantidad: " + cantidadASumar);
                 } else {
                     System.out.println("No existe producto con nombre: " + nombreProducto);
+                    throw new RuntimeException("Producto no encontrado: " + nombreProducto);
                 }
             }
 
@@ -143,6 +150,7 @@ public class StockDAO {
                 tx.rollback();
             }
             e.printStackTrace();
+            throw new RuntimeException("Error al crear/actualizar stock", e);
         }
     }
 
@@ -172,7 +180,14 @@ public class StockDAO {
                     nuevaCantidad = Math.round(nuevaCantidad * 100.0) / 100.0;
 
                     if (nuevaCantidad <= 0) {
+                        // PRIMERO: Actualizar el producto para que no referencie al stock
+                        producto.setStock(null);
+                        session.update(producto);
+
+                        // DESPUÉS: Eliminar el stock
                         session.delete(stock);
+
+                        System.out.println("Stock eliminado para producto: " + producto.getNombre() + " (cantidad <= 0)");
                     } else {
                         stock.setCantidad(nuevaCantidad);
                         session.update(stock);
@@ -185,7 +200,9 @@ public class StockDAO {
             if (tx != null) {
                 tx.rollback();
             }
+            System.out.println("Error al restar stock por media res: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException("Error al restar stock por media res", e);
         }
     }
 
@@ -233,8 +250,14 @@ public class StockDAO {
                             producto.getNombre(), stock.getCantidad(), pesoAjustadoRedondeado, nuevaCantidad));
 
                     if (nuevaCantidad <= 0) {
-                        System.out.println("Eliminando stock de: " + producto.getNombre() + " (cantidad <= 0)");
+                        // PRIMERO: Actualizar el producto para que no referencie al stock
+                        producto.setStock(null);
+                        session.update(producto);
+
+                        // DESPUÉS: Eliminar el stock
                         session.delete(stock);
+
+                        System.out.println("Stock eliminado para producto: " + producto.getNombre() + " (cantidad <= 0)");
                     } else {
                         stock.setCantidad(nuevaCantidad);
                         session.update(stock);
@@ -251,6 +274,7 @@ public class StockDAO {
             }
             System.out.println("Error al restar stock por cajón de pollo: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException("Error al restar stock por cajón de pollo", e);
         }
     }
 
