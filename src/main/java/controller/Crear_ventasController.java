@@ -4,10 +4,23 @@
  */
 package controller;
 
+import Util.CalcularVuelto;
+import Util.DatosPagos;
+import Util.HibernateUtil;
+import Util.MercadoPagoApi;
+import Util.Transaccion;
+import dao.DetalleVentaDAO;
 import dao.ProductoDAO;
+import dao.StockDAO;
+import dao.VentaDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +35,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,7 +46,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.DetalleVenta;
 import model.Producto;
 import model.Venta;
@@ -47,15 +63,22 @@ public class Crear_ventasController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    
+    private Timeline temporizadorActual;
+    private int indicePagoActual = 0;
+    private MercadoPagoApi MP;
+    private List<DatosPagos> datos;
     private Venta venta;
     private NombreFiadoClienteController nombreFiadoClienteController;
     private ObservableList<Producto> productosEnVenta;
     private double SumarPreciosAPagar = 0.0;
-    
+    private VentaDAO ventaDao;
+    private DetalleVentaDAO detalleVentaDao;
+    // Cache para evitar crear DAOs repetidamente
+    private ProductoDAO productoDAO;
+    private StockDAO stockDao;
     @FXML
     private TextField txtCodigoDeBarra;
-    
+
     @FXML
     private AnchorPane overlayNombre;
     @FXML
@@ -75,50 +98,83 @@ public class Crear_ventasController implements Initializable {
     @FXML
     private Label lblMedioPago;
 
+    @FXML
+    private TableView<Transaccion> tbolVueltos;
+
+    @FXML
+    private TableColumn<Transaccion, String> colRecibido;
+
+    @FXML
+    private TableColumn<Transaccion, String> colVuelto;
+
+    //variables para mostrar mercadoPago
+    @FXML
+    private Label lblMonto;
+    @FXML
+    private Label lblHora;
+    @FXML
+    private Label lblEstado;
+    @FXML
+    private VBox vBoxAprobado;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        tbolVueltos.setPlaceholder(new Label("")); // deja el placeholder vacío
+        tblVistaProductos.setPlaceholder(new Label("")); // deja el placeholder vacío
+
+        // Inicializar DAOs una sola vez para mejorar rendimiento
+        ventaDao = new VentaDAO();
+        detalleVentaDao = new DetalleVentaDAO();
+        productoDAO = new ProductoDAO(); // Cache del ProductoDAO
+        //tablas de calcular vueltos
+        colRecibido.setCellValueFactory(new PropertyValueFactory<>("dineroRecibido"));
+        colVuelto.setCellValueFactory(new PropertyValueFactory<>("vuelto"));
         // Inicializar la lista observable
         productosEnVenta = FXCollections.observableArrayList();
-        
+
         // Configurar las columnas de la tabla
         colProducto.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colPeso.setCellValueFactory(new PropertyValueFactory<>("pesoParaVender"));
-        
+
         // Configurar columna Total con cálculo personalizado
         colTotal.setCellValueFactory(cellData -> {
             Producto producto = cellData.getValue();
             double total = producto.getPrecio() * producto.getPesoParaVender();
             return new javafx.beans.property.SimpleDoubleProperty(total).asObject();
         });
-        
+
         // Configurar la tabla con la lista
         tblVistaProductos.setItems(productosEnVenta);
-        
+
         // Mantener foco siempre en el TextField
         Platform.runLater(() -> txtCodigoDeBarra.requestFocus());
-        
+
         // Deshabilitar selección en las tablas y evitar que capture el foco
         tblVistaProductos.setFocusTraversable(false);
         tblVistaProductos.setSelectionModel(null);
         tblVistaProductos.getColumns().forEach(column -> column.setSortable(false));
         tblVistaProductos.setOnMouseClicked(event -> event.consume());
-        
+
         // Evitar que el TextField capture el foco y bloquee eventos
         txtCodigoDeBarra.setFocusTraversable(false);
-        
+
         // Listener para mantener el foco en el TextField
         txtCodigoDeBarra.focusedProperty().addListener((obs, oldFocused, newFocused) -> {
             if (!newFocused) {
                 Platform.runLater(() -> txtCodigoDeBarra.requestFocus());
             }
         });
-        
+
+        // Inicializar valores por defecto
+        lblCantidadPagar.setText("$ 0.00");
+        lblMedioPago.setText("---");
+
         // Configurar eventos globales de teclado cuando la escena esté lista
         txtCodigoDeBarra.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 System.out.println("Escena detectada. Activando eventos de teclado.");
-                
+
                 // Usar addEventFilter para capturar eventos antes que otros elementos
                 newScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                     switch (event.getCode()) {
@@ -130,20 +186,183 @@ public class Crear_ventasController implements Initializable {
                             lblMedioPago.setText("Virtual");
                             event.consume();
                             break;
+                        case F4:
+                            MostrarTransferencias();
+                            event.consume();
+                            break;
+                        case F5:
+                            guardarVenta();
+                            event.consume();
+                            break;
+                        case F7:
+                            AgregarHuesos();
+                            event.consume();
+                            break;
+                        case F8:
+                            AgregarCarbon();
+                            event.consume();
+                            break;
+                        case F9:
+                            AgregarHuevos();
+                            event.consume();
+                            break;
+                        case F11:
+                            difuminarTodo();
+                            event.consume();
+                            break;
+                        case F12:
+                            limpiarTodo();
+                            event.consume();
+                            break;
+                        case LEFT:
+                            pagoAnterior();
+                            event.consume();  // Bloquea propagación
+                            break;
+                        case RIGHT:
+                            pagoSiguiente();
+                            event.consume();  // Bloquea propagación
+                            break;
                         case ENTER:
                             if (event.getTarget() == txtCodigoDeBarra) {
                                 SepararCodigo();
                                 event.consume();
                             }
                             break;
+                        case ESCAPE:
+                            // Limpiar todo con ESC
+                            limpiarTodo();
+                            event.consume();
+                            break;
                     }
                 });
             }
         });
+        new Thread(() -> {
+            try {
+                System.out.println("Inicializando Hibernate...");
+                long inicio = System.currentTimeMillis();
+
+                // Forzar inicialización de SessionFactory
+                HibernateUtil.getSessionFactory();
+
+                // Hacer una consulta simple para calentar todo
+                productoDAO.buscarPorCodigo(-1); // Código inexistente
+
+                long tiempo = System.currentTimeMillis() - inicio;
+                System.out.println("✓ Hibernate inicializado en " + tiempo + "ms");
+
+            } catch (Exception e) {
+                System.out.println("Precalentamiento completado");
+            }
+        }).start();
+    }
+
+    public void AgregarHuesos() {
+        txtCodigoDeBarra.setText("2100480000014");
+        SepararCodigo();
+    }
+
+    public void AgregarCarbon() {
+        txtCodigoDeBarra.setText("2100590000010");
+        SepararCodigo();
+    }
+
+    public void AgregarHuevos() {
+        txtCodigoDeBarra.setText("2100620000010");
+        SepararCodigo();
+    }
+
+    @FXML
+    public void MostrarTransferencias() {
+        MP = new MercadoPagoApi();
+        MP.obtenerUltimosPagos();
+        datos = MP.getListaDatos();
+
+        // Mostrar el primer pago (más reciente) por defecto
+        indicePagoActual = 0;
+        actualizarPago();
+        // Iniciar el temporizador que limpia la información después de 10 segundos
+        iniciarTemporizadorLimpieza();
+    }
+
+    private void limpiarDatosMP() {
+        // Limpiar los labels
+        lblMonto.setText("--");
+        lblHora.setText("--");
+        lblEstado.setText("--");
+
+        // Cambiar el fondo de AnchorPane a blanco
+        vBoxAprobado.setStyle("-fx-background-color: white;");
+    }
+
+    private void actualizarPago() {
+        if (datos.isEmpty() || indicePagoActual < 0 || indicePagoActual >= datos.size()) {
+            return; // Evita errores si la lista está vacía o el índice es inválido
+        }
+
+        DatosPagos pago = datos.get(indicePagoActual);
+        lblMonto.setText(String.valueOf(pago.getMonto()));
+        lblHora.setText(pago.getFecha());
+
+        if (pago.getEstado().equals("approved")) {
+            lblEstado.setText("Si");
+            vBoxAprobado.setStyle("-fx-background-color: #7FFFD4;");
+        } else {
+            lblEstado.setText("No");
+            vBoxAprobado.setStyle("-fx-background-color: #FF6347;"); // Cambié el color para diferenciar estados
+        }
+    }
+
+    @FXML
+    public void pagoSiguiente() {
+        if (indicePagoActual > 0) {
+            indicePagoActual--;
+            actualizarPago();
+            reiniciarTemporizadorLimpieza();
+        }
+    }
+
+    @FXML
+    public void pagoAnterior() {
+        if (indicePagoActual < datos.size() - 1) {
+            indicePagoActual++;
+            actualizarPago();
+            reiniciarTemporizadorLimpieza();
+        }
+    }
+// Nuevo método para reiniciar el temporizador
+
+    private void reiniciarTemporizadorLimpieza() {
+        // Detener el temporizador anterior si existe
+        if (temporizadorActual != null) {
+            temporizadorActual.stop();
+        }
+
+        // Crear nuevo temporizador
+        temporizadorActual = new Timeline(new KeyFrame(Duration.seconds(10), e -> limpiarDatosMP()));
+        temporizadorActual.setCycleCount(1);
+        temporizadorActual.play();
+    }
+
+// Método corregido iniciarTemporizadorLimpieza
+    private void iniciarTemporizadorLimpieza() {
+        reiniciarTemporizadorLimpieza(); // Usar el nuevo método
     }
 
     @FXML
     private void cerrarVentas(ActionEvent event) {
+        // Verificar si hay una venta en progreso
+        if (!productosEnVenta.isEmpty() && SumarPreciosAPagar > 0) {
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAlert.setTitle("Confirmar salida");
+            confirmAlert.setHeaderText("Hay una venta en progreso");
+            confirmAlert.setContentText("¿Está seguro que desea salir? Se perderán los datos no guardados.");
+
+            if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+                return;
+            }
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menu.fxml"));
             Parent root = loader.load();
@@ -155,10 +374,16 @@ public class Crear_ventasController implements Initializable {
 
         } catch (IOException e) {
             e.printStackTrace();
+            mostrarError("Error", "No se pudo cargar el menú principal.");
         }
     }
 
     public void difuminarTodo() {
+        // Validar que haya productos en la venta
+        if (!validarVentaParaProcesar()) {
+            return;
+        }
+
         difuminar.setVisible(true);
         difuminar.setDisable(false);
 
@@ -210,6 +435,9 @@ public class Crear_ventasController implements Initializable {
 
         overlayNombre.setDisable(true);
         overlayNombre.setVisible(false);
+
+        // Retomar foco en el campo de código de barras
+        Platform.runLater(() -> txtCodigoDeBarra.requestFocus());
     }
 
     @FXML
@@ -222,7 +450,7 @@ public class Crear_ventasController implements Initializable {
             Parent root = loader.load();
             nombreFiadoClienteController = loader.getController();
             nombreFiadoClienteController.setSpa_creaVentasController(this);
-            // controller.setClientesController(this); // Por ejemplo
+
             // Insertar el contenido cargado en el AnchorPane
             overlayNombre.getChildren().add(root);
 
@@ -234,96 +462,343 @@ public class Crear_ventasController implements Initializable {
 
         } catch (IOException e) {
             e.printStackTrace();
+            mostrarError("Error", "No se pudo cargar la ventana de cliente fiado.");
+            CerrarDifuminarYSpa();
         }
     }
 
     //Metodo para separar el codigo de barra
     @FXML
     public void SepararCodigo() {
-        String codigo = txtCodigoDeBarra.getText();
+        String codigo = txtCodigoDeBarra.getText().trim();
+
+        // Validar que el código no esté vacío
+        if (codigo.isEmpty()) {
+            mostrarAdvertencia("Campo vacío", "Por favor ingrese un código de barras.");
+            return;
+        }
 
         if (codigo.length() != 13) {
-            // error si el código no tiene 13 dígitos
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error de Código");
-            alert.setHeaderText(null);
-            alert.setContentText("El código ingresado no es válido. Debe tener 13 dígitos.");
-            alert.showAndWait();  // Mostrar el alert y esperar que el usuario lo cierre
-
+            // Error si el código no tiene 13 dígitos
+            mostrarError("Código inválido",
+                    "El código ingresado no es válido. Debe tener exactamente 13 dígitos.\n"
+                    + "Código ingresado: " + codigo + " (longitud: " + codigo.length() + ")");
+            limpiarCampoCodigoYEnfocar();
         } else {
             try {
+                // Validar que todos los caracteres sean números
+                if (!codigo.matches("\\d{13}")) {
+                    mostrarError("Código inválido", "El código debe contener solo números.");
+                    limpiarCampoCodigoYEnfocar();
+                    return;
+                }
+
                 // Extraer partes del código
                 String tipoProducto = codigo.substring(0, 2);  // Primeros 2 dígitos
                 String codigoProducto = codigo.substring(2, 6); // 4 dígitos 
-                String pesoImporte = codigo.substring(6, 12);
+                String pesoImporte = codigo.substring(6, 12);   // 6 dígitos para peso/importe
+                String digitoControl = codigo.substring(12);    // Último dígito
+
                 int codigoInt = Integer.parseInt(codigoProducto);
-                Double pesoImporteFloat = Double.valueOf(pesoImporte); // 5 dígitos 
-                String digitoControl = codigo.substring(13);   // Último dígito
+                Double pesoImporteFloat = Double.valueOf(pesoImporte);
 
-                // convierto peso a formato decimal usando float
-                Double peso = pesoImporteFloat / 1000.0f; // Dividir para obtener kg
+                // Convertir peso a formato decimal
+                Double peso = pesoImporteFloat / 1000.0; // Dividir para obtener kg
 
+                System.out.println("Tipo de producto: " + tipoProducto);
                 System.out.println("Código del producto: " + codigoInt);
                 System.out.println("Peso: " + peso + " kg");
+                System.out.println("Dígito de control: " + digitoControl);
 
                 // Llamar a BuscarProducto
                 BuscarProducto(codigoInt, tipoProducto, peso);
+
             } catch (NumberFormatException e) {
                 System.out.println("Error: El código contiene caracteres no numéricos.");
+                mostrarError("Error de formato", "El código contiene caracteres inválidos.");
+                limpiarCampoCodigoYEnfocar();
+            } catch (Exception e) {
+                System.out.println("Error inesperado al procesar código: " + e.getMessage());
+                mostrarError("Error", "Ocurrió un error al procesar el código de barras.");
+                limpiarCampoCodigoYEnfocar();
             }
         }
-        txtCodigoDeBarra.clear();
     }
 
     public void BuscarProducto(int codigo, String tipoProducto, Double peso) {
-        ProductoDAO productoDAO = new ProductoDAO();
-        // Buscar el producto en la base de datos
-        Producto ProductoEncontrado = productoDAO.buscarPorCodigo(codigo);
-        if (ProductoEncontrado == null) {
-            System.out.println("No se encontro el producto ");
-            // Mostrar alerta de producto no encontrado
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Producto no encontrado");
-            alert.setHeaderText(null);
-            alert.setContentText("No se encontró ningún producto con el código: " + codigo);
-            alert.showAndWait();
-            return;
-        } else {
-            System.out.println("el produto es: " + ProductoEncontrado.getNombre());
-        }
-        
-        if (tipoProducto.equals("21")) {
-            ProductoEncontrado.setPesoParaVender(1.00);
-        } else {
-            ProductoEncontrado.setPesoParaVender(peso);
-        }
+        System.out.println("Buscando producto con código: " + codigo); // Debug
 
-        // Agregar el producto a la tabla
-        agregarProductoATabla(ProductoEncontrado);
+        try {
+            // Usar el DAO cacheado en lugar de crear uno nuevo cada vez
+            Producto ProductoEncontrado = productoDAO.buscarPorCodigo(codigo);
+
+            if (ProductoEncontrado == null) {
+                System.out.println("No se encontró el producto con código: " + codigo);
+                mostrarAdvertencia("Producto no encontrado",
+                        "No se encontró ningún producto con el código: " + codigo);
+                limpiarCampoCodigoYEnfocar();
+                return;
+            }
+
+            System.out.println("Producto encontrado: " + ProductoEncontrado.getNombre());
+
+            // CAMBIO IMPORTANTE: Usar setPeso en lugar de setPesoParaVender
+            if (tipoProducto.equals("21")) {
+                // Producto por unidad
+                ProductoEncontrado.setPesoParaVender(1.00);
+            } else {
+                // Producto por peso
+                if (peso <= 0) {
+                    mostrarAdvertencia("Peso inválido", "El peso del producto debe ser mayor a 0.");
+                    limpiarCampoCodigoYEnfocar();
+                    return;
+                }
+                ProductoEncontrado.setPesoParaVender(peso);
+            }
+
+            // Agregar el producto a la tabla
+            agregarProductoATabla(ProductoEncontrado);
+
+        } catch (Exception e) {
+            System.out.println("Error al buscar producto: " + e.getMessage());
+            e.printStackTrace();
+            mostrarError("Error de base de datos", "No se pudo consultar el producto en la base de datos.");
+            limpiarCampoCodigoYEnfocar();
+        }
     }
-    
+
     // Método para agregar producto a la tabla
     private void agregarProductoATabla(Producto producto) {
-        productosEnVenta.add(producto);
-        SumarPreciosAPagar = SumarPreciosAPagar + (producto.getPesoParaVender() * producto.getPrecio());
-        lblCantidadPagar.setText(String.valueOf(SumarPreciosAPagar));
-        System.out.println("Producto agregado a la tabla: " + producto.getNombre() + " - $" + producto.getPrecio());
-        
-        // Mantener el foco en el campo de código de barras
-        Platform.runLater(() -> {
-            txtCodigoDeBarra.requestFocus();
-        });
+        try {
+            productosEnVenta.add(producto);
+
+            // Sumar el subtotal
+            SumarPreciosAPagar += producto.getPesoParaVender() * producto.getPrecio();
+
+            // Aplicar el redondeo especial
+            int entero = (int) Math.round(SumarPreciosAPagar);
+            int unidades = entero % 10;
+
+            if (unidades >= 6) {
+                entero = (entero / 10) * 10 + 10; // redondea hacia arriba
+            } else {
+                entero = (entero / 10) * 10; // redondea hacia abajo
+            }
+
+            // Actualizar el total redondeado
+            double totalRedondeado = entero;
+
+            // Mostrar en label
+            lblCantidadPagar.setText(String.format("$ %, .0f", totalRedondeado));
+
+            // Calcular vueltos
+            CalcularVuelto calculador = new CalcularVuelto();
+            calculador.CalcularVuelto(totalRedondeado);
+
+            // Llenar la tabla con los posibles pagos/vueltos
+            ObservableList<Transaccion> lista = FXCollections.observableArrayList(calculador.GetListaTransacciones());
+            tbolVueltos.setItems(lista);
+
+            // Limpiar campo y mantener foco
+            limpiarCampoCodigoYEnfocar();
+
+        } catch (Exception e) {
+            System.out.println("Error al agregar producto a la tabla: " + e.getMessage());
+            mostrarError("Error", "No se pudo agregar el producto a la venta.");
+        }
     }
-    
+
     // Método para limpiar la tabla (útil para nuevas ventas)
     public void limpiarTabla() {
         productosEnVenta.clear();
         SumarPreciosAPagar = 0.0;
-        lblCantidadPagar.setText("0.0");
+        lblCantidadPagar.setText("$ 0.00");
+        System.out.println("Tabla de productos limpiada.");
     }
-    
-    // Método para obtener la lista de productos (útil para procesar la venta)
+
+    // Método para obtener la lista de productos (lo uso para procesar la venta)
     public ObservableList<Producto> getProductosEnVenta() {
         return productosEnVenta;
+    }
+
+    // Método para validar que la venta esté lista para procesar
+    private boolean validarVentaParaProcesar() {
+        if (productosEnVenta.isEmpty()) {
+            mostrarAdvertencia("Venta vacía", "Debe agregar al menos un producto para generar la venta.");
+            return false;
+        }
+
+        if (SumarPreciosAPagar <= 0) {
+            mostrarAdvertencia("Total inválido", "El total de la venta debe ser mayor a $0.00");
+            return false;
+        }
+
+        if (lblMedioPago.getText().equals("---")) {
+            mostrarAdvertencia("Medio de pago",
+                    "Debe seleccionar un medio de pago.\n"
+                    + "Presione F1 para Efectivo o F2 para Virtual.");
+            return false;
+        }
+
+        return true;
+    }
+
+    public void guardarVenta() {
+        if (!validarVentaParaProcesar()) {
+            return;
+        }
+
+        try {
+            System.out.println("=== INICIANDO GUARDADO DE VENTA ===");
+
+            // Crear nueva venta (usando el patrón del controlador de referencia)
+            venta = new Venta();
+            venta.setFecha(LocalDateTime.now()); // Usar LocalDate en lugar de LocalDateTime
+            venta.setMedioPago(lblMedioPago.getText()); // Usar setMedioDePago
+            venta.setTotal(SumarPreciosAPagar);
+
+            System.out.println("Datos de la venta:");
+            System.out.println("- Total: $" + SumarPreciosAPagar);
+            System.out.println("- Medio de pago: " + lblMedioPago.getText());
+            System.out.println("- Fecha: " + venta.getFecha());
+            System.out.println("- Productos a procesar: " + productosEnVenta.size());
+
+            // Guardar venta en base de datos (usando método del controlador de referencia)
+            System.out.println("Guardando venta principal...");
+            ventaDao.guardar(venta); // Usar agregarVenta como en el controlador de referencia
+
+            System.out.println("✓ Venta principal guardada");
+            System.out.println("✓ ID de venta: " + venta.getId());
+
+            // Guardar detalles de venta siguiendo el patrón del controlador de referencia
+            System.out.println("\n=== GUARDANDO DETALLES DE VENTA ===");
+            GenerarDetalleVenta(); // Usar el mismo método del controlador de referencia
+
+            System.out.println("✓ VENTA PROCESADA CORRECTAMENTE");
+
+            // Limpiar todo después de guardar exitosamente
+            limpiarTodo();
+
+            System.out.println("✓ Sistema limpiado - listo para nueva venta");
+
+        } catch (Exception e) {
+            System.err.println("\n✗ ERROR CRÍTICO EN GUARDADO DE VENTA");
+            System.err.println("✗ Mensaje: " + e.getMessage());
+            e.printStackTrace();
+
+            mostrarError("Error al procesar venta",
+                    "No se pudo completar el procesamiento de la venta:\n\n"
+                    + e.getMessage()
+                    + "\n\nVerifique:\n"
+                    + "• Conexión a la base de datos\n"
+                    + "• Configuración de entidades (Venta, DetalleVenta, Producto)\n"
+                    + "• Relaciones en Hibernate/JPA\n"
+                    + "• Que todos los productos tengan ID válido\n"
+                    + "• Transacciones de base de datos");
+        }
+    }
+
+    // Método extraído del controlador de referencia para generar detalles
+    public void GenerarDetalleVenta() {
+        for (Producto producto : productosEnVenta) {
+            DetalleVenta nuevoDetalle = new DetalleVenta();
+            nuevoDetalle.setVenta(venta);
+            nuevoDetalle.setProducto(producto);
+            nuevoDetalle.setPeso(producto.getPesoParaVender());
+            nuevoDetalle.setPrecio(producto.getPrecio());
+
+            // Guardar el detalle de la venta en la base de datos
+            detalleVentaDao.guardar(nuevoDetalle);
+            System.out.println("Detalle ID: " + nuevoDetalle.getId());
+
+            // --- DESCONTAR STOCK ---
+            if (producto.getStock() != null && producto.getPesoParaVender() != null) {
+                stockDao = new StockDAO();
+                stockDao.descontarStockPorProducto(producto);
+                // Opcional: reiniciar pesoParaVender después de descontar
+                producto.setPesoParaVender(0.0);
+            }
+        }
+    }
+
+    public void limpiarTodo() {
+        try {
+            // Limpiar tabla y totales
+            limpiarTabla();
+
+            // Resetear medio de pago
+            lblMedioPago.setText("---");
+
+            // Limpiar campo de código de barras
+            txtCodigoDeBarra.clear();
+
+            // Resetear venta
+            venta = null;
+
+            tbolVueltos.getItems().clear();
+            tbolVueltos.setPlaceholder(new Label("")); // deja el placeholder vacío
+            tblVistaProductos.setPlaceholder(new Label("")); // deja el placeholder vacío
+            // Retomar foco en el campo
+            Platform.runLater(() -> txtCodigoDeBarra.requestFocus());
+
+            System.out.println("Sistema limpiado - listo para nueva venta.");
+
+        } catch (Exception e) {
+            System.out.println("Error al limpiar sistema: " + e.getMessage());
+        }
+    }
+
+    // Métodos de utilidad para mostrar alertas
+    private void mostrarError(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void mostrarAdvertencia(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void limpiarCampoCodigoYEnfocar() {
+        txtCodigoDeBarra.clear();
+        Platform.runLater(() -> txtCodigoDeBarra.requestFocus());
+    }
+
+    // Getter para el total (útil para otros controladores)
+    public double getTotalVenta() {
+        return SumarPreciosAPagar;
+    }
+
+    // Método público para ser llamado desde otros controladores (ej: nombreFiadoClienteController)
+    public void procesarVentaFiado() {
+        guardarVenta();
+    }
+
+    // Método para obtener información de la venta actual
+    public String getResumenVenta() {
+        if (productosEnVenta.isEmpty()) {
+            return "No hay productos en la venta actual";
+        }
+
+        StringBuilder resumen = new StringBuilder();
+        resumen.append("=== RESUMEN DE VENTA ===\n");
+        resumen.append("Productos: ").append(productosEnVenta.size()).append("\n");
+        resumen.append("Total: $").append(String.format("%.2f", SumarPreciosAPagar)).append("\n");
+        resumen.append("Medio de pago: ").append(lblMedioPago.getText()).append("\n");
+        resumen.append("\nDetalle:\n");
+
+        for (Producto p : productosEnVenta) {
+            resumen.append("- ").append(p.getNombre())
+                    .append(" x $").append(p.getPrecio())
+                    .append("\n");
+        }
+
+        return resumen.toString();
     }
 }

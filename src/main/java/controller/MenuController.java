@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.hibernate.Session;
@@ -98,7 +99,7 @@ public class MenuController implements Initializable {
     private Button btnCrearVenta;
     @FXML
     private Button btnHistorialVentas;
-    
+
     //anchorPane para usarlo de Overlay o SPA
     @FXML
     private AnchorPane overlayClientes;
@@ -232,7 +233,7 @@ public class MenuController implements Initializable {
     // Handlers para Stock
     @FXML
     private void handleMediaRes() {
-         try {
+        try {
             // Cargar producto_menu.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockMediaRes.fxml"));
             AnchorPane vistaProductos = loader.load();
@@ -254,7 +255,7 @@ public class MenuController implements Initializable {
 
     @FXML
     private void handlePollo() {
-         try {
+        try {
             // Cargar producto_menu.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockCajonPollo.fxml"));
             AnchorPane vistaProductos = loader.load();
@@ -276,7 +277,7 @@ public class MenuController implements Initializable {
 
     @FXML
     private void handleIngresarIndividual() {
-         try {
+        try {
             // Cargar producto_menu.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockProducto.fxml"));
             AnchorPane vistaProductos = loader.load();
@@ -300,14 +301,29 @@ public class MenuController implements Initializable {
     @FXML
     private void handleCrearVenta(ActionEvent event) {
         try {
-            System.out.println("Cargando crear_ventas.fxml...");
+            // Cargar el archivo FXML de la nueva ventana
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/crear_ventas.fxml"));
             Parent root = loader.load();
 
-            // Obtener stage desde el botón que disparó el evento
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            // Obtener la resolución de la pantalla
+            Screen screen = Screen.getPrimary();
+            double width = screen.getVisualBounds().getWidth();  // Ancho de la pantalla
+            double height = screen.getVisualBounds().getHeight(); // Alto de la pantalla
+
+            // Crear la escena y agregarla al escenario con tamaño completo
+            Scene scene = new Scene(root, width, height);
+
+            // Crear una nueva ventana (Stage)
+            Stage stage = new Stage();
+            stage.setTitle("Crear Ventas"); // Título de la ventana
+            stage.setScene(scene);
+            stage.setMaximized(true); // Maximizar la ventana para que ocupe toda la pantalla
+
+            stage.show(); // Mostrar la nueva ventana
+
+            // Cerrar la ventana actual (la ventana de la que se hizo clic)
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close(); // Cerrar la ventana actual
 
         } catch (IOException e) {
             e.printStackTrace();

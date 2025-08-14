@@ -17,7 +17,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/fxml/menu"), 640, 480);
+        scene = new Scene(loadFXML("/fxml/crear_ventas"), 640, 480);
         stage.setScene(scene);
         //esto agranda la pantalla al maximo
          stage.setMaximized(true);

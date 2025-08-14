@@ -28,7 +28,7 @@ public class DetalleVenta {
     @ManyToOne
     @JoinColumn(name = "producto_id")
     private Producto producto;
-    private int cantidad;
+    private Double peso;
     private Double precio;
 
     public Long getId() {
@@ -55,12 +55,12 @@ public class DetalleVenta {
         this.producto = producto;
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public Double getPeso() {
+        return peso;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setPeso(Double peso) {
+        this.peso = peso;
     }
 
     public Double getPrecio() {

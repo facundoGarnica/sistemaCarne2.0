@@ -2,7 +2,6 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -20,13 +19,12 @@
         <URL value="@../styles/producto_menu.css" />
     </stylesheets>
    <children>
-      <VBox prefHeight="800.0" prefWidth="1200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="4.0" layoutY="-127.0" prefHeight="927.0" prefWidth="1196.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label styleClass="titulo" text="Historial de Ventas" />
-            <Separator />
+            <Label prefHeight="43.0" prefWidth="354.0" styleClass="titulo" text="Historial de ventas" />
             
             <!-- Filtros -->
-            <GridPane alignment="CENTER_LEFT" hgap="20.0" styleClass="gridPanel" vgap="15.0">
+            <GridPane alignment="CENTER_LEFT" hgap="20.0" prefHeight="20.0" prefWidth="1194.0" styleClass="gridPanel" vgap="15.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" prefWidth="150.0" />
@@ -40,48 +38,56 @@
                   <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label text="Fecha desde:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                  <DatePicker prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  <Label text="Buscar por fecha particular:" />
+                  <DatePicker fx:id="datePickerfecha" onAction="#buscarVentasPorFecha" prefWidth="202.0" GridPane.columnIndex="1" />
                   
-                  <Label text="Fecha hasta:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                  <DatePicker GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                  <Label text="Filtrar desde:" GridPane.columnIndex="2" />
+                  <DatePicker fx:id="datePickerDesde" GridPane.columnIndex="3" />
                   
-                  <Label text="Filtrar por producto:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                  <ComboBox prefHeight="33.0" prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Filtrar hasta:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="datePickerHasta" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   
-                  <Label text="Fecha específica:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <DatePicker GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  
-                  <HBox prefHeight="83.0" prefWidth="1164.0" spacing="10.0" GridPane.columnIndex="0" GridPane.columnSpan="5" GridPane.rowIndex="2">
+                  <HBox prefHeight="62.0" prefWidth="1162.0" spacing="10.0" GridPane.columnSpan="5" GridPane.rowIndex="2">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="82.0" styleClass="boton" text="Filtrar" />
-                        <Button mnemonicParsing="false" styleClass="boton" text="Mostrar ventas de hoy" />
-                        <Button mnemonicParsing="false" styleClass="boton" text="Limpiar filtros" />
+                        <Button mnemonicParsing="false" onAction="#buscarVentasDeHoy" styleClass="boton" text="Mostrar ventas de hoy" />
+                        <Button mnemonicParsing="false" onAction="#mostrarTodasLasVentas" styleClass="boton" text="Mostrar todas las ventas" />
                      </children>
                   </HBox>
+                  <Button mnemonicParsing="false" onAction="#buscarVentasPorFiltro" styleClass="boton" text="Aplicar filtros" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             
             <Separator />
             
-            <!-- Tabla -->
-            <TableView prefHeight="397.0" prefWidth="1196.0" styleClass="tablaVenta">
+            <!-- Tabla de Ventas -->
+            <TableView fx:id="tlbVerVentas" prefHeight="300.0" prefWidth="1196.0" styleClass="tablaVenta">
               <columns>
-                <TableColumn prefWidth="75.0" text="Fecha" />
-                <TableColumn prefWidth="75.0" text="Hora" />
-                  <TableColumn prefWidth="75.0" text="Medio de pago" />
-                  <TableColumn prefWidth="75.0" text="Cantidad de productos" />
-                  <TableColumn prefWidth="75.0" text="Total" />
+                <TableColumn fx:id="colFecha" prefWidth="75.0" text="Fecha" />
+                <TableColumn fx:id="colHora" prefWidth="75.0" text="Hora" />
+                  <TableColumn fx:id="colMedioPago" prefWidth="75.0" text="Medio de pago" />
+                  <TableColumn fx:id="colTotal" prefWidth="75.0" text="Total" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Button mnemonicParsing="false" onAction="#eliminarVentaSeleccionada" styleClass="boton" text="Borrar Venta seleccionada" />
+            
+            <!-- Tabla de Productos -->
+            <TableView fx:id="tblProductos" prefHeight="287.0" prefWidth="1194.0" styleClass="tablaVenta">
+              <columns>
+                <TableColumn fx:id="colNombre" prefWidth="75.0" text="Nombre" />
+                <TableColumn fx:id="colPrecio" prefWidth="75.0" text="Precio" />
+                <TableColumn fx:id="colKilos" prefWidth="75.0" text="Kilos" />
+                <TableColumn fx:id="colTotalProducto" prefWidth="75.0" text="Total" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
             
-            <Separator />
-            
             <!-- Estadísticas -->
-            <GridPane alignment="CENTER" hgap="30.0" styleClass="gridPanel" vgap="15.0">
+            <GridPane alignment="CENTER" hgap="30.0" prefHeight="41.0" prefWidth="1194.0" styleClass="gridPanel" vgap="15.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="200.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="200.0" />
@@ -95,28 +101,28 @@
                   <HBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
                      <children>
                         <Label text="Total de clientes:" />
-                        <Label text="---" />
+                        <Label fx:id="lblClientes" text="---" />
                      </children>
                   </HBox>
                   
                   <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
                      <children>
                         <Label text="Total vendido:" />
-                        <Label text="---" />
+                        <Label fx:id="lblTotalVendido" text="---" />
                      </children>
                   </HBox>
                   
                   <HBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="0">
                      <children>
                         <Label text="Total en efectivo:" />
-                        <Label text="---" />
+                        <Label fx:id="lblEfectivo" text="---" />
                      </children>
                   </HBox>
                   
                   <HBox prefHeight="33.0" prefWidth="254.0" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="0">
                      <children>
                         <Label text="Total en virtual:" />
-                        <Label text="---" />
+                        <Label fx:id="lblVirtual" text="---" />
                      </children>
                   </HBox>
                </children>

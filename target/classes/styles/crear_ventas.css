@@ -52,10 +52,83 @@
     -fx-selection-bar-non-focused: #bdc3c7;
 }
 
+/* ==============================
+   TABLAS de mostrar producto en ventas y vueltos a dar
+   ============================== */
+.tablaCrearVenta {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dcdde1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-table-cell-border-color: #ecf0f1;
+    -fx-selection-bar: #3498db;
+    -fx-selection-bar-non-focused: #bdc3c7;
+}
+
+/* Estilos para las celdas de datos */
+.tablaCrearVenta .table-cell {
+    -fx-font-size: 38px;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+
+/* Estilos para las cabeceras de columnas - CORRECCIÓN AQUÍ */
+.tablaCrearVenta .column-header-background .table-column {
+    -fx-font-size: 30px !important;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+
+/* Alternativa más específica si la anterior no funciona */
+.tablaCrearVenta .column-header-background .filler {
+    -fx-font-size: 30px;
+}
+
+.tablaCrearVenta .column-header-background .label {
+    -fx-font-size: 30px !important;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+
+/* Otra alternativa para asegurar que funcione */
+.tablaCrearVenta .column-header {
+    -fx-font-size: 30px !important;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+
+.tablaCrearVenta .table-column .label {
+    -fx-font-size: 35px !important;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+/* Versión más agresiva si las anteriores no funcionan */
+.tablaCrearVenta > .virtual-flow > .clipped-container > .sheet > .table-row-cell > .table-cell {
+    -fx-font-size: 30px;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+
+/* Para forzar el estilo en las cabeceras específicamente */
+.tablaCrearVenta .column-header-background .nested-column-header .table-column .label,
+.tablaCrearVenta .column-header-background .table-column .label {
+    -fx-font-size: 30px !important;
+    -fx-font-weight: bold !important;
+    -fx-alignment: CENTER !important;
+}
+
+/* Último recurso: aplicar a todos los labels dentro de la tabla */
+.tablaCrearVenta .label {
+    -fx-font-size: 30px !important;
+    -fx-font-weight: bold !important;
+}
+
 .tablaVenta .table-cell,
 .tablaVuelto .table-cell {
     -fx-alignment: CENTER;
     -fx-font-size: 24px;
+    -fx-font-weight: bold
 }
 .tablaVenta .column-header,
 .tablaVuelto .column-header {
@@ -106,6 +179,13 @@
     -fx-font-size: 24px;
 }
 
+/* Resultados de mp */
+.texto-MP {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+    -fx-font-size: 35px;
+}
+
 /* Botones principales */
 .boton {
     -fx-background-color: #3498db;
@@ -147,7 +227,7 @@
 .numeroTotal {
     -fx-text-fill: #27ae60;           /* Verde moderno */
     -fx-font-weight: bold;
-    -fx-font-size: 40px;
+    -fx-font-size: 50px;
     -fx-alignment: center;
 }
 .fondoTitulo {

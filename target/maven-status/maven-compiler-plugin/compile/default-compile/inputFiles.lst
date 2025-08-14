@@ -1,7 +1,9 @@
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\Cliente_CrearPedidoController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\HistorialVentasController.java
+C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\Util\DatosPagos.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\Crear_productoController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\ClientesController.java
+C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\Util\Transaccion.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\StockCajonPolloController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\StockDAO.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\model\Venta.java
@@ -19,6 +21,8 @@ C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\Crear_
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\model\MediaRes.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\model\DetalleVenta.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\DetalleMediaResDAO.java
+C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\Util\CalcularVuelto.java
+C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\Util\MercadoPagoApi.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\Producto_menuController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\MenuController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\carniceria\sistemacarne\App.java
