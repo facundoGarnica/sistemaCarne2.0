@@ -6,65 +6,181 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StockProductoController">
+<AnchorPane id="AnchorPane" prefHeight="900.0" prefWidth="1400.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StockProductoController">
     <stylesheets>
         <URL value="@../styles/stock.css" />
     </stylesheets>
     
     <children>
-        <GridPane hgap="10.0" layoutX="292.0" layoutY="96.0" prefHeight="252.0" prefWidth="627.0" styleClass="gridPanel" vgap="15.0">
-            <columnConstraints>
-                <ColumnConstraints minWidth="100.0" prefWidth="150.0" />
-                <ColumnConstraints minWidth="250.0" prefWidth="100.0" />
-                <ColumnConstraints minWidth="100.0" prefWidth="0.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="35.0" prefHeight="30.0" />
-                <RowConstraints minHeight="35.0" prefHeight="30.0" />
-                <RowConstraints minHeight="35.0" prefHeight="30.0" />
-                <RowConstraints minHeight="35.0" prefHeight="30.0" />
-                <RowConstraints minHeight="40.0" prefHeight="40.0" />
-            </rowConstraints>
-            
-            <Label text="Producto:" />
-            <ComboBox fx:id="cbxSeleccionProducto" onAction="#mostrarStockProducto" prefHeight="48.0" prefWidth="260.0" GridPane.columnIndex="1" />
-            
-            <Label prefHeight="33.0" prefWidth="214.0" text="Stock actual:" GridPane.rowIndex="1" />
-            <Label fx:id="labelStock" prefHeight="33.0" prefWidth="252.0" text="--" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            
-            <Label text="Agregar stock:" GridPane.rowIndex="2" />
-            <TextField fx:id="txtAgregarStock" promptText="Ingresar Kg o unidad" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            
-            <Button onAction="#GuardarOEditar" styleClass="boton" text="Guardar" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-         <Label prefHeight="33.0" prefWidth="214.0" text="Cant. minima:" GridPane.rowIndex="3" />
-         <TextField fx:id="txtCantidadMinima" prefHeight="21.0" prefWidth="150.0" promptText="Ingresar cantidad" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         <CheckBox fx:id="checkActivarCantidad" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </GridPane>
-         
-            <Label layoutX="383.0" layoutY="30.0" styleClass="titulo" text="Cargar stock en productos" />
-      <TableView fx:id="tablaStock" layoutX="123.0" layoutY="379.0" prefHeight="318.0" prefWidth="966.0" styleClass="tablaVenta">
-        <columns>
-          <TableColumn fx:id="colProducto" prefWidth="75.0" text="Nombre" />
-          <TableColumn fx:id="colCantidad" prefWidth="75.0" text="Cantidad en stock" />
-          <TableColumn fx:id="colCantidadMinima" prefWidth="75.0" text="Cantidad minima para alerta" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-      <Button layoutX="891.0" layoutY="716.0" onAction="#cargarParaEditar" styleClass="boton" text="Editar stock del producto" />
-      <Button layoutX="706.0" layoutY="716.0" onAction="#borrarSeleccionado" styleClass="boton" text="Borrar seleccionado" />
+        <!-- Título Principal -->
+        <Label layoutX="50.0" layoutY="20.0" styleClass="titulo" text="Gestión de Stock de Productos" />
+        
+        <!-- Panel de Estadísticas Rápidas -->
+        <HBox layoutX="50.0" layoutY="60.0" prefHeight="60.0" prefWidth="1300.0" spacing="30.0" styleClass="stats-panel">
+            <children>
+                <VBox alignment="CENTER" styleClass="subtitulo">
+                    <children>
+                        <Label fx:id="lblTotalProductos" styleClass="stat-number" text="0" />
+                        <Label styleClass="stat-label" text="Total Productos" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" styleClass="stat-card-warning">
+                    <children>
+                        <Label fx:id="lblStockBajo" styleClass="subtitulo" text="0" />
+                        <Label styleClass="subtitulo" text="Stock Bajo" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" styleClass="subtitulo">
+                    <children>
+                        <Label fx:id="lblSinStock" styleClass="stat-number" text="0" />
+                        <Label styleClass="stat-label" text="Sin Stock" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" styleClass="stat-card-success">
+                    <children>
+                        <Label fx:id="lblStockNormal" styleClass="subtitulo" text="0" />
+                        <Label styleClass="subtitulo" text="Stock Normal" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        
+        <!-- Panel de Formulario de Carga -->
+        <VBox layoutX="50.0" layoutY="140.0" prefHeight="320.0" prefWidth="400.0" styleClass="form-panel">
+            <children>
+                <Label styleClass="subtitulo" text="Cargar/Editar Stock" />
+                <Separator />
+                
+                <GridPane hgap="10.0" prefHeight="361.0" prefWidth="400.0" styleClass="gridPanel" vgap="15.0">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100.0" prefWidth="120.0" />
+                        <ColumnConstraints minWidth="200.0" prefWidth="220.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="35.0" prefHeight="35.0" />
+                        <RowConstraints minHeight="35.0" prefHeight="35.0" />
+                        <RowConstraints minHeight="35.0" prefHeight="35.0" />
+                        <RowConstraints minHeight="35.0" prefHeight="35.0" />
+                        <RowConstraints minHeight="35.0" prefHeight="35.0" />
+                        <RowConstraints minHeight="40.0" prefHeight="45.0" />
+                    </rowConstraints>
+                    
+                    <Label styleClass="form-label" text="Producto:" />
+                    <ComboBox fx:id="cbxSeleccionProducto" onAction="#mostrarStockProducto" prefHeight="30.0" prefWidth="220.0" styleClass="combo-producto" GridPane.columnIndex="1" />
+                    
+                    <Label styleClass="form-label" text="Stock actual:" GridPane.rowIndex="1" />
+                    <Label fx:id="labelStock" prefHeight="30.0" prefWidth="220.0" styleClass="stock-display" text="--" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    
+                    <Label styleClass="form-label" text="Agregar:" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtAgregarStock" prefHeight="30.0" promptText="Cantidad (Kg o unidades)" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    
+                    <Label styleClass="form-label" text="cant. Minima" GridPane.rowIndex="3" />
+                    <TextField fx:id="txtCantidadMinima" prefHeight="30.0" promptText="Cantidad mínima" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    
+                    <CheckBox fx:id="checkActivarCantidad" mnemonicParsing="false" styleClass="checkbox-edit" text="Bloquear edición" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    
+                    <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <children>
+                            <Button onAction="#GuardarOEditar" prefWidth="100.0" styleClass="boton" text="Guardar" />
+                            <Button onAction="#limpiarFormulario" prefWidth="100.0" styleClass="boton" text="Limpiar" />
+                        </children>
+                    </HBox>
+                    
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </GridPane>
+            </children>
+        </VBox>
+        
+        <!-- Panel de Tabla con Filtros -->
+        <VBox layoutX="470.0" layoutY="140.0" prefHeight="680.0" prefWidth="1107.0" styleClass="table-panel">
+            <children>
+                <Label styleClass="subtitulo" text="Inventario de Productos" />
+                <Separator />
+                
+                <!-- Panel de Filtros -->
+                <HBox prefHeight="50.0" prefWidth="840.0" spacing="15.0" styleClass="gridPanel">
+                    <children>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label styleClass="filter-label" text="Buscar producto:" />
+                                <TextField fx:id="txtBuscarProducto" onKeyReleased="#filtrarProductos" prefWidth="200.0" promptText="Nombre del producto..." styleClass="search-field" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label styleClass="filter-label" text="Estado del stock:" />
+                                <ComboBox fx:id="cbxFiltroEstado" onAction="#filtrarPorEstado" prefHeight="48.0" prefWidth="212.0" styleClass="filter-combo" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label styleClass="filter-label" text="Ordenar por:" />
+                                <ComboBox fx:id="cbxOrdenar" onAction="#ordenarTabla" prefHeight="48.0" prefWidth="219.0" styleClass="filter-combo" />
+                            </children>
+                        </VBox>
+                        <VBox alignment="BOTTOM_LEFT" spacing="5.0">
+                            <children>
+                                <Button onAction="#limpiarFiltros" prefHeight="34.0" prefWidth="106.0" styleClass="boton" text="Limpiar" />
+                            </children>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                    </padding>
+                </HBox>
+                
+                <!-- Tabla de Stock -->
+                <TableView fx:id="tablaStock" prefHeight="476.0" prefWidth="923.0" styleClass="tablaVenta">
+                    <columns>
+                        <TableColumn fx:id="colEstado" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Estado" />
+                        <TableColumn fx:id="colCodigo" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" text="Código" />
+                        <TableColumn fx:id="colProducto" minWidth="200.0" prefWidth="250.0" text="Nombre del Producto" />
+                        <TableColumn fx:id="colCantidad" minWidth="120.0" prefWidth="120.0" text="Stock Actual" />
+                        <TableColumn fx:id="colCantidadMinima" minWidth="120.0" prefWidth="120.0" text="Stock Mínimo" />
+                        <TableColumn fx:id="colUnidad" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" text="Unidad" />
+                        <TableColumn fx:id="colUltimaActualizacion" minWidth="130.0" prefWidth="130.0" text="Última Act." />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+                
+                <!-- Panel de Acciones -->
+                <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="840.0" spacing="10.0" styleClass="action-panel">
+                    <children>
+                        <Button onAction="#exportarDatos" styleClass="boton" text="Exportar" />
+                        <Button onAction="#verHistorial" styleClass="boton" text="Ver Historial" />
+                        <Button onAction="#cargarParaEditar" styleClass="boton" text="Editar Seleccionado" />
+                        <Button onAction="#borrarSeleccionado" styleClass="boton" text="Eliminar Stock" />
+                        <Button onAction="#actualizarTabla" styleClass="boton" text="Actualizar" />
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+        
+        <!-- Panel de Alertas (opcional, se puede mostrar/ocultar) -->
+        <VBox fx:id="panelAlertas" layoutX="50.0" layoutY="480.0" prefHeight="120.0" prefWidth="400.0" styleClass="alert-panel" visible="false">
+            <children>
+                <Label styleClass="panel-title" text="🚨 Alertas de Stock" />
+                <Separator />
+                <Label fx:id="lblAlertas" styleClass="alert-text" text="No hay alertas" wrapText="true" />
+            </children>
+        </VBox>
     </children>
 </AnchorPane>

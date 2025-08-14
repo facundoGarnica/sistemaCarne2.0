@@ -6,6 +6,7 @@ dao\VentaDAO.class
 carniceria\sistemacarne\App.class
 controller\StockProductoController$2.class
 controller\HistorialVentasController$2.class
+controller\StockProductoController$5.class
 model\Stock.class
 controller\StockMediaResController$4.class
 dao\StockDAO.class

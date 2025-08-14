@@ -67,7 +67,7 @@
 
 /* Estilos para las celdas de datos */
 .tablaCrearVenta .table-cell {
-    -fx-font-size: 38px;
+    -fx-font-size: 45px;
     -fx-alignment: CENTER;
     -fx-font-weight: bold;
 }
@@ -101,13 +101,6 @@
     -fx-font-size: 35px !important;
     -fx-font-weight: bold;
     -fx-alignment: CENTER;
-}
-
-/* Versión más agresiva si las anteriores no funcionan */
-.tablaCrearVenta > .virtual-flow > .clipped-container > .sheet > .table-row-cell > .table-cell {
-    -fx-font-size: 30px;
-    -fx-alignment: CENTER;
-    -fx-font-weight: bold;
 }
 
 /* Para forzar el estilo en las cabeceras específicamente */
