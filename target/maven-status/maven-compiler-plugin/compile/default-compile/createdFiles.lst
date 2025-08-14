@@ -28,6 +28,7 @@ controller\StockCajonPolloController$2.class
 controller\Crear_ventasController.class
 model\Fiado.class
 controller\StockMediaResController$2.class
+controller\StockProductoController$4.class
 dao\MediaResDAO.class
 dao\ProductoDAO.class
 controller\StockProductoController$1.class
