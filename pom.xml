@@ -32,6 +32,7 @@
             <version>2.2.224</version>
             <scope>runtime</scope>
         </dependency>
+
         <!-- JPA API -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
@@ -81,7 +82,17 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.16.1</version>
         </dependency>
-        
+        <!-- JavaFX Base y Graphics explícitamente -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>${javafx.version}</version>
+    </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -98,6 +109,52 @@
                     <mainClass>carniceria.sistemacarne.App</mainClass>
                 </configuration>
             </plugin>
+            <!-- Plugin Maven Shade para crear JAR ejecutable -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.4.1</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <createDependencyReducedPom>false</createDependencyReducedPom>
+                        <transformers>
+                            <!-- Configurar la clase principal -->
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>carniceria.sistemacarne.App</mainClass>
+                            </transformer>
+                            <!-- Transformadores específicos para Hibernate -->
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <resource>META-INF/services/org.hibernate.integrator.spi.Integrator</resource>
+                            </transformer>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <resource>META-INF/services/org.hibernate.boot.registry.selector.StrategyRegistrationProvider</resource>
+                            </transformer>
+                            <!-- Transformador para servicios en general -->
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        </transformers>
+                        <filters>
+                            <filter>
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <!-- Excluir archivos de firma digital que pueden causar problemas -->
+                                    <exclude>META-INF/*.SF</exclude>
+                                    <exclude>META-INF/*.DSA</exclude>
+                                    <exclude>META-INF/*.RSA</exclude>
+                                    <exclude>META-INF/MANIFEST.MF</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        
+        
         </plugins>
     </build>
 </project>
