@@ -68,4 +68,16 @@ public class FiadoDAO {
             e.printStackTrace();
         }
     }
+
+    public List<Fiado> obtenerFiadosPorClienteId(Long clienteId) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    List<Fiado> fiados = session.createQuery(
+            "FROM Fiado f LEFT JOIN FETCH f.fiadoParciales WHERE f.cliente.id = :id", Fiado.class)
+            .setParameter("id", clienteId)
+            .getResultList();
+    session.close();
+    return fiados;
+}
+
+
 }

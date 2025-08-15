@@ -25,6 +25,7 @@ import java.util.List;
 @Entity
 @Table(name = "fiado")
 public class Fiado {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +36,7 @@ public class Fiado {
     @JoinColumn(name = "venta_id")
     private Venta venta;
     private LocalDateTime fecha;
-    @OneToMany(mappedBy = "fiado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fiado", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<FiadoParcial> fiadoParciales;
 
     public Long getId() {
@@ -69,7 +70,7 @@ public class Fiado {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
-    
+
     public List<FiadoParcial> getFiadoParciales() {
         return fiadoParciales;
     }
@@ -77,8 +78,30 @@ public class Fiado {
     public void setFiadoParciales(List<FiadoParcial> fiadoParciales) {
         this.fiadoParciales = fiadoParciales;
     }
-    
-    
-    
-    
+
+    // Retorna la suma de todos los parciales pagos
+    public double getTotalParciales() {
+        if (fiadoParciales == null || fiadoParciales.isEmpty()) {
+            return 0.0;
+        }
+        return fiadoParciales.stream()
+                .mapToDouble(fp -> fp.getAnticipo() != null ? fp.getAnticipo() : 0.0)
+                .sum();
+    }
+
+    // Retorna el resto por pagar
+    public double getResto() {
+        if (venta == null) {
+            return 0.0;
+        }
+        return venta.getTotal() - getTotalParciales();
+    }
+
+    public Boolean getEstado() {
+        double totalPagado = fiadoParciales.stream()
+                .mapToDouble(FiadoParcial::getAnticipo)
+                .sum();
+        return (venta.getTotal() - totalPagado) <= 0;
+    }
+
 }

@@ -3,75 +3,140 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" fx:id="cartelGuardarPedido" prefHeight="280.0" prefWidth="520.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NombreFiadoClienteController">
+<AnchorPane id="AnchorPane" fx:id="cartelGuardarPedido" prefHeight="450.0" prefWidth="580.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NombreFiadoClienteController">
     <stylesheets>
         <URL value="@../styles/clientes.css" />
     </stylesheets>
     
     <children>
-        <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="240.0" prefWidth="480.0" spacing="15.0" styleClass="gridPanel" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <VBox alignment="TOP_CENTER" layoutX="25.0" layoutY="25.0" prefHeight="400.0" prefWidth="530.0" spacing="20.0" styleClass="gridPanel" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
             
-            <!-- Título del formulario -->
-            <Label styleClass="titulo-formulario" text="Registro de Cliente Fiado" />
-            
-            <!-- GridPane para los campos del formulario -->
-            <GridPane alignment="CENTER" hgap="15.0" prefWidth="400.0" vgap="15.0">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="NEVER" minWidth="90.0" prefWidth="80.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="250.0" prefWidth="250.0" />
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                </rowConstraints>
-                
+            <!-- Encabezado del formulario -->
+            <VBox alignment="CENTER" spacing="8.0">
                 <children>
-                    <!-- Campo Nombre (requerido) -->
-                    <Label prefHeight="33.0" prefWidth="116.0" styleClass="label-requerido" text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <TextField fx:id="txtNombre" prefHeight="32.0" promptText="Ingrese el nombre del cliente" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                    
-                    <!-- Campo Alias (opcional) -->
-                    <Label text="Alias:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                    <TextField fx:id="txtAlias" prefHeight="32.0" promptText="Ingrese un alias (Opcional)" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                    
-                    <!-- Campo Celular (opcional) -->
-                    <Label text="Celular:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                    <TextField fx:id="txtCelular" prefHeight="32.0" promptText="Ingrese celular (Opcional)" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                    
-                    <!-- Campo Anticipo (opcional) -->
-                    <Label text="Anticipo:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                    <TextField fx:id="txtAnticipo" prefHeight="32.0" promptText="Ingresar dinero (opcional)" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label styleClass="titulo-formulario" text="Asignar Pedido a Cliente" />
+                    <Label styleClass="subtitulo-descripcion" text="Seleccione un cliente existente o registre uno nuevo" />
                 </children>
-                
-                <padding>
-                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                </padding>
-            </GridPane>
+            </VBox>
             
-            <!-- Separador visual -->
-            <HBox prefHeight="10.0" />
+            <Separator prefWidth="480.0" styleClass="separador-principal" />
             
-            <!-- Botones de acción -->
-            <HBox alignment="CENTER" spacing="20.0">
+            <!-- Sección 1: Cliente Existente -->
+            <VBox spacing="12.0" styleClass="seccion-formulario">
                 <children>
-                    <Button fx:id="generarFiadoButton" mnemonicParsing="false" onAction="#guardarFiado" prefHeight="40.0" prefWidth="160.0" styleClass="boton" text="Generar Fiado" />
-                    <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cerrarOverlay" prefHeight="40.0" prefWidth="120.0" styleClass="boton" text="Cancelar" />
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <children>
+                            <Label prefHeight="20.0" prefWidth="20.0" styleClass="numero-seccion" text="1" />
+                            <Label styleClass="titulo-seccion" text="Cliente Existente" />
+                        </children>
+                    </HBox>
+                    
+                    <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="contenedor-campo">
+                        <children>
+                            <Label prefWidth="80.0" styleClass="etiqueta-campo" text="Cliente:" />
+                            <ComboBox fx:id="cmbClientesExistentes" prefHeight="35.0" prefWidth="280.0" promptText="Buscar cliente..." styleClass="combo-clientes" />
+                            <Button fx:id="btnLimpiarSeleccion" mnemonicParsing="false" onAction="#limpiarClientes" prefHeight="35.0" prefWidth="90.0" styleClass="boton" text="Limpiar" />
+                        </children>
+                        <padding>
+                            <Insets left="15.0" right="15.0" />
+                        </padding>
+                    </HBox>
+                </children>
+            </VBox>
+            
+            <!-- Separador con "O" -->
+            <HBox alignment="CENTER" spacing="15.0">
+                <children>
+                    <Separator prefWidth="200.0" />
+                    <Label styleClass="separador-texto" text="O" />
+                    <Separator prefWidth="200.0" />
                 </children>
             </HBox>
             
+            <!-- Sección 2: Nuevo Cliente -->
+            <VBox spacing="15.0" styleClass="seccion-formulario">
+                <children>
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <children>
+                            <Label prefHeight="20.0" prefWidth="20.0" styleClass="numero-seccion" text="2" />
+                            <Label styleClass="titulo-seccion" text="Registrar Nuevo Cliente" />
+                        </children>
+                    </HBox>
+                    
+                    <!-- Formulario de nuevo cliente -->
+                    <GridPane fx:id="gridFormularioNuevo" alignment="TOP_LEFT" hgap="20.0" styleClass="grid-nuevo-cliente" vgap="15.0">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="90.0" prefWidth="90.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="300.0" prefWidth="300.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
+                            <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
+                            <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
+                            <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
+                        </rowConstraints>
+                        
+                        <children>
+                            <!-- Nombre (obligatorio) -->
+                            <Label styleClass="label-requerido" text="Nombre*:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <TextField fx:id="txtNombre" prefHeight="35.0" promptText="Nombre completo del cliente" styleClass="campo-requerido" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            
+                            <!-- Alias (opcional) -->
+                            <Label styleClass="etiqueta-campo" text="Alias:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <TextField fx:id="txtAlias" prefHeight="35.0" promptText="Apodo o nombre alternativo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            
+                            <!-- Celular (opcional) -->
+                            <Label styleClass="etiqueta-campo" text="Celular:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                            <TextField fx:id="txtCelular" prefHeight="35.0" promptText="Número de teléfono" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            
+                            <!-- Anticipo (opcional) -->
+                            <Label styleClass="etiqueta-campo" text="Anticipo:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                            <TextField fx:id="txtAnticipo" prefHeight="35.0" promptText="Monto de anticipo (opcional)" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        </children>
+                        
+                        <padding>
+                            <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                        </padding>
+                    </GridPane>
+                    
+                    <!-- Nota informativa -->
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <children>
+                            <Region prefWidth="110.0" />
+                            <Label styleClass="nota-informativa" text="* Campos obligatorios" />
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+            
+            <!-- Espaciador flexible -->
+            <Region prefHeight="10.0" VBox.vgrow="ALWAYS" />
+            
+            <!-- Botones de acción -->
+            <HBox alignment="CENTER" spacing="25.0" styleClass="contenedor-botones">
+                <children>
+                    <Button fx:id="generarFiadoButton" mnemonicParsing="false" onAction="#guardarFiado" prefHeight="42.0" prefWidth="180.0" styleClass="boton" text="Generar Fiado" />
+                    <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cerrarOverlay" prefHeight="42.0" prefWidth="120.0" styleClass="boton" text="Cancelar" />
+                </children>
+                <padding>
+                    <Insets bottom="10.0" top="10.0" />
+                </padding>
+            </HBox>
+            
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
             </padding>
         </VBox>
     </children>

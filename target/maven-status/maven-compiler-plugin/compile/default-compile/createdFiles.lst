@@ -3,6 +3,7 @@ model\DetallePedido.class
 controller\StockCajonPolloController$3.class
 carniceria\sistemacarne\AppTester.class
 dao\VentaDAO.class
+controller\NombreFiadoClienteController$1.class
 carniceria\sistemacarne\App.class
 controller\StockProductoController$2.class
 controller\HistorialVentasController$2.class
@@ -73,6 +74,7 @@ controller\Producto_menuController$1.class
 model\Pedido.class
 Util\HibernateUtil.class
 controller\AumentarPrecioProductoController$2.class
+controller\ClientesController$1.class
 controller\StockCajonPolloController$6.class
 carniceria\sistemacarne\SecondaryController.class
 controller\HistorialVentasController$1.class

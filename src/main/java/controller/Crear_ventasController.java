@@ -36,6 +36,7 @@ import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -107,6 +108,8 @@ public class Crear_ventasController implements Initializable {
 
     @FXML
     private TableColumn<Transaccion, String> colVuelto;
+
+    //Variables para guardar cliente
 
     //variables para mostrar mercadoPago
     @FXML
@@ -259,6 +262,9 @@ public class Crear_ventasController implements Initializable {
         }).start();
     }
 
+    public String getMedioPago(){
+        return lblMedioPago.getText();
+    }
     public void AgregarHuesos() {
         txtCodigoDeBarra.setText("2100480000014");
         SepararCodigo();

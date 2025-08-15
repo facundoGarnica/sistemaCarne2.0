@@ -87,4 +87,24 @@ public class ClienteDAO {
         }
     }
 
+    public List<Cliente> buscarClientesConFiados() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "SELECT DISTINCT c FROM Cliente c JOIN c.fiados f", Cliente.class
+            ).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public List<Cliente> buscarTodosConFiados() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Cliente> clientes = session.createQuery(
+                "SELECT c FROM Cliente c LEFT JOIN FETCH c.fiados", Cliente.class
+        ).getResultList();
+        session.close();
+        return clientes;
+    }
+
 }

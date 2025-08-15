@@ -32,7 +32,7 @@ public class Venta {
     @JoinColumn(name = "fiado_id")
     private Fiado fiado;
     private LocalDateTime fecha;
-        @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<DetalleVenta> detalleVentas;
     private String medioPago;
 

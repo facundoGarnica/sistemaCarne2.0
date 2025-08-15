@@ -172,9 +172,9 @@
       </HBox>
 
       <!-- Overlay para modal (manteniendo funcionalidad original) -->
-      <AnchorPane id="difuminar" fx:id="difuminar" disable="true" prefHeight="387.0" prefWidth="1200.0" visible="false" AnchorPane.bottomAnchor="333.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+      <AnchorPane id="difuminar" fx:id="difuminar" disable="true" prefHeight="520.0" prefWidth="1200.0" visible="false" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
          <children>
-            <AnchorPane id="overlayNombre" fx:id="overlayNombre" prefHeight="282.0" prefWidth="534.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="100.0" />
+            <AnchorPane id="overlayNombre" fx:id="overlayNombre" layoutX="381.0" layoutY="-3.0" prefHeight="526.0" prefWidth="406.0" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="381.0" AnchorPane.rightAnchor="413.0" AnchorPane.topAnchor="-3.0" />
          </children>
       </AnchorPane>
    </children>
