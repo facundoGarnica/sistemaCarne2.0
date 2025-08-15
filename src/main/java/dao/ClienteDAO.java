@@ -7,6 +7,7 @@ package dao;
 import Util.HibernateUtil;
 import java.util.List;
 import model.Cliente;
+import model.Fiado;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -66,6 +67,23 @@ public class ClienteDAO {
                 tx.rollback();
             }
             e.printStackTrace();
+        }
+    }
+
+    public List<Fiado> obtenerFiadosDeCliente(Long clienteId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Cliente cliente = session.get(Cliente.class, clienteId);
+            if (cliente != null) {
+                // Inicializar la lista si está lazy
+                cliente.getFiados().size();
+                return cliente.getFiados();
+            } else {
+                System.out.println("No se encontró el cliente con ID: " + clienteId);
+                return List.of();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
         }
     }
 

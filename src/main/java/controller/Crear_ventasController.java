@@ -63,6 +63,7 @@ public class Crear_ventasController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private boolean overlayActivo = false;
     private Timeline temporizadorActual;
     private int indicePagoActual = 0;
     private MercadoPagoApi MP;
@@ -160,8 +161,9 @@ public class Crear_ventasController implements Initializable {
         txtCodigoDeBarra.setFocusTraversable(false);
 
         // Listener para mantener el foco en el TextField
+        // MODIFICAR este listener para considerar el estado del overlay
         txtCodigoDeBarra.focusedProperty().addListener((obs, oldFocused, newFocused) -> {
-            if (!newFocused) {
+            if (!newFocused && !overlayActivo) { // Solo refocus si no hay overlay activo
                 Platform.runLater(() -> txtCodigoDeBarra.requestFocus());
             }
         });
@@ -272,6 +274,14 @@ public class Crear_ventasController implements Initializable {
         SepararCodigo();
     }
 
+    public boolean isOverlayActivo() {
+        return overlayActivo;
+    }
+
+    public void setMedioPagoFiado() {
+        lblMedioPago.setText("Fiado");
+    }
+
     @FXML
     public void MostrarTransferencias() {
         MP = new MercadoPagoApi();
@@ -379,10 +389,17 @@ public class Crear_ventasController implements Initializable {
     }
 
     public void difuminarTodo() {
+        setMedioPagoFiado();
         // Validar que haya productos en la venta
         if (!validarVentaParaProcesar()) {
             return;
         }
+
+        // Marcar que el overlay está activo
+        overlayActivo = true;
+
+        // Quitar el foco del campo de código de barras
+        txtCodigoDeBarra.setFocusTraversable(false);
 
         difuminar.setVisible(true);
         difuminar.setDisable(false);
@@ -430,11 +447,18 @@ public class Crear_ventasController implements Initializable {
 
     public void CerrarDifuminarYSpa() {
         System.out.println("Cerrando overlay...");
+
+        // Marcar que el overlay ya no está activo
+        overlayActivo = false;
+
         difuminar.setDisable(true);
         difuminar.setVisible(false);
 
         overlayNombre.setDisable(true);
         overlayNombre.setVisible(false);
+
+        // Restaurar la capacidad de recibir foco del campo de código de barras
+        txtCodigoDeBarra.setFocusTraversable(true);
 
         // Retomar foco en el campo de código de barras
         Platform.runLater(() -> txtCodigoDeBarra.requestFocus());
@@ -636,7 +660,7 @@ public class Crear_ventasController implements Initializable {
         if (lblMedioPago.getText().equals("---")) {
             mostrarAdvertencia("Medio de pago",
                     "Debe seleccionar un medio de pago.\n"
-                    + "Presione F1 para Efectivo o F2 para Virtual.");
+                    + "Presione F1 para Efectivo, F2 para Virtual o F11 para Fiado.");
             return false;
         }
 

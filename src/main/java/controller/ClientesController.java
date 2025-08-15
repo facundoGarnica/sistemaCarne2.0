@@ -1,7 +1,12 @@
 package controller;
 
+import dao.ClienteDAO;
+import dao.FiadoDAO;
+import dao.FiadoParcialDAO;
+import dao.VentaDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,13 +15,35 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import model.Cliente;
+import model.Fiado;
+import model.FiadoParcial;
+import model.Venta;
 
 public class ClientesController implements Initializable {
 
+    //Objetos
+    private Cliente cliente;
+    private Fiado fiado;
+    private FiadoParcial fiadoParcial;
+    private Venta venta;
+    
+    //Dao
+    private ClienteDAO clienteDao;
+    private FiadoDAO fiadoDao;
+    private FiadoParcialDAO fiadoParcialDao;
+    private VentaDAO ventaDao;
+    
+    
+    //Variables
+    List<Fiado> listaDeFiadosCliente;
+    List<Cliente> listaClientes;
     @FXML
     private AnchorPane difuminar;
     @FXML
@@ -24,9 +51,41 @@ public class ClientesController implements Initializable {
     @FXML
     private Spa_clientesController spaClienteController;
 
+    
+    //tablas
+    
+    @FXML
+    private TableView tablaClientes;
+    @FXML 
+    private TableColumn colNombre;
+    @FXML 
+    private TableColumn colFecha;
+    @FXML 
+    private TableColumn colCelular;
+    @FXML 
+    private TableColumn colTotal;
+    @FXML 
+    private TableColumn colAnticipos;
+    @FXML 
+    private TableColumn colResto;
+    @FXML 
+    private TableColumn colPago;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // No aplicamos nada aquí para que sea a demanda
+        clienteDao = new ClienteDAO();
+        fiadoDao = new FiadoDAO();
+        ventaDao = new VentaDAO();
+        fiadoParcialDao = new FiadoParcialDAO();
+        listaClientes = clienteDao.buscarTodos();
+       
+    }
+    
+    public void llenarTablaClientes(){
+        for (Cliente c : listaClientes){
+            listaDeFiadosCliente = clienteDao.obtenerFiadosDeCliente(c.getId());
+        }
+        
     }
 
     public void difuminarTodo() {

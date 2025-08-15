@@ -10,7 +10,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +28,9 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double total;
+    @OneToOne
+    @JoinColumn(name = "fiado_id")
+    private Fiado fiado;
     private LocalDateTime fecha;
         @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetalleVenta> detalleVentas;
@@ -35,6 +40,15 @@ public class Venta {
         return medioPago;
     }
 
+    public Fiado getFiado() {
+        return fiado;
+    }
+
+    public void setFiado(Fiado fiado) {
+        this.fiado = fiado;
+    }
+
+    
     public void setMedioPago(String medioPago) {
         this.medioPago = medioPago;
     }

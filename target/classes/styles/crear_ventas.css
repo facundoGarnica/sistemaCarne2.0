@@ -67,7 +67,7 @@
 
 /* Estilos para las celdas de datos */
 .tablaCrearVenta .table-cell {
-    -fx-font-size: 45px;
+    -fx-font-size: 42px;
     -fx-alignment: CENTER;
     -fx-font-weight: bold;
 }

@@ -487,3 +487,69 @@
 .date-picker-popup .next-month {
     -fx-text-fill: #95a5a6;
 }
+
+/* ==============================
+   ESTILOS PARA TABPANE
+   ============================== */
+
+/* TabPane principal */
+.tab-pane {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dcdde1;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+/* Área de las pestañas (tab headers) */
+.tab-pane .tab-header-area {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Fondo de las pestañas */
+.tab-pane .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+/* Pestañas individuales */
+.tab-pane .tab {
+    -fx-background-color: #34495e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-padding: 12px 20px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+/* Pestaña en hover */
+.tab-pane .tab:hover {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+/* Pestaña seleccionada */
+.tab-pane .tab:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Texto de las pestañas */
+.tab-pane .tab .tab-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+/* Contenido de las pestañas */
+.tab-pane .tab-content-area {
+    -fx-background-color: #ffffff;
+    -fx-padding: 15px;
+    -fx-border-color: #dcdde1;
+    -fx-border-width: 0 1px 1px 1px;
+    -fx-background-radius: 0 0 5px 5px;
+}

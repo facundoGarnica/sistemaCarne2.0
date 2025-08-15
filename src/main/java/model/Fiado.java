@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,11 +31,10 @@ public class Fiado {
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "venta_id")
     private Venta venta;
     private LocalDateTime fecha;
-    private String observacion;
     @OneToMany(mappedBy = "fiado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FiadoParcial> fiadoParciales;
 
@@ -69,15 +69,7 @@ public class Fiado {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
+    
     public List<FiadoParcial> getFiadoParciales() {
         return fiadoParciales;
     }

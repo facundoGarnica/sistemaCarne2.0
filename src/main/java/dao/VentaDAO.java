@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javafx.collections.FXCollections;
 import model.DetalleVenta;
+import model.Fiado;
 import model.Producto;
 import model.Stock;
 import model.Venta;
@@ -267,6 +268,53 @@ public class VentaDAO {
             System.err.println("Error al buscar ventas por fecha: " + e.getMessage());
             e.printStackTrace();
             return FXCollections.observableArrayList();
+        }
+    }
+
+    public Venta buscarUltimaVenta() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Ordena por fecha descendente y toma solo el primer resultado
+            return session.createQuery(
+                    "FROM Venta v ORDER BY v.fecha DESC", Venta.class)
+                    .setMaxResults(1)
+                    .uniqueResult();
+        } catch (Exception e) {
+            System.err.println("Error al obtener la última venta: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void asignarFiadoALaUltimaVenta(Fiado fiado) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            // Obtener la última venta
+            Venta ultimaVenta = session.createQuery("FROM Venta v ORDER BY v.fecha DESC", Venta.class)
+                    .setMaxResults(1)
+                    .uniqueResult();
+
+            if (ultimaVenta == null) {
+                System.out.println("No hay ventas registradas.");
+                tx.rollback();
+                return;
+            }
+
+            // Asignar el fiado
+            ultimaVenta.setFiado(fiado);
+            session.update(ultimaVenta);
+
+            tx.commit();
+            System.out.println("Fiado asignado correctamente a la última venta (ID: " + ultimaVenta.getId() + ").");
+
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            System.err.println("Error al asignar fiado a la última venta: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al asignar fiado", e);
         }
     }
 }

@@ -24,12 +24,11 @@ public class FiadoParcial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "fiado_id")
     private Fiado fiado;
-    private Double montoPagado;
+    private Double anticipo;
     private LocalDateTime fecha;
-    private String observacion;
-
+    private String medioAbonado;
     public Long getId() {
         return id;
     }
@@ -38,6 +37,15 @@ public class FiadoParcial {
         this.id = id;
     }
 
+    public String getMedioAbonado() {
+        return medioAbonado;
+    }
+
+    public void setMedioAbonado(String medioAbonado) {
+        this.medioAbonado = medioAbonado;
+    }
+
+    
     public Fiado getFiado() {
         return fiado;
     }
@@ -46,12 +54,12 @@ public class FiadoParcial {
         this.fiado = fiado;
     }
 
-    public Double getMontoPagado() {
-        return montoPagado;
+    public Double getAnticipo() {
+        return anticipo;
     }
 
-    public void setMontoPagado(Double montoPagado) {
-        this.montoPagado = montoPagado;
+    public void setAnticipo(Double anticipo) {
+        this.anticipo = anticipo;
     }
 
     public LocalDateTime getFecha() {
@@ -61,14 +69,5 @@ public class FiadoParcial {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-    
     
 }
