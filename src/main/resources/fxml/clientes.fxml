@@ -10,7 +10,6 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -52,19 +51,6 @@
                             <padding>
                                 <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
                             </padding>
-                            <children>
-                                <TextField fx:id="txtBuscarCliente" maxWidth="Infinity" promptText="Buscar por nombre, alias o celular..." styleClass="search-input" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                        <Insets right="10.0" />
-                                    </HBox.margin>
-                                </TextField>
-                                <Button fx:id="btnBuscar" minWidth="80.0" styleClass="btn-primary" text="Buscar">
-                                    <HBox.margin>
-                                        <Insets right="8.0" />
-                                    </HBox.margin>
-                                </Button>
-                                <Button fx:id="btnLimpiar" minWidth="80.0" styleClass="btn-secondary" text="Limpiar" />
-                            </children>
                         </HBox>
                     </children>
                 </VBox>
@@ -121,10 +107,6 @@
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <Button fx:id="btnEditarCliente" minWidth="70.0" prefHeight="34.0" prefWidth="133.0" styleClass="btn-small" text="Borrar cliente">
-                                 <HBox.margin>
-                                    <Insets left="100.0" />
-                                 </HBox.margin></Button>
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="15.0" />

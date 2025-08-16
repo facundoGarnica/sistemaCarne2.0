@@ -421,6 +421,7 @@ public class ClientesController implements Initializable {
         alert.showAndWait();
     }
 
+    // Método actualizado para borrar fiado individual (elimina cliente si no tiene más fiados)
     public void borrarFiadoSeleccionado() {
         // Validar que hay un cliente seleccionado
         if (clienteSeleccionado == null) {
@@ -435,26 +436,51 @@ public class ClientesController implements Initializable {
             return;
         }
 
-        // NUEVA VALIDACIÓN DE CONTRASEÑA
-        if (!validarContraseña()) {
-            return; // Si no ingresa la contraseña correcta, salir del método
+        // VALIDACIÓN DE CONTRASEÑA
+        if (!validarContrasena()) {
+            return;
         }
 
-        // Confirmación antes de borrar
-        String mensajeConfirmacion = String.format(
-                "¿Está seguro que desea eliminar el fiado seleccionado?\n\n"
-                + "Cliente: %s%s\n"
-                + "Fecha: %s\n"
-                + "Monto: $%.2f\n"
-                + "Estado: %s\n\n"
-                + "Esta acción no se puede deshacer.",
-                clienteSeleccionado.getNombre(),
-                (clienteSeleccionado.getAlias() != null && !clienteSeleccionado.getAlias().isEmpty()
-                ? " - " + clienteSeleccionado.getAlias() : ""),
-                fiadoSeleccionado.getFecha().toLocalDate().format(fechaFormatter),
-                fiadoSeleccionado.getVenta().getTotal(),
-                fiadoSeleccionado.getEstado() ? "Finalizado" : "Pendiente"
-        );
+        // Verificar si es el último fiado del cliente
+        List<Fiado> fiadosCliente = fiadoDao.obtenerFiadosPorClienteId(clienteSeleccionado.getId());
+        boolean esUltimoFiado = fiadosCliente.size() == 1;
+
+        String mensajeConfirmacion;
+        if (esUltimoFiado) {
+            mensajeConfirmacion = String.format(
+                    "⚠️ ATENCIÓN: Este es el último fiado del cliente.\n\n"
+                    + "Al eliminarlo, el CLIENTE TAMBIÉN SERÁ ELIMINADO automáticamente.\n\n"
+                    + "Cliente: %s%s\n"
+                    + "Fecha del fiado: %s\n"
+                    + "Monto: $%.2f\n"
+                    + "Estado: %s\n\n"
+                    + "¿Está seguro que desea continuar?\n"
+                    + "Esta acción eliminará tanto el fiado como el cliente.",
+                    clienteSeleccionado.getNombre(),
+                    (clienteSeleccionado.getAlias() != null && !clienteSeleccionado.getAlias().isEmpty()
+                    ? " - " + clienteSeleccionado.getAlias() : ""),
+                    fiadoSeleccionado.getFecha().toLocalDate().format(fechaFormatter),
+                    fiadoSeleccionado.getVenta().getTotal(),
+                    fiadoSeleccionado.getEstado() ? "Finalizado" : "Pendiente"
+            );
+        } else {
+            mensajeConfirmacion = String.format(
+                    "¿Está seguro que desea eliminar el fiado seleccionado?\n\n"
+                    + "Cliente: %s%s\n"
+                    + "Fecha: %s\n"
+                    + "Monto: $%.2f\n"
+                    + "Estado: %s\n\n"
+                    + "El cliente se mantendrá (tiene %d fiados restantes).\n"
+                    + "Esta acción no se puede deshacer.",
+                    clienteSeleccionado.getNombre(),
+                    (clienteSeleccionado.getAlias() != null && !clienteSeleccionado.getAlias().isEmpty()
+                    ? " - " + clienteSeleccionado.getAlias() : ""),
+                    fiadoSeleccionado.getFecha().toLocalDate().format(fechaFormatter),
+                    fiadoSeleccionado.getVenta().getTotal(),
+                    fiadoSeleccionado.getEstado() ? "Finalizado" : "Pendiente",
+                    fiadosCliente.size() - 1
+            );
+        }
 
         javafx.scene.control.Alert alerta = new javafx.scene.control.Alert(
                 javafx.scene.control.Alert.AlertType.CONFIRMATION,
@@ -464,23 +490,41 @@ public class ClientesController implements Initializable {
         );
 
         alerta.setTitle("Confirmar eliminación");
-        alerta.setHeaderText("Eliminar Fiado");
+        alerta.setHeaderText(esUltimoFiado ? "⚠️ Eliminar Fiado y Cliente" : "Eliminar Fiado");
 
         alerta.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.YES) {
                 try {
-                    // Borrar el fiado específico (esto debería borrar en cascada los FiadoParcial)
-                    boolean eliminado = fiadoDao.eliminarFiadoPorId(fiadoSeleccionado.getId());
+                    // Usar el nuevo método que elimina cliente automáticamente si no tiene más fiados
+                    boolean eliminado = fiadoDao.eliminarFiadoPorIdYCliente(fiadoSeleccionado.getId());
 
                     if (eliminado) {
-                        System.out.println("Fiado eliminado correctamente - ID: " + fiadoSeleccionado.getId());
+                        System.out.println("Operación completada correctamente");
 
-                        // Refrescar los datos del cliente seleccionado
-                        DatosClienteSeleccionado();
+                        if (esUltimoFiado) {
+                            // El cliente fue eliminado, limpiar todo y recargar lista
+                            tablaFiados.getItems().clear();
+                            tablaAnticipos.getItems().clear();
+                            tablaProductos.getItems().clear();
+                            lblClienteSeleccionado.setText("Cliente: ");
+                            clienteSeleccionado = null;
 
-                        // Mostrar mensaje de éxito
-                        mostrarAlerta("Éxito", "El fiado ha sido eliminado correctamente",
-                                javafx.scene.control.Alert.AlertType.INFORMATION);
+                            // Recargar lista de clientes
+                            listaClientes = clienteDao.buscarClientesConFiados();
+                            llenarTablaClientes();
+
+                            mostrarAlerta("Éxito",
+                                    "El fiado y el cliente han sido eliminados correctamente.\n"
+                                    + "El cliente no tenía más fiados pendientes.",
+                                    javafx.scene.control.Alert.AlertType.INFORMATION);
+                        } else {
+                            // Solo se eliminó el fiado, refrescar datos del cliente
+                            DatosClienteSeleccionado();
+
+                            mostrarAlerta("Éxito", "El fiado ha sido eliminado correctamente.\n"
+                                    + "El cliente se mantiene con sus otros fiados.",
+                                    javafx.scene.control.Alert.AlertType.INFORMATION);
+                        }
 
                     } else {
                         mostrarAlerta("Error", "No se pudo eliminar el fiado",
@@ -496,40 +540,130 @@ public class ClientesController implements Initializable {
         });
     }
 
-// Método para validar la contraseña
-    private boolean validarContraseña() {
-        final String CONTRASEÑA_CORRECTA = "FordFocus2808#";
+// Método actualizado para borrar TODOS los fiados Y el cliente
+    public void borrarTodosFiadosYCliente() {
+        if (clienteSeleccionado == null) {
+            mostrarAlerta("Error", "No hay cliente seleccionado", javafx.scene.control.Alert.AlertType.WARNING);
+            return;
+        }
 
-        // Crear dialog para ingresar contraseña
-        javafx.scene.control.TextInputDialog dialog = new javafx.scene.control.TextInputDialog();
+        // Verificar si el cliente tiene fiados
+        List<Fiado> fiadosCliente = fiadoDao.obtenerFiadosPorClienteId(clienteSeleccionado.getId());
+        if (fiadosCliente.isEmpty()) {
+            mostrarAlerta("Información", "El cliente seleccionado no tiene fiados para eliminar",
+                    javafx.scene.control.Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        // VALIDACIÓN DE CONTRASEÑA
+        if (!validarContrasena()) {
+            return;
+        }
+
+        // Confirmación antes de borrar
+        String mensajeConfirmacion = String.format(
+                "⚠️ ELIMINAR CLIENTE COMPLETO ⚠️\n\n"
+                + "¿Desea eliminar AL CLIENTE y TODOS sus fiados?\n\n"
+                + "Cliente: %s%s\n"
+                + "Total de fiados: %d\n\n"
+                + "Esta acción eliminará:\n"
+                + "• Todos los fiados del cliente\n"
+                + "• Todos los pagos parciales\n"
+                + "• El cliente de la base de datos\n\n"
+                + "⚠️ Las ventas se conservarán para historial contable.\n\n"
+                + "Esta acción NO se puede deshacer.",
+                clienteSeleccionado.getNombre(),
+                (clienteSeleccionado.getAlias() != null && !clienteSeleccionado.getAlias().isEmpty()
+                ? " - " + clienteSeleccionado.getAlias() : ""),
+                fiadosCliente.size()
+        );
+
+        javafx.scene.control.Alert alerta = new javafx.scene.control.Alert(
+                javafx.scene.control.Alert.AlertType.CONFIRMATION,
+                mensajeConfirmacion,
+                javafx.scene.control.ButtonType.YES,
+                javafx.scene.control.ButtonType.NO
+        );
+
+        alerta.setTitle("Confirmar eliminación completa");
+        alerta.setHeaderText("⚠️ Eliminar Cliente y Todos sus Fiados");
+
+        alerta.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.YES) {
+                try {
+                    // Usar el nuevo método para eliminar todo
+                    boolean eliminado = fiadoDao.eliminarTodosFiadosYCliente(clienteSeleccionado.getId());
+
+                    if (eliminado) {
+                        System.out.println("Cliente y todos sus fiados eliminados correctamente");
+
+                        // Limpiar tablas y UI
+                        tablaFiados.getItems().clear();
+                        tablaAnticipos.getItems().clear();
+                        tablaProductos.getItems().clear();
+                        lblClienteSeleccionado.setText("Cliente: ");
+                        clienteSeleccionado = null;
+
+                        // Refrescar lista de clientes
+                        listaClientes = clienteDao.buscarClientesConFiados();
+                        llenarTablaClientes();
+
+                        mostrarAlerta("Éxito", "El cliente y todos sus fiados han sido eliminados correctamente",
+                                javafx.scene.control.Alert.AlertType.INFORMATION);
+
+                    } else {
+                        mostrarAlerta("Error", "No se pudieron eliminar los datos del cliente",
+                                javafx.scene.control.Alert.AlertType.ERROR);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mostrarAlerta("Error", "Error al eliminar el cliente: " + e.getMessage(),
+                            javafx.scene.control.Alert.AlertType.ERROR);
+                }
+            }
+        });
+    }
+
+// Método para validar la contraseña
+    // Método corregido para validar la contraseña
+    private boolean validarContrasena() {
+        final String CONTRASENA_CORRECTA = "2808";
+
+        // Crear un diálogo personalizado con PasswordField
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
         dialog.setTitle("Validación de Seguridad");
         dialog.setHeaderText("Eliminar Fiado");
-        dialog.setContentText("Ingrese la contraseña para continuar:");
 
-        // Hacer que el campo sea de contraseña (ocultar caracteres)
-        javafx.scene.control.TextField textField = dialog.getEditor();
+        // Configurar los botones
+        javafx.scene.control.ButtonType loginButtonType = new javafx.scene.control.ButtonType("Aceptar", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, javafx.scene.control.ButtonType.CANCEL);
+
+        // Crear el campo de contraseña
         javafx.scene.control.PasswordField passwordField = new javafx.scene.control.PasswordField();
         passwordField.setPromptText("Contraseña");
 
-        // Reemplazar el TextField por un PasswordField
-        dialog.getDialogPane().setContent(new javafx.scene.layout.VBox(8,
-                new javafx.scene.control.Label("Ingrese la contraseña para continuar:"),
-                passwordField));
+        // Crear el layout
+        javafx.scene.layout.VBox vbox = new javafx.scene.layout.VBox(10);
+        vbox.getChildren().addAll(new javafx.scene.control.Label("Ingrese la contraseña para continuar:"), passwordField);
+        dialog.getDialogPane().setContent(vbox);
 
-        // Configurar el resultado del diálogo
+        // Enfocar el campo de contraseña
+        Platform.runLater(() -> passwordField.requestFocus());
+
+        // Convertir el resultado cuando se presiona el botón de login
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == javafx.scene.control.ButtonType.OK) {
+            if (dialogButton == loginButtonType) {
                 return passwordField.getText();
             }
             return null;
         });
 
-        // Mostrar diálogo y validar
         java.util.Optional<String> result = dialog.showAndWait();
 
         if (result.isPresent()) {
             String passwordIngresada = result.get();
-            if (CONTRASEÑA_CORRECTA.equals(passwordIngresada)) {
+            if (CONTRASENA_CORRECTA.equals(passwordIngresada)) {
                 return true; // Contraseña correcta
             } else {
                 // Contraseña incorrecta

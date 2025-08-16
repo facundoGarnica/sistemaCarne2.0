@@ -16,7 +16,7 @@ module carniceria.sistemacarne {
     // ===== OPENS =====
     opens carniceria.sistemacarne to javafx.fxml;
     opens model to org.hibernate.orm.core, javafx.fxml, javafx.base;
-    opens controller to javafx.fxml;
+    opens controller to javafx.fxml, javafx.base;  // <--- se agregó javafx.base
     opens Util to javafx.fxml, com.fasterxml.jackson.databind, javafx.base;
 
     // ===== EXPORTS =====
