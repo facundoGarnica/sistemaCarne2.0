@@ -1,5 +1,6 @@
 dao\DetalleMediaResDAO.class
 model\DetallePedido.class
+controller\ClientesController$4.class
 controller\StockCajonPolloController$3.class
 carniceria\sistemacarne\AppTester.class
 dao\VentaDAO.class
@@ -26,6 +27,7 @@ controller\Crear_productoController.class
 controller\StockProductoController$3.class
 dao\FiadoDAO.class
 controller\AumentarPrecioProductoController.class
+controller\ClientesController$5.class
 controller\StockCajonPolloController$2.class
 controller\Crear_ventasController.class
 model\Fiado.class
@@ -45,6 +47,7 @@ dao\DetalleCajonPolloDAO.class
 model\Cliente.class
 controller\Spa_clientesController.class
 dao\ClienteDAO.class
+controller\ClientesController$3.class
 controller\StockCajonPolloController$4.class
 controller\StockProductoController.class
 controller\Producto_menuController.class
@@ -59,6 +62,7 @@ controller\AgregarPago_clienteController.class
 model\DetalleCajonPollo.class
 model\FiadoParcial.class
 controller\StockCajonPolloController.class
+controller\ClientesController$2.class
 controller\StockCajonPolloController$5.class
 controller\AgregarCajonPolloController.class
 controller\AumentarPrecioProductoController$1.class

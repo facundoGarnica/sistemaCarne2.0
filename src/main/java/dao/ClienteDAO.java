@@ -87,10 +87,12 @@ public class ClienteDAO {
         }
     }
 
+    // MÉTODO CORREGIDO: Solo clientes que SÍ tienen fiados
     public List<Cliente> buscarClientesConFiados() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // INNER JOIN = solo clientes que tienen al menos un fiado
             return session.createQuery(
-                    "SELECT DISTINCT c FROM Cliente c JOIN c.fiados f", Cliente.class
+                    "SELECT DISTINCT c FROM Cliente c INNER JOIN c.fiados f", Cliente.class
             ).list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,13 +100,55 @@ public class ClienteDAO {
         }
     }
 
+// MÉTODO ALTERNATIVO: Clientes con fiados usando EXISTS (más eficiente)
+    public List<Cliente> buscarClientesConFiadosExists() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "SELECT c FROM Cliente c WHERE EXISTS (SELECT 1 FROM Fiado f WHERE f.cliente.id = c.id)",
+                    Cliente.class
+            ).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+// MÉTODO CORREGIDO: Todos los clientes CON sus fiados (incluso si no tienen)
     public List<Cliente> buscarTodosConFiados() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Cliente> clientes = session.createQuery(
-                "SELECT c FROM Cliente c LEFT JOIN FETCH c.fiados", Cliente.class
-        ).getResultList();
-        session.close();
-        return clientes;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // LEFT JOIN FETCH = trae todos los clientes y sus fiados (si tienen)
+            return session.createQuery(
+                    "SELECT c FROM Cliente c LEFT JOIN FETCH c.fiados", Cliente.class
+            ).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+// MÉTODO NUEVO: Solo clientes con fiados PENDIENTES (estado = false)
+    public List<Cliente> buscarClientesConFiadosPendientes() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "SELECT DISTINCT c FROM Cliente c INNER JOIN c.fiados f WHERE f.estado = false",
+                    Cliente.class
+            ).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+// MÉTODO NUEVO: Clientes con fiados, incluyendo información del fiado
+    public List<Cliente> buscarClientesConFiadosCompleto() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "SELECT DISTINCT c FROM Cliente c INNER JOIN FETCH c.fiados f", Cliente.class
+            ).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
 }

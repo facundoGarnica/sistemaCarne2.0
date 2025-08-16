@@ -68,4 +68,30 @@ public class FiadoParcialDAO {
             e.printStackTrace();
         }
     }
+
+    public void eliminarPorCliente(Long clienteId) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            // Obtener todos los FiadoParcial asociados a los fiados del cliente
+            List<FiadoParcial> lista = session.createQuery(
+                    "SELECT fp FROM FiadoParcial fp WHERE fp.fiado.cliente.id = :clienteId", FiadoParcial.class)
+                    .setParameter("clienteId", clienteId)
+                    .list();
+
+            // Borrar cada uno
+            for (FiadoParcial fp : lista) {
+                session.delete(fp);
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -114,7 +114,7 @@ public class Spa_clientesController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/agregarPago_cliente.fxml"));
             Parent root = loader.load();
             agregarPagoClienteController = loader.getController();
-            agregarPagoClienteController.setSpa_ClientesController(this);
+           // agregarPagoClienteController.setSpa_ClientesController(this);
             // controller.setClientesController(this); // Por ejemplo
             // Insertar el contenido cargado en el AnchorPane
             overlayMonto.getChildren().add(root);

@@ -22,8 +22,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.hibernate.Session;
-import model.Producto;
+// Handlers para Stock
+import javafx.scene.control.Alert;
+import java.util.Optional;
+import javafx.application.Platform;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 
 /**
  * FXML Controller class
@@ -230,49 +237,99 @@ public class MenuController implements Initializable {
         }
     }
 
-    // Handlers para Stock
     @FXML
     private void handleMediaRes() {
-        try {
-            // Cargar producto_menu.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockMediaRes.fxml"));
-            AnchorPane vistaProductos = loader.load();
-
-            // Limpiar lo anterior y añadir la nueva vista
-            overlayClientes.getChildren().clear();
-            overlayClientes.getChildren().add(vistaProductos);
-
-            // Hacer que se ajuste al tamaño del overlay
-            AnchorPane.setTopAnchor(vistaProductos, 0.0);
-            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
-            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
-            AnchorPane.setRightAnchor(vistaProductos, 0.0);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (validarContrasena()) {
+            try {
+                // Cargar producto_menu.fxml
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockMediaRes.fxml"));
+                AnchorPane vistaProductos = loader.load();
+                // Limpiar lo anterior y añadir la nueva vista
+                overlayClientes.getChildren().clear();
+                overlayClientes.getChildren().add(vistaProductos);
+                // Hacer que se ajuste al tamaño del overlay
+                AnchorPane.setTopAnchor(vistaProductos, 0.0);
+                AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+                AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+                AnchorPane.setRightAnchor(vistaProductos, 0.0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @FXML
     private void handlePollo() {
-        try {
-            // Cargar producto_menu.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockCajonPollo.fxml"));
-            AnchorPane vistaProductos = loader.load();
-
-            // Limpiar lo anterior y añadir la nueva vista
-            overlayClientes.getChildren().clear();
-            overlayClientes.getChildren().add(vistaProductos);
-
-            // Hacer que se ajuste al tamaño del overlay
-            AnchorPane.setTopAnchor(vistaProductos, 0.0);
-            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
-            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
-            AnchorPane.setRightAnchor(vistaProductos, 0.0);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (validarContrasena()) {
+            try {
+                // Cargar producto_menu.fxml
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stockCajonPollo.fxml"));
+                AnchorPane vistaProductos = loader.load();
+                // Limpiar lo anterior y añadir la nueva vista
+                overlayClientes.getChildren().clear();
+                overlayClientes.getChildren().add(vistaProductos);
+                // Hacer que se ajuste al tamaño del overlay
+                AnchorPane.setTopAnchor(vistaProductos, 0.0);
+                AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+                AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+                AnchorPane.setRightAnchor(vistaProductos, 0.0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+// Método para validar la contraseña
+    private boolean validarContrasena() {
+        final String CONTRASENA_CORRECTA = "FordFocus2808#";
+
+        // Crear un diálogo personalizado con PasswordField
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Acceso Restringido");
+        dialog.setHeaderText("Ingrese la contraseña para acceder:");
+
+        // Configurar los botones
+        ButtonType loginButtonType = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        // Crear el campo de contraseña
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Contraseña");
+
+        // Crear el layout
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(new Label("Contraseña:"), passwordField);
+        dialog.getDialogPane().setContent(vbox);
+
+        // Enfocar el campo de contraseña
+        Platform.runLater(() -> passwordField.requestFocus());
+
+        // Convertir el resultado cuando se presiona el botón de login
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return passwordField.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            if (CONTRASENA_CORRECTA.equals(result.get())) {
+                return true;
+            } else {
+                // Mostrar mensaje de error
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error de Acceso");
+                alert.setHeaderText("Contraseña Incorrecta");
+                alert.setContentText("La contraseña ingresada es incorrecta. Acceso denegado.");
+                alert.showAndWait();
+                return false;
+            }
+        }
+
+        // Si el usuario cancela el diálogo
+        return false;
     }
 
     @FXML
@@ -332,23 +389,22 @@ public class MenuController implements Initializable {
 
     @FXML
     private void handleHistorialVentas() {
-        try {
-            // Cargar producto_menu.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/historialVentas.fxml"));
-            AnchorPane vistaProductos = loader.load();
-
-            // Limpiar lo anterior y añadir la nueva vista
-            overlayClientes.getChildren().clear();
-            overlayClientes.getChildren().add(vistaProductos);
-
-            // Hacer que se ajuste al tamaño del overlay
-            AnchorPane.setTopAnchor(vistaProductos, 0.0);
-            AnchorPane.setBottomAnchor(vistaProductos, 0.0);
-            AnchorPane.setLeftAnchor(vistaProductos, 0.0);
-            AnchorPane.setRightAnchor(vistaProductos, 0.0);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (validarContrasena()) {
+            try {
+                // Cargar producto_menu.fxml
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/historialVentas.fxml"));
+                AnchorPane vistaProductos = loader.load();
+                // Limpiar lo anterior y añadir la nueva vista
+                overlayClientes.getChildren().clear();
+                overlayClientes.getChildren().add(vistaProductos);
+                // Hacer que se ajuste al tamaño del overlay
+                AnchorPane.setTopAnchor(vistaProductos, 0.0);
+                AnchorPane.setBottomAnchor(vistaProductos, 0.0);
+                AnchorPane.setLeftAnchor(vistaProductos, 0.0);
+                AnchorPane.setRightAnchor(vistaProductos, 0.0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

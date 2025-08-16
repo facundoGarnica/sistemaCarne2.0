@@ -5,6 +5,8 @@
     -fx-background-color: #f4f6f8;
 }
 
+
+
 /* ===== HEADER ===== */
 .header-container {
     -fx-background-color: transparent;
@@ -419,4 +421,18 @@
 
 .text-field:hover {
     -fx-border-color: #95a5a6;
+}
+
+.check-box {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 5 0 5 0;
+}
+.check-box .text {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+.check-box:hover {
+    -fx-text-fill: #4a90e2;
 }
