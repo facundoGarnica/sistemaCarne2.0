@@ -13,79 +13,29 @@
     </stylesheets>
    <children>
       <!-- Barra Lateral -->
-      <AnchorPane fx:id="barraLateral" prefHeight="1080.0" prefWidth="300.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="barraLateral" prefHeight="1080.0" prefWidth="320.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox fx:id="menuContainer" prefWidth="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+            <VBox fx:id="menuContainer" prefWidth="320.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                <children>
                   
                   <!-- Header del Menú -->
                   <Label styleClass="menu-header" text="SISTEMA DE VENTAS">
                      <VBox.margin>
-                        <Insets bottom="30.0" left="15.0" right="15.0" top="10.0" />
+                        <Insets bottom="20.0" left="15.0" right="15.0" top="10.0" />
                      </VBox.margin>
                   </Label>
                   
-                  <!-- Sección Cliente -->
-                  <VBox fx:id="clienteSection" styleClass="menu-section">
-                     <children>
-                        <Button fx:id="btnCliente" mnemonicParsing="false" onAction="#toggleClienteMenu" prefWidth="300.0" styleClass="menu-button-main" text="👤 CLIENTE">
-                        </Button>
-                        
-                        <VBox fx:id="clienteSubmenu" styleClass="submenu" visible="false">
-                           <children>
-                              <Button fx:id="btnFiado" mnemonicParsing="false" onAction="#handleFiado" prefWidth="300.0" styleClass="submenu-button" text="💳 Fiado">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btnPedido" mnemonicParsing="false" onAction="#handlePedido" prefWidth="300.0" styleClass="submenu-button" text="📋 Pedido">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-                  
-                  <!-- Sección Producto -->
-                  <VBox fx:id="productoSection" styleClass="menu-section">
-                     <children>
-                        <Button fx:id="btnProducto" mnemonicParsing="false" onAction="#toggleProductoMenu" prefWidth="300.0" styleClass="menu-button-main" text="📦 PRODUCTO">
-                        </Button>
-                        
-                        <VBox fx:id="productoSubmenu" styleClass="submenu" visible="false">
-                           <children>
-                              <Button fx:id="btnVisualizarProductos" mnemonicParsing="false" onAction="#handleVisualizarProductos" prefWidth="300.0" styleClass="submenu-button" text="👁️ Visualizar Productos">
-                              </Button>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-                  
-                  <!-- Sección Stock -->
+                  <!-- Sección Stock/Inventario -->
                   <VBox fx:id="stockSection" styleClass="menu-section">
                      <children>
-                        <Button fx:id="btnStock" mnemonicParsing="false" onAction="#toggleStockMenu" prefWidth="300.0" styleClass="menu-button-main" text="📈 STOCK">
+                        <Button fx:id="btnStock" mnemonicParsing="false" onAction="#toggleStockMenu" prefWidth="320.0" styleClass="menu-button-main" text="📊 INVENTARIO">
                         </Button>
                         
                         <VBox fx:id="stockSubmenu" styleClass="submenu" visible="false">
                            <children>
-                              <Button fx:id="btnMediaRes" mnemonicParsing="false" onAction="#handleMediaRes" prefWidth="300.0" styleClass="submenu-button" text="🥩 Media Res">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btnPollo" mnemonicParsing="false" onAction="#handlePollo" prefWidth="300.0" styleClass="submenu-button" text="🐔 Pollo">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btnIngresarIndividual" mnemonicParsing="false" onAction="#handleIngresarIndividual" prefWidth="300.0" styleClass="submenu-button" text="➕ Ingresar Individual">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </Button>
+                              <Button fx:id="btnMediaRes" mnemonicParsing="false" onAction="#handleMediaRes" prefWidth="300.0" styleClass="submenu-button" text="🐄 Stock Media Res" />
+                              <Button fx:id="btnPollo" mnemonicParsing="false" onAction="#handlePollo" prefWidth="300.0" styleClass="submenu-button" text="🐔 Stock Pollo" />
+                              <Button fx:id="btnIngresarIndividual" mnemonicParsing="false" onAction="#handleIngresarIndividual" prefWidth="300.0" styleClass="submenu-button" text="➕ Ingreso Individual" />
                            </children>
                         </VBox>
                      </children>
@@ -94,37 +44,62 @@
                   <!-- Sección Ventas -->
                   <VBox fx:id="ventasSection" styleClass="menu-section">
                      <children>
-                        <Button fx:id="btnVentas" mnemonicParsing="false" onAction="#toggleVentasMenu" prefWidth="300.0" styleClass="menu-button-main" text="💰 VENTAS">
+                        <Button fx:id="btnVentas" mnemonicParsing="false" onAction="#toggleVentasMenu" prefWidth="320.0" styleClass="menu-button-main" text="💰 VENTAS">
                         </Button>
                         
                         <VBox fx:id="ventasSubmenu" styleClass="submenu" visible="false">
                            <children>
-                              <Button fx:id="btnCrearVenta" mnemonicParsing="false" onAction="#handleCrearVenta" prefWidth="300.0" styleClass="submenu-button" text="➕ Crear Venta">
-                              </Button>
-                              <Button fx:id="btnHistorialVentas" mnemonicParsing="false" onAction="#handleHistorialVentas" prefWidth="300.0" styleClass="submenu-button" text="📊 Historial de Ventas">
-                              </Button>
+                              <Button fx:id="btnCrearVenta" mnemonicParsing="false" onAction="#handleCrearVenta" prefWidth="300.0" styleClass="submenu-button" text="➕ Nueva Venta" />
+                              <Button fx:id="btnHistorialVentas" mnemonicParsing="false" onAction="#handleHistorialVentas" prefWidth="300.0" styleClass="submenu-button" text="📈 Historial y Reportes" />
                            </children>
                         </VBox>
                      </children>
                   </VBox>
                   
-                  <!-- Sección Configuración -->
-                  <VBox fx:id="configSection" styleClass="menu-section">
+                  <!-- Sección Cliente -->
+                  <VBox fx:id="clienteSection" styleClass="menu-section">
                      <children>
-                        <Button fx:id="btnConfiguracion" mnemonicParsing="false" onAction="#handleConfiguracion" prefWidth="300.0" styleClass="menu-button-single" text="⚙️ CONFIGURACIÓN">
+                        <Button fx:id="btnCliente" mnemonicParsing="false" onAction="#toggleClienteMenu" prefWidth="320.0" styleClass="menu-button-main" text="👤 CLIENTES">
                         </Button>
+                        
+                        <VBox fx:id="clienteSubmenu" styleClass="submenu" visible="false">
+                           <children>
+                              <Button fx:id="btnFiado" mnemonicParsing="false" onAction="#handleFiado" prefWidth="300.0" styleClass="submenu-button" text="💳 Gestión de Fiado" />
+                              <Button fx:id="btnPedido" mnemonicParsing="false" onAction="#handlePedido" prefWidth="300.0" styleClass="submenu-button" text="📋 Gestión de Pedidos" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Sección Producto -->
+                  <VBox fx:id="productoSection" styleClass="menu-section">
+                     <children>
+                        <Button fx:id="btnProducto" mnemonicParsing="false" onAction="#toggleProductoMenu" prefWidth="320.0" styleClass="menu-button-main" text="📦 PRODUCTOS">
+                        </Button>
+                        
+                        <VBox fx:id="productoSubmenu" styleClass="submenu" visible="false">
+                           <children>
+                              <Button fx:id="btnVisualizarProductos" mnemonicParsing="false" onAction="#handleVisualizarProductos" prefWidth="300.0" styleClass="submenu-button" text="👁️ Catálogo de Productos" />
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
                   
                </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
             </VBox>
          </children>
       </AnchorPane>
       
       <!-- Área de Contenido Principal -->
-      <AnchorPane fx:id="contenidoPrincipal" styleClass="content-area" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="contenidoPrincipal" styleClass="content-area" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="320.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane fx:id="overlayClientes" layoutX="163.0" layoutY="63.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+           
+            
+            <!-- Overlay para contenido dinámico -->
+            <AnchorPane fx:id="overlayClientes" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       

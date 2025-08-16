@@ -11,6 +11,7 @@ module carniceria.sistemacarne {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.annotation;
+    requires java.base;
 
     // ===== OPENS =====
     opens carniceria.sistemacarne to javafx.fxml;

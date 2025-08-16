@@ -54,6 +54,7 @@ controller\Producto_menuController.class
 model\Producto.class
 controller\ClientesController.class
 Util\Transaccion.class
+controller\ConfiguracionController.class
 model\MediaRes.class
 controller\MenuController.class
 controller\NombreFiadoClienteController.class
