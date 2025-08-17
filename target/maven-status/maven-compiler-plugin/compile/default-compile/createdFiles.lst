@@ -1,6 +1,9 @@
 model\Senia.class
+controller\Cliente_pedidoController$9.class
 dao\DetalleMediaResDAO.class
 model\DetallePedido.class
+controller\Cliente_pedidoController$6.class
+controller\Cliente_pedidoController$10.class
 controller\ClientesController$4.class
 controller\StockCajonPolloController$3.class
 carniceria\sistemacarne\AppTester.class
@@ -18,8 +21,10 @@ dao\SeniaDAO.class
 dao\StockDAO.class
 controller\HistorialVentasController.class
 controller\StockMediaResController$1.class
+controller\Cliente_pedidoController$4.class
 controller\Crear_ventasController$1.class
 Util\CalcularVuelto.class
+controller\Cliente_pedidoController$11.class
 controller\HistorialVentasController$3$1.class
 controller\StockCajonPolloController$1.class
 controller\Cliente_pedidoController.class
@@ -29,9 +34,11 @@ module-info.class
 carniceria\sistemacarne\PrimaryController.class
 model\DetalleMediaRes.class
 controller\Crear_productoController.class
+controller\Cliente_pedidoController$3.class
 controller\StockProductoController$3.class
 dao\FiadoDAO.class
 controller\AumentarPrecioProductoController.class
+controller\Cliente_pedidoController$12.class
 controller\ClientesController$5.class
 controller\StockCajonPolloController$2.class
 controller\Crear_ventasController.class
@@ -45,6 +52,7 @@ dao\ProductoDAO.class
 controller\StockProductoController$1.class
 controller\StockMediaResController.class
 dao\DetallePedidoDAO.class
+controller\Cliente_pedidoController$2.class
 controller\HistorialVentasController$2$1.class
 model\Venta.class
 controller\StockMediaResController$3.class
@@ -59,9 +67,11 @@ dao\ClienteDAO.class
 controller\ClientesController$3.class
 controller\StockCajonPolloController$4.class
 controller\StockProductoController.class
+controller\Cliente_pedidoController$8.class
 controller\Producto_menuController.class
 model\Producto.class
 controller\ClientesController.class
+controller\Cliente_pedidoController$5.class
 Util\Transaccion.class
 controller\ConfiguracionController.class
 model\MediaRes.class
@@ -87,10 +97,12 @@ Util\MercadoPagoApi.class
 controller\Producto_menuController$1.class
 model\Pedido.class
 Util\HibernateUtil.class
+controller\Cliente_pedidoController$1.class
 controller\AumentarPrecioProductoController$2.class
 controller\ClientesController$1.class
 controller\StockCajonPolloController$6.class
 carniceria\sistemacarne\SecondaryController.class
 controller\HistorialVentasController$1.class
+controller\Cliente_pedidoController$7.class
 controller\AgregarMediaResController.class
 Util\DatosPagos.class

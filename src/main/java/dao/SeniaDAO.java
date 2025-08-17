@@ -72,7 +72,8 @@ public class SeniaDAO {
     }
 
     //buscar todas las señas de un pedido
-    public List<Senia> buscarPorPedido(Long pedidoId) {
+    //buscar todas las señas de un pedido
+    public List<Senia> buscarSeniasPorPedido(Long pedidoId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                     "FROM Senia s WHERE s.pedido.id = :pedidoId", Senia.class)
@@ -80,4 +81,5 @@ public class SeniaDAO {
                     .list();
         }
     }
+
 }

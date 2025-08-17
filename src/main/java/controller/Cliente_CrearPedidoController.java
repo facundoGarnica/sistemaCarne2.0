@@ -61,6 +61,8 @@ public class Cliente_CrearPedidoController implements Initializable {
     @FXML
     private ComboBox<String> cmbHoraEntrega;
     @FXML
+    private TextField txtComentario;
+    @FXML
     private TextField txtNombre;
     @FXML
     private TextField txtCelular;
@@ -109,7 +111,7 @@ public class Cliente_CrearPedidoController implements Initializable {
 
     private void configurarComboHoras() {
         if (cmbHoraEntrega != null) {
-            cmbHoraEntrega.getItems().addAll("08:00", "09:00", "10:00", "11:00", "12:00");
+            cmbHoraEntrega.getItems().addAll("08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00");
             cmbHoraEntrega.setValue("08:00");
         }
     }
@@ -402,16 +404,16 @@ public class Cliente_CrearPedidoController implements Initializable {
                 String nombreCliente = txtNombre.getText().trim();
                 String celularCliente = txtCelular.getText().trim();
 
+                cliente.setNombre(nombreCliente);
+
                 // Celular es opcional - solo guardarlo si no está vacío
                 if (!celularCliente.isEmpty()) {
                     cliente.setCelular(celularCliente);
                 } else {
-                    cliente.setCelular(null); // o simplemente no setearlo
+                    cliente.setCelular(null);
                 }
-                
-                cliente.setNombre(nombreCliente);
-                clienteDao.guardar(cliente);
 
+                clienteDao.guardar(cliente);
                 System.out.println("Cliente guardado exitosamente");
 
             } catch (Exception e) {
@@ -427,7 +429,7 @@ public class Cliente_CrearPedidoController implements Initializable {
                 // Obtener fecha y hora por separado
                 LocalDate fechaSeleccionada = this.fechaEntrega.getValue();
                 String horaSeleccionada = cmbHoraEntrega.getValue();
-                
+
                 System.out.println("Fecha seleccionada: " + fechaSeleccionada);
                 System.out.println("Hora seleccionada: " + horaSeleccionada);
 
@@ -438,8 +440,16 @@ public class Cliente_CrearPedidoController implements Initializable {
                 pedido.setHoraEntrega(horaSeleccionada);   // Solo la hora como String
                 pedido.setEstado(false); // false = pendiente, true = completado
 
-                pedidoDao.guardar(pedido);
+                // *** COMENTARIO OPCIONAL - AGREGADO AQUÍ ***
+                String comentarioCliente = txtComentario.getText().trim();
+                if (!comentarioCliente.isEmpty()) {
+                    pedido.setComentario(comentarioCliente);
+                } else {
+                    pedido.setComentario(null); // O simplemente no setear nada
+                }
 
+                // Guardar el pedido UNA SOLA VEZ con todos sus datos
+                pedidoDao.guardar(pedido);
                 System.out.println("Pedido guardado exitosamente");
 
             } catch (Exception e) {
@@ -450,7 +460,7 @@ public class Cliente_CrearPedidoController implements Initializable {
             // 3. Crear y guardar la seña vinculada al pedido (OPCIONAL)
             try {
                 String textoSenia = txtSena.getText().trim();
-                
+
                 // Solo crear y guardar seña si se ingresó un valor
                 if (!textoSenia.isEmpty()) {
                     senia = new Senia();
@@ -460,7 +470,7 @@ public class Cliente_CrearPedidoController implements Initializable {
                     senia.setMonto(montoSenia);
                     senia.setFecha(LocalDateTime.now());
                     senia.setPedido(pedido); // Vincula al pedido
-                    
+
                     seniaDao.guardar(senia);
                     System.out.println("Seña guardada exitosamente");
                 } else {
@@ -515,20 +525,12 @@ public class Cliente_CrearPedidoController implements Initializable {
 
             // Limpiar formulario después del guardado exitoso
             limpiarFormulario();
-
             cerrarOverlay();
 
-            // 6. Refrescar la vista padre si existe
-            /* if (clienteController != null) {
-            clienteController.refrescarTablaPedidos();
-        }*/
-        } catch (NumberFormatException e) {
-            mostrarError("Error en formato de número: " + e.getMessage());
         } catch (Exception e) {
             mostrarError("Error inesperado al guardar el pedido: " + e.getMessage());
             e.printStackTrace();
         }
-        cerrarOverlay();
     }
 
     // Método para mostrar confirmación antes de guardar
@@ -548,6 +550,7 @@ public class Cliente_CrearPedidoController implements Initializable {
         // Manejar campos opcionales
         String celularTexto = txtCelular.getText().trim().isEmpty() ? "No especificado" : txtCelular.getText();
         String seniaTexto = txtSena.getText().trim().isEmpty() ? "Sin seña" : "$" + txtSena.getText();
+        String comentarioTexto = txtComentario.getText().trim().isEmpty() ? "Sin comentarios" : txtComentario.getText(); // *** AGREGAR ***
 
         String mensaje = String.format(
                 "Se guardará el siguiente pedido:\n\n"
@@ -556,6 +559,7 @@ public class Cliente_CrearPedidoController implements Initializable {
                 + "Productos: %d\n"
                 + "Total: %s\n"
                 + "Seña: %s\n"
+                + "Comentario: %s\n" // *** AGREGAR ***
                 + "Fecha de entrega: %s\n"
                 + "Hora de entrega: %s\n\n"
                 + "¿Confirma que desea guardar este pedido?",
@@ -564,13 +568,13 @@ public class Cliente_CrearPedidoController implements Initializable {
                 productosCompletos,
                 formatoMoneda.format(totalPedido),
                 seniaTexto,
+                comentarioTexto, // *** AGREGAR ***
                 fechaEntrega.getValue().toString(),
                 cmbHoraEntrega.getValue()
         );
 
         alert.setContentText(mensaje);
 
-        // Configurar botones personalizados
         ButtonType buttonTypeGuardar = new ButtonType("Sí, Guardar");
         ButtonType buttonTypeCancelar = new ButtonType("No, Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
 
@@ -625,6 +629,7 @@ public class Cliente_CrearPedidoController implements Initializable {
         txtNombre.clear();
         txtCelular.clear();
         txtSena.clear();
+        txtComentario.clear(); // *** AGREGAR ESTA LÍNEA ***
         fechaEntrega.setValue(null);
         cmbHoraEntrega.setValue("08:00");
         listaProductos.clear();
@@ -640,7 +645,6 @@ public class Cliente_CrearPedidoController implements Initializable {
         }
 
         // Celular es OPCIONAL - no validar
-
         // Validar seña SOLO si se ingresó algo
         String textoSenia = txtSena.getText().trim();
         if (!textoSenia.isEmpty()) {

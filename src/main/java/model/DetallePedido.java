@@ -19,14 +19,15 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "detallePedido")
 public class DetallePedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn (name = "producto_id")
+    @JoinColumn(name = "producto_id")
     private Producto producto;
     @ManyToOne
-    @JoinColumn (name = "pedido_id")
+    @JoinColumn(name = "pedido_id")
     private Pedido pedido;
     private String unidadMedida;
     private Double cantidad;
@@ -79,7 +80,7 @@ public class DetallePedido {
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
+
     
-    
-    
+
 }
