@@ -64,7 +64,7 @@
                 </VBox>
 
                 <!-- Main Content Area Responsive -->
-                <HBox spacing="15.0" VBox.vgrow="ALWAYS">
+                <HBox fx:id="colFecha" spacing="15.0" VBox.vgrow="ALWAYS">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
@@ -80,20 +80,19 @@
                                         <Insets bottom="15.0" />
                                     </VBox.margin>
                                 </Label>
-                        <CheckBox mnemonicParsing="false" prefHeight="32.0" prefWidth="169.0" text="Ocultar telefono">
+                        <CheckBox mnemonicParsing="false" prefHeight="32.0" prefWidth="163.0" text="Ocultar telefono">
                            <VBox.margin>
-                              <Insets left="350.0" />
+                              <Insets left="240.0" />
                            </VBox.margin>
                         </CheckBox>
       
                                 <!-- ScrollPane responsive para la lista de clientes -->
                                 <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" prefHeight="400.0" prefWidth="522.0" styleClass="clients-scroll" VBox.vgrow="ALWAYS">
                                     <content>
-                                        <TableView prefHeight="431.0" prefWidth="518.0" styleClass="modern-table">
+                                        <TableView fx:id="tablaClientes" prefHeight="431.0" prefWidth="518.0" styleClass="modern-table">
                                             <columns>
-                                                <TableColumn minWidth="80.0" prefWidth="120.0" text="Nombre" />
-                                                <TableColumn minWidth="60.0" prefWidth="90.0" text="Alias" />
-                                                <TableColumn minWidth="100.0" prefWidth="120.0" text="Celular" />
+                                                <TableColumn fx:id="colNombre" minWidth="80.0" prefWidth="120.0" text="Nombre" />
+                                                <TableColumn fx:id="colCelular" minWidth="100.0" prefWidth="120.0" text="Celular" />
                                             </columns>
                                             <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -105,7 +104,7 @@
                         </VBox>
 
                         <!-- Right Panel - Detalles del Cliente Responsive -->
-                        <VBox maxHeight="600.0" minWidth="500.0" prefHeight="626.0" prefWidth="871.0" styleClass="details-panel" HBox.hgrow="ALWAYS">
+                        <VBox maxHeight="600.0" minWidth="500.0" prefHeight="578.0" prefWidth="1063.0" styleClass="details-panel" HBox.hgrow="ALWAYS">
                             <children>
                                 <!-- Header de detalles responsive -->
                                 <HBox alignment="CENTER_LEFT">
@@ -151,14 +150,14 @@
                                                     <children>
                                                         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <TableView prefHeight="330.0" prefWidth="867.0" styleClass="modern-table">
+                                                                <TableView fx:id="tablaPedidos" prefHeight="330.0" prefWidth="867.0" styleClass="modern-table">
                                                                     <columns>
-                                                                        <TableColumn minWidth="60.0" prefWidth="80.0" text="Fecha" />
-                                                                        <TableColumn minWidth="50.0" prefWidth="60.0" text="Hora" />
-                                                                        <TableColumn minWidth="60.0" prefWidth="80.0" text="Monto" />
-                                                                        <TableColumn minWidth="70.0" prefWidth="90.0" text="Seña" />
-                                                                        <TableColumn minWidth="60.0" prefWidth="80.0" text="Resto" />
-                                                                        <TableColumn minWidth="70.0" prefWidth="90.0" text="Estado" />
+                                                                        <TableColumn fx:id="colFechaPedido" minWidth="60.0" prefWidth="80.0" text="Fecha" />
+                                                                        <TableColumn fx:id="colMonto" minWidth="60.0" prefWidth="80.0" text="Monto" />
+                                                                        <TableColumn fx:id="colSena" minWidth="70.0" prefWidth="90.0" text="Seña" />
+                                                                        <TableColumn fx:id="colResto" minWidth="60.0" prefWidth="80.0" text="Resto" />
+                                                                        <TableColumn fx:id="colEstado" minWidth="70.0" prefWidth="90.0" text="Estado" />
+                                                      <TableColumn fx:id="colDiaEntrega" prefWidth="75.0" text="Dia entrega" />
                                                                     </columns>
                                                                     <columnResizePolicy>
                                                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

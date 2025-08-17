@@ -4,21 +4,51 @@
  */
 package dao;
 
-/**
- *
- * @author garca
- */
 import Util.HibernateUtil;
 import java.util.List;
-import model.Pedido;
+import model.Senia;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class PedidoDAO {
+public class SeniaDAO {
 
-    public List<Pedido> buscarTodos() {
+    public List<Senia> buscarTodos() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Pedido", Pedido.class).list();
+            return session.createQuery("FROM Senia", Senia.class).list();
+        }
+    }
+
+    public Senia buscarPorId(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Senia.class, id);
+        }
+    }
+
+    public void guardar(Senia senia) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            session.save(senia);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public void actualizar(Senia senia) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+            session.update(senia);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
         }
     }
 
@@ -27,9 +57,9 @@ public class PedidoDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
 
-            Pedido pedido = session.get(Pedido.class, id);
-            if (pedido != null) {
-                session.delete(pedido);
+            Senia senia = session.get(Senia.class, id);
+            if (senia != null) {
+                session.delete(senia);
             }
 
             tx.commit();
@@ -41,44 +71,13 @@ public class PedidoDAO {
         }
     }
 
-    public void guardar(Pedido pedido) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            session.save(pedido);
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public void actualizar(Pedido pedido) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            session.update(pedido);
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public List<Pedido> buscarPedidosPorCliente(Long clienteId) {
+    //buscar todas las señas de un pedido
+    public List<Senia> buscarPorPedido(Long pedidoId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "SELECT p FROM Pedido p WHERE p.cliente.id = :clienteId", Pedido.class
-            ).setParameter("clienteId", clienteId)
+                    "FROM Senia s WHERE s.pedido.id = :pedidoId", Senia.class)
+                    .setParameter("pedidoId", pedidoId)
                     .list();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of(); // Devuelve lista vacía si hay error
         }
     }
-
 }

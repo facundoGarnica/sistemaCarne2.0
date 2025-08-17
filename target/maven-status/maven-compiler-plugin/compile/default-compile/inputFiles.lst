@@ -16,6 +16,7 @@ C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\MediaResDAO.j
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\ClienteDAO.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\Util\HibernateUtil.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\module-info.java
+C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\SeniaDAO.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\VentaDAO.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\Crear_ventasController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\model\MediaRes.java
@@ -38,6 +39,7 @@ C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\Nombre
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\carniceria\sistemacarne\SecondaryController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\FiadoDAO.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\model\Pedido.java
+C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\model\Senia.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\dao\PedidoDAO.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\AumentarPrecioProductoController.java
 C:\Users\garca\Desktop\Practicas\sistemaCarne2.0\src\main\java\controller\AgregarPago_clienteController.java

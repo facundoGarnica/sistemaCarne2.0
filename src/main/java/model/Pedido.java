@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,17 +25,19 @@ import java.util.List;
 @Entity
 @Table(name = "pedido")
 public class Pedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private LocalDate fechaEntrega;
+    private String horaEntrega;
     private Boolean estado;
-    private Double senia;
-    private String observacion;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Senia> senias;
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetallePedido> detallePedidos;
 
@@ -50,24 +53,33 @@ public class Pedido {
         return cliente;
     }
 
+    public String getHoraEntrega() {
+        return horaEntrega;
+    }
+
+    public void setHoraEntrega(String horaEntrega) {
+        this.horaEntrega = horaEntrega;
+    }
+
+    
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 
-    public Double getSenia() {
-        return senia;
+    public List<Senia> getSenias() {
+        return senias;
     }
 
-    public void setSenia(Double senia) {
-        this.senia = senia;
+    public void setSenias(List<Senia> senias) {
+        this.senias = senias;
     }
 
     public List<DetallePedido> getDetallePedidos() {
@@ -93,14 +105,4 @@ public class Pedido {
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-    
-    
 }

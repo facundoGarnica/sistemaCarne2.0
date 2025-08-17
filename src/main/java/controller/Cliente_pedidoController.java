@@ -4,20 +4,30 @@
  */
 package controller;
 
+import dao.ClienteDAO;
+import dao.PedidoDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import model.Cliente;
+import model.Pedido;
 
 /**
  * FXML Controller class
@@ -29,18 +39,92 @@ public class Cliente_pedidoController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    
+    //clases y Dao
+    private Cliente cliente;
+    private ClienteDAO clienteDao;
+    private Pedido pedido;
+    private PedidoDAO pedidoDao;
+
+    //tablas
+    @FXML
+    private TableView<Cliente> tablaClientes;
+    @FXML
+    private TableColumn<Cliente, String> colNombre;
+    @FXML
+    private TableColumn<Cliente, String> colCelular;
     @FXML
     private AnchorPane overlayPedido;
     @FXML
     private AnchorPane difuminar;
+
+    //tabla pedidos
+    @FXML
+    private TableView <Pedido> tablaPedidos;
+    @FXML
+    private TableColumn<Cliente, String> colFechaPedido;
+    @FXML
+    private TableColumn<Cliente, String> colMonto;
+    @FXML
+    private TableColumn<Cliente, String> colSena;
+    @FXML
+    private TableColumn<Cliente, String> colResto;
+    @FXML
+    private TableColumn<Cliente, String> colEstado;
+    @FXML
+    private TableColumn<Cliente, String> colDiaEntrega;
+    
+    
+    //variables
+    List<Cliente> listaClientePedidos;
+
+    //controller
     @FXML
     private Cliente_CrearPedidoController crearPedidoController;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-     public void difuminarTodo() {
+
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colCelular.setCellValueFactory(new PropertyValueFactory<>("celular"));
+        
+        //tabla de pedidos
+        
+        colFechaPedido.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        
+        cargarClientesConPedidos();
+        cargarClientesConPedidos();
+    }
+
+    private void cargarClientesConPedidos() {
+        clienteDao = new ClienteDAO();
+        listaClientePedidos = clienteDao.buscarClientesConPedidos();
+
+        // Pasar la lista a un ObservableList (lo que TableView entiende)
+        ObservableList<Cliente> clientesObservable = FXCollections.observableArrayList(listaClientePedidos);
+
+        // Asignar a la tabla
+        tablaClientes.setItems(clientesObservable);
+
+        //listener para capturar selección
+        tablaClientes.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, selectedCliente) -> {
+                    if (selectedCliente != null) {
+                        cargarPedidosDeCliente(selectedCliente);
+                    }
+                }
+        );
+    }
+
+    private void cargarPedidosDeCliente(Cliente clienteSeleccionado) {
+        pedidoDao = new PedidoDAO();
+
+        List<Pedido> pedidos = pedidoDao.buscarPedidosPorCliente(clienteSeleccionado.getId());
+
+        ObservableList<Pedido> pedidosObservable = FXCollections.observableArrayList(pedidos);
+        tablaPedidos.setItems(pedidosObservable);
+    }
+
+    public void difuminarTodo() {
         difuminar.setVisible(true);
         difuminar.setDisable(false);
 

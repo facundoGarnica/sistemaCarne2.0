@@ -1,3 +1,4 @@
+model\Senia.class
 dao\DetalleMediaResDAO.class
 model\DetallePedido.class
 controller\ClientesController$4.class
@@ -10,8 +11,10 @@ carniceria\sistemacarne\App.class
 controller\StockProductoController$2.class
 controller\HistorialVentasController$2.class
 controller\StockProductoController$5.class
+controller\Cliente_CrearPedidoController$4.class
 model\Stock.class
 controller\StockMediaResController$4.class
+dao\SeniaDAO.class
 dao\StockDAO.class
 controller\HistorialVentasController.class
 controller\StockMediaResController$1.class
@@ -45,9 +48,11 @@ dao\DetallePedidoDAO.class
 controller\HistorialVentasController$2$1.class
 model\Venta.class
 controller\StockMediaResController$3.class
+controller\Cliente_CrearPedidoController$5.class
 controller\Producto_menuController$2.class
 controller\HistorialVentasController$3.class
 dao\DetalleCajonPolloDAO.class
+controller\Cliente_CrearPedidoController$1$1.class
 model\Cliente.class
 controller\Spa_clientesController.class
 dao\ClienteDAO.class

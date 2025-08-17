@@ -50,7 +50,7 @@
 
 /* Celdas de la tabla - TAMAÑO COMPACTO */
 .tabla-productos .table-cell {
-    -fx-alignment: CENTER;
+    -fx-alignment: CENTER !important;
     -fx-font-size: 15px;
     -fx-padding: 8px 20px;   /* Padding más pequeño */
     -fx-text-fill: #2c3e50;

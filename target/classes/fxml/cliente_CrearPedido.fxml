@@ -25,7 +25,7 @@
         <URL value="@../styles/clientesCrearPedido.css" />
     </stylesheets>
 
-    <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="845.0" prefWidth="905.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         
         <VBox prefHeight="819.0" prefWidth="903.0" spacing="20.0" styleClass="container-principal">
             <padding>
@@ -129,8 +129,8 @@
             <!-- Sección: Acciones Finales -->
             <HBox alignment="CENTER" spacing="15.0" styleClass="seccion-botones-finales">
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="btnCancelar" prefWidth="120.0" styleClass="boton" text="Cancelar" />
-                <Button fx:id="btnGuardar" prefHeight="47.0" prefWidth="194.0" styleClass="boton" text="Guardar Pedido" />
+                <Button fx:id="btnCancelar" onAction="#cerrarOverlay" prefWidth="120.0" styleClass="boton" text="Cancelar" />
+                <Button fx:id="btnGuardar" onAction="#guardarPedido" prefHeight="47.0" prefWidth="194.0" styleClass="boton" text="Guardar Pedido" />
             </HBox>
 
         </VBox>

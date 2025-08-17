@@ -151,4 +151,15 @@ public class ClienteDAO {
         }
     }
 
+    public List<Cliente> buscarClientesConPedidos() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "SELECT DISTINCT c FROM Cliente c INNER JOIN c.pedidos p", Cliente.class
+            ).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
 }

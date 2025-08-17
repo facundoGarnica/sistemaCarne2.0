@@ -41,6 +41,7 @@
         <mapping class="model.Producto"/>
         <mapping class="model.Stock"/>
         <mapping class="model.Venta"/>
+        <mapping class="model.Senia"/>
 
     </session-factory>
 </hibernate-configuration>
