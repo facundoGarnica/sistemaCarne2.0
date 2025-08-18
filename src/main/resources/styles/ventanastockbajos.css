@@ -1,0 +1,27 @@
+/* Estilo para el globo de diálogo */
+.globo {
+    -fx-background-color: white;               /* Fondo blanco */
+    -fx-border-color: #00cfff;                 /* Borde azul celeste */
+    -fx-border-width: 2px;                     /* Grosor del borde */
+    -fx-border-radius: 12px;                   /* Bordes redondeados */
+    -fx-background-radius: 12px;               /* Redondeo del fondo */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 2); /* Sombra suave */
+}
+
+/* Estilo para el triángulo (flecha) */
+.triangulo {
+    -fx-fill: white;                           /* Interior blanco */
+    -fx-stroke: #00cfff;                       /* Borde azul celeste */
+    -fx-stroke-width: 2px;                     /* Grosor del borde */
+}
+.tapar{
+    -fx-background-color: white; 
+    -fx-border-width: 2px;              /* Grosor del borde */
+    -fx-border-radius: 5px;            /* Radio del borde */
+    -fx-background-radius: 5px;
+}
+
+.mainFxmlClass {
+    -fx-background-color: transparent; /* Fondo invisible */
+    -fx-border-color: transparent;     /* Sin borde */
+}

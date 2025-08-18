@@ -377,6 +377,12 @@
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
+.label-monto {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e57373; /* rojo suave */
+}
+
 
 .valor-total {
     -fx-font-size: 18px;
@@ -479,6 +485,31 @@
 .gridPanel:hover {
     -fx-border-color: #3498db;
     -fx-background-color: #ffffff;
+}
+.grid-datos {
+    -fx-padding: 20px;                          /* más espacio interno */
+    -fx-hgap: 15px;                             /* separación horizontal */
+    -fx-vgap: 12px;                             /* separación vertical */
+    -fx-background-color: #ffffff;              /* fondo blanco limpio */
+    -fx-background-radius: 10px;                /* bordes redondeados */
+    -fx-border-color: #3498db;                  /* borde azul tenue */
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 2); /* sombra suave */
+    -fx-alignment: center-left;                 /* alinear contenido a la izquierda */
+}
+
+/* Para los Labels internos del Grid */
+.grid-datos .label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Para valores importantes como el monto */
+.grid-datos .valor {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c;   /* rojo para destacar el monto */
 }
 
 /* ==============================
@@ -590,4 +621,11 @@
 .text-field:hover {
     -fx-background-color: #f5f7fa; /* fondo gris muy claro */
 }
-s
+/* Estilo para Label de título */
+.label-titulo {
+    -fx-font-size: 25px;           /* tamaño moderado */
+    -fx-font-weight: bold;         /* negrita */
+    -fx-text-fill: #2c3e50;        /* color del texto, gris oscuro */
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-padding: 5px 0;            /* un poco de espacio arriba y abajo */
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Polygon?>
+
+<AnchorPane prefHeight="400.0" prefWidth="490.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VentanaStockBajosController">
+    <stylesheets>
+        <URL value="@../styles/ventanastockbajos.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane layoutX="27.0" layoutY="77.0" prefHeight="283.0" prefWidth="446.0" styleClass="globo" />
+      <Polygon fill="DODGERBLUE" layoutX="72.0" layoutY="35.0" points="-27.0, 43.99998474121094, 37.0, 43.99998474121094, 3.20001220703125, -19.9999942779541" stroke="BLACK" strokeType="INSIDE" styleClass="triangulo" />
+      <AnchorPane layoutX="48.8" layoutY="75.0" prefHeight="25.0" prefWidth="58.0" styleClass="tapar" AnchorPane.leftAnchor="46.5" />
+   </children>
+</AnchorPane>

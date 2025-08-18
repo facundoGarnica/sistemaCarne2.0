@@ -1,5 +1,6 @@
 package controller;
 
+import Dto.AlertaStockDTO;
 import Util.HibernateUtil;
 import dao.ProductoDAO;
 import dao.StockDAO;
@@ -287,28 +288,36 @@ public class StockProductoController implements Initializable {
     }
 
     private String determinarEstadoStock(Stock stock) {
-        if (stock == null) return "🔴";
+        if (stock == null) {
+            return "🔴";
+        }
 
         double cantidad = stock.getCantidad();
         double minima = stock.getCantidadMinima();
 
-        if (cantidad == 0) return "🔴"; // Sin stock
-        if (cantidad <= minima) return "🟠"; // Stock crítico
-        if (cantidad <= minima * 1.5) return "🟡"; // Stock bajo
+        if (cantidad == 0) {
+            return "🔴"; // Sin stock
+        }
+        if (cantidad <= minima) {
+            return "🟠"; // Stock crítico
+        }
+        if (cantidad <= minima * 1.5) {
+            return "🟡"; // Stock bajo
+        }
         return "🟢"; // Stock normal
     }
 
     private void cargarDatosTabla() {
         List<Stock> listaStock = stockDao.buscarTodos();
         listaStockCompleta = listaStock;
-        
+
         if (listaStockFiltrada != null) {
             listaStockFiltrada = new FilteredList<>(FXCollections.observableArrayList(listaStockCompleta));
             tablaStock.setItems(listaStockFiltrada);
         } else {
             tablaStock.getItems().setAll(listaStock);
         }
-        
+
         actualizarEstadisticas();
     }
 
@@ -329,14 +338,20 @@ public class StockProductoController implements Initializable {
 
     @FXML
     private void limpiarFiltros() {
-        if (txtBuscarProducto != null) txtBuscarProducto.clear();
-        if (cbxFiltroEstado != null) cbxFiltroEstado.setValue("Todos");
-        if (cbxOrdenar != null) cbxOrdenar.setValue("Nombre A-Z");
+        if (txtBuscarProducto != null) {
+            txtBuscarProducto.clear();
+        }
+        if (cbxFiltroEstado != null) {
+            cbxFiltroEstado.setValue("Todos");
+        }
+        if (cbxOrdenar != null) {
+            cbxOrdenar.setValue("Nombre A-Z");
+        }
         aplicarFiltros();
     }
 
     @FXML
-    private void actualizarTabla() {
+    public void actualizarTabla() {
         cargarDatosTabla();
         System.out.println("Tabla actualizada correctamente.");
     }
@@ -354,7 +369,9 @@ public class StockProductoController implements Initializable {
     }
 
     private void aplicarFiltros() {
-        if (listaStockCompleta == null || tablaStock == null) return;
+        if (listaStockCompleta == null || tablaStock == null) {
+            return;
+        }
 
         String textoBusqueda = (txtBuscarProducto != null) ? txtBuscarProducto.getText().toLowerCase() : "";
         String estadoFiltro = (cbxFiltroEstado != null) ? cbxFiltroEstado.getValue() : "Todos";
@@ -362,9 +379,9 @@ public class StockProductoController implements Initializable {
         List<Stock> listaFiltrada = listaStockCompleta.stream()
                 .filter(stock -> {
                     // Filtro por texto de búsqueda
-                    boolean coincideTexto = textoBusqueda.isEmpty() ||
-                            stock.getProducto().getNombre().toLowerCase().contains(textoBusqueda) ||
-                            String.valueOf(stock.getProducto().getCodigo()).contains(textoBusqueda);
+                    boolean coincideTexto = textoBusqueda.isEmpty()
+                            || stock.getProducto().getNombre().toLowerCase().contains(textoBusqueda)
+                            || String.valueOf(stock.getProducto().getCodigo()).contains(textoBusqueda);
 
                     // Filtro por estado
                     boolean coincideEstado = true;
@@ -395,7 +412,9 @@ public class StockProductoController implements Initializable {
     }
 
     private void aplicarOrdenamiento() {
-        if (cbxOrdenar == null || tablaStock.getItems().isEmpty()) return;
+        if (cbxOrdenar == null || tablaStock.getItems().isEmpty()) {
+            return;
+        }
 
         String criterio = cbxOrdenar.getValue();
         List<Stock> items = tablaStock.getItems();
@@ -422,7 +441,9 @@ public class StockProductoController implements Initializable {
     }
 
     private void actualizarEstadisticas() {
-        if (listaStockCompleta == null) return;
+        if (listaStockCompleta == null) {
+            return;
+        }
 
         int total = listaStockCompleta.size();
         int sinStock = 0;
@@ -448,10 +469,18 @@ public class StockProductoController implements Initializable {
             }
         }
 
-        if (lblTotalProductos != null) lblTotalProductos.setText(String.valueOf(total));
-        if (lblSinStock != null) lblSinStock.setText(String.valueOf(sinStock));
-        if (lblStockBajo != null) lblStockBajo.setText(String.valueOf(stockBajo + stockCritico));
-        if (lblStockNormal != null) lblStockNormal.setText(String.valueOf(stockNormal));
+        if (lblTotalProductos != null) {
+            lblTotalProductos.setText(String.valueOf(total));
+        }
+        if (lblSinStock != null) {
+            lblSinStock.setText(String.valueOf(sinStock));
+        }
+        if (lblStockBajo != null) {
+            lblStockBajo.setText(String.valueOf(stockBajo + stockCritico));
+        }
+        if (lblStockNormal != null) {
+            lblStockNormal.setText(String.valueOf(stockNormal));
+        }
 
         // Mostrar/ocultar panel de alertas
         if (panelAlertas != null && lblAlertas != null) {
@@ -702,4 +731,26 @@ public class StockProductoController implements Initializable {
             System.out.println("Eliminación cancelada.");
         }
     }
+
+    public List<AlertaStockDTO> obtenerProductosStockBajoOCritico() {
+        if (listaStockCompleta == null) {
+            return Collections.emptyList();
+        }
+
+        return listaStockCompleta.stream()
+                .filter(stock -> {
+                    String estado = determinarEstadoStock(stock);
+                    return "🟠".equals(estado) || "🟡".equals(estado); // crítico o bajo
+                })
+                .map(stock -> {
+                    String estado = determinarEstadoStock(stock).equals("🟠") ? "Crítico" : "Bajo";
+                    return new AlertaStockDTO(
+                            stock.getProducto().getNombre(),
+                            estado,
+                            stock.getCantidad()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
 }

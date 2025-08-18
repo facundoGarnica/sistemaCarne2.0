@@ -92,6 +92,7 @@ controller\NombreFiadoClienteController.class
 dao\CajonPolloDAO.class
 controller\AgregarPago_clienteController.class
 model\DetalleCajonPollo.class
+Dto\AlertaStockDTO.class
 controller\AgregarUnProductoController$1.class
 controller\ClientesController$9.class
 model\FiadoParcial.class

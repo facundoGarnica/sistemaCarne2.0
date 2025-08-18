@@ -4,6 +4,7 @@
  */
 package controller;
 
+import Dto.AlertaStockDTO;
 import Util.CalcularVuelto;
 import Util.DatosPagos;
 import Util.HibernateUtil;
@@ -17,9 +18,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
+import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -43,6 +46,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
@@ -52,6 +56,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.DetalleVenta;
 import model.Producto;
+import model.Stock;
 import model.Venta;
 
 /**
@@ -67,6 +72,8 @@ public class Crear_ventasController implements Initializable {
     private boolean overlayActivo = false;
     private Timeline temporizadorActual;
     private int indicePagoActual = 0;
+    StockProductoController stockController = new StockProductoController();
+    private List<AlertaStockDTO> listaStockBajo;
     private MercadoPagoApi MP;
     private List<DatosPagos> datos;
     private Venta venta;
@@ -78,6 +85,9 @@ public class Crear_ventasController implements Initializable {
     // Cache para evitar crear DAOs repetidamente
     private ProductoDAO productoDAO;
     private StockDAO stockDao;
+
+    @FXML
+    private ImageView imagenSigno;
     @FXML
     private TextField txtCodigoDeBarra;
 
@@ -122,6 +132,7 @@ public class Crear_ventasController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         tbolVueltos.setPlaceholder(new Label("")); // deja el placeholder vacío
         tblVistaProductos.setPlaceholder(new Label("")); // deja el placeholder vacío
 
@@ -260,6 +271,79 @@ public class Crear_ventasController implements Initializable {
                 System.out.println("Precalentamiento completado");
             }
         }).start();
+        ImagenStock();
+        productosBajos();
+    }
+
+    public void productosBajos() {
+        try {
+            System.out.println("=== Verificando productos con stock bajo ===");
+
+            // Usar los DAOs directamente
+            StockDAO stockDao = new StockDAO();
+            List<Stock> listaStock = stockDao.buscarTodos();
+
+            listaStockBajo = new ArrayList<>();
+
+            for (Stock stock : listaStock) {
+                // Lógica igual que en StockProductoController
+                double cantidad = stock.getCantidad();
+                double minima = stock.getCantidadMinima();
+
+                String estado = "";
+                boolean esStockBajo = false;
+
+                if (cantidad == 0) {
+                    // Sin stock - no incluir en alertas
+                    continue;
+                } else if (cantidad <= minima) {
+                    estado = "Crítico";
+                    esStockBajo = true;
+                } else if (cantidad <= minima * 1.5) {
+                    estado = "Bajo";
+                    esStockBajo = true;
+                }
+
+                if (esStockBajo) {
+                    listaStockBajo.add(new AlertaStockDTO(
+                            stock.getProducto().getNombre(),
+                            estado,
+                            stock.getCantidad()
+                    ));
+                }
+            }
+
+            if (!listaStockBajo.isEmpty()) {
+                System.out.println("✓ Encontrados " + listaStockBajo.size() + " productos con stock bajo:");
+                for (AlertaStockDTO alerta : listaStockBajo) {
+                    System.out.println("  - " + alerta.getNombreProducto()
+                            + " | Estado: " + alerta.getEstado()
+                            + " | Cantidad: " + alerta.getCantidad());
+                }
+            } else {
+                System.out.println("ℹ️  No hay productos con stock bajo actualmente");
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Error al verificar stock bajo: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void ImagenStock() {
+        ScaleTransition st = new ScaleTransition(Duration.seconds(1), imagenSigno);
+        st.setToX(1.2); // 20% más ancho
+        st.setToY(1.2); // 20% más alto
+        st.setAutoReverse(true);
+        st.setCycleCount(ScaleTransition.INDEFINITE);
+
+        // Cargar solo la imagen roja
+        Image rojo = new Image(getClass().getResource("/images/peligroRojo.png").toExternalForm());
+
+        // Al iniciar la animación, siempre usa la roja
+        imagenSigno.setImage(rojo);
+
+        st.play();
     }
 
     public String getMedioPago() {
@@ -675,66 +759,65 @@ public class Crear_ventasController implements Initializable {
     }
 
     public void guardarVenta() {
-    if (!validarVentaParaProcesar()) {
-        return;
-    }
-
-    try {
-        System.out.println("=== INICIANDO GUARDADO DE VENTA ===");
-
-        // Calcular total redondeado tal como se muestra en lblCantidadPagar
-        int entero = (int) Math.round(SumarPreciosAPagar);
-        int unidades = entero % 10;
-        if (unidades >= 6) {
-            entero = (entero / 10) * 10 + 10; // redondea hacia arriba
-        } else {
-            entero = (entero / 10) * 10;       // redondea hacia abajo
+        if (!validarVentaParaProcesar()) {
+            return;
         }
-        double totalRedondeado = entero;
-        System.out.println("Total redondeado a guardar: $" + totalRedondeado);
 
-        // Crear nueva venta
-        venta = new Venta();
-        venta.setFecha(LocalDateTime.now());
-        venta.setMedioPago(lblMedioPago.getText());
-        venta.setTotal(totalRedondeado);
+        try {
+            System.out.println("=== INICIANDO GUARDADO DE VENTA ===");
 
-        System.out.println("Datos de la venta:");
-        System.out.println("- Total: $" + totalRedondeado);
-        System.out.println("- Medio de pago: " + lblMedioPago.getText());
-        System.out.println("- Fecha: " + venta.getFecha());
-        System.out.println("- Productos a procesar: " + productosEnVenta.size());
+            // Calcular total redondeado tal como se muestra en lblCantidadPagar
+            int entero = (int) Math.round(SumarPreciosAPagar);
+            int unidades = entero % 10;
+            if (unidades >= 6) {
+                entero = (entero / 10) * 10 + 10; // redondea hacia arriba
+            } else {
+                entero = (entero / 10) * 10;       // redondea hacia abajo
+            }
+            double totalRedondeado = entero;
+            System.out.println("Total redondeado a guardar: $" + totalRedondeado);
 
-        // Guardar venta principal en base de datos
-        ventaDao.guardar(venta);
-        System.out.println("✓ Venta principal guardada");
-        System.out.println("✓ ID de venta: " + venta.getId());
+            // Crear nueva venta
+            venta = new Venta();
+            venta.setFecha(LocalDateTime.now());
+            venta.setMedioPago(lblMedioPago.getText());
+            venta.setTotal(totalRedondeado);
 
-        // Guardar detalles de venta
-        System.out.println("\n=== GUARDANDO DETALLES DE VENTA ===");
-        GenerarDetalleVenta();
+            System.out.println("Datos de la venta:");
+            System.out.println("- Total: $" + totalRedondeado);
+            System.out.println("- Medio de pago: " + lblMedioPago.getText());
+            System.out.println("- Fecha: " + venta.getFecha());
+            System.out.println("- Productos a procesar: " + productosEnVenta.size());
 
-        System.out.println("✓ VENTA PROCESADA CORRECTAMENTE");
+            // Guardar venta principal en base de datos
+            ventaDao.guardar(venta);
+            System.out.println("✓ Venta principal guardada");
+            System.out.println("✓ ID de venta: " + venta.getId());
 
-        // Limpiar todo después de guardar exitosamente
-        limpiarTodo();
-        System.out.println("✓ Sistema limpiado - listo para nueva venta");
+            // Guardar detalles de venta
+            System.out.println("\n=== GUARDANDO DETALLES DE VENTA ===");
+            GenerarDetalleVenta();
 
-    } catch (Exception e) {
-        System.err.println("\n✗ ERROR CRÍTICO EN GUARDADO DE VENTA");
-        System.err.println("✗ Mensaje: " + e.getMessage());
-        e.printStackTrace();
-        mostrarError("Error al procesar venta",
-            "No se pudo completar el procesamiento de la venta:\n\n" + e.getMessage() +
-            "\n\nVerifique:\n" +
-            "• Conexión a la base de datos\n" +
-            "• Configuración de entidades (Venta, DetalleVenta, Producto)\n" +
-            "• Relaciones en Hibernate/JPA\n" +
-            "• Que todos los productos tengan ID válido\n" +
-            "• Transacciones de base de datos");
+            System.out.println("✓ VENTA PROCESADA CORRECTAMENTE");
+
+            // Limpiar todo después de guardar exitosamente
+            limpiarTodo();
+            System.out.println("✓ Sistema limpiado - listo para nueva venta");
+
+        } catch (Exception e) {
+            System.err.println("\n✗ ERROR CRÍTICO EN GUARDADO DE VENTA");
+            System.err.println("✗ Mensaje: " + e.getMessage());
+            e.printStackTrace();
+            mostrarError("Error al procesar venta",
+                    "No se pudo completar el procesamiento de la venta:\n\n" + e.getMessage()
+                    + "\n\nVerifique:\n"
+                    + "• Conexión a la base de datos\n"
+                    + "• Configuración de entidades (Venta, DetalleVenta, Producto)\n"
+                    + "• Relaciones en Hibernate/JPA\n"
+                    + "• Que todos los productos tengan ID válido\n"
+                    + "• Transacciones de base de datos");
+        }
     }
-}
-
 
     // Método extraído del controlador de referencia para generar detalles
     public void GenerarDetalleVenta() {
