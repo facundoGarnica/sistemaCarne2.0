@@ -4,7 +4,11 @@
 }
 
 .mainFxmlClass {
-    -fx-background-color: #f5f5f5;
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #e0e0e0; /* gris claro */
 }
 
 /* Barra lateral */

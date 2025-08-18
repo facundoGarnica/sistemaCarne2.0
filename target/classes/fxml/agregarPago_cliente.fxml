@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AgregarPago_clienteController">
+<AnchorPane id="AnchorPane" prefHeight="515.0" prefWidth="744.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AgregarPago_clienteController">
     
     <stylesheets>
         <URL value="@../styles/clientes.css" />
@@ -23,7 +23,7 @@
             <children>
                 
                 <!-- Grid para fecha y resto a pagar -->
-                <GridPane layoutX="30.0" layoutY="14.0" styleClass="gridPanel" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
+                <GridPane layoutX="126.0" prefHeight="136.0" prefWidth="481.0" styleClass="gridPanel" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="133.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <!-- Fila 1: Fecha -->
                         <Label fx:id="lblFecha1" styleClass="titulo" text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="0">
@@ -32,7 +32,7 @@
                             </font>
                         </Label>
                         
-                        <Label fx:id="lblFecha" prefHeight="43.0" prefWidth="268.0" styleClass="titulo" text="dd/mm/aaaa" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label fx:id="lblFecha" prefHeight="47.0" prefWidth="184.0" styleClass="titulo" text="dd/mm/aaaa" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <font>
                                 <Font size="32.0" />
                             </font>
@@ -45,7 +45,7 @@
                             </font>
                         </Label>
                         
-                        <Label fx:id="lblRestoAPagar" prefWidth="150.0" styleClass="titulo" text="\$ --" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="lblRestoAPagar" prefHeight="47.0" prefWidth="217.0" styleClass="titulo" text="\$ --" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <font>
                                 <Font size="32.0" />
                             </font>
@@ -53,7 +53,7 @@
                     </children>
                <columnConstraints>
                   <ColumnConstraints />
-                  <ColumnConstraints minWidth="150.0" prefWidth="150.0" />
+                  <ColumnConstraints minWidth="190.0" prefWidth="150.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints />
@@ -68,7 +68,7 @@
                     </font>
                 </Label>
                 
-                <TextField fx:id="txtDineroIngresar" layoutX="30.0" layoutY="160.0" prefHeight="35.0" prefWidth="440.0" promptText="Ingrese el monto..." styleClass="campo-texto" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="180.0">
+                <TextField fx:id="txtDineroIngresar" layoutX="30.0" layoutY="160.0" prefHeight="40.0" prefWidth="268.0" styleClass="text-field" promptText="Ingrese el monto..." AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="442.0" AnchorPane.topAnchor="180.0">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -81,27 +81,32 @@
                     </font>
                 </Label>
                 
-                <ComboBox fx:id="cmbMedioPago" layoutX="30.0" layoutY="250.0" prefHeight="35.0" prefWidth="440.0" promptText="Seleccione medio de pago..." styleClass="combo-pago" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
+                <ComboBox fx:id="cmbMedioPago" layoutX="30.0" layoutY="250.0" prefHeight="42.0" prefWidth="268.0" promptText="Seleccione medio de pago..." styleClass="combo-box" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="442.0" AnchorPane.topAnchor="250.0">
                 </ComboBox>
 
                 <!-- Botones -->
-                <Button fx:id="btnConfirmar" layoutX="108.0" layoutY="310.0" onAction="#guardarAnticipo" prefHeight="35.0" prefWidth="100.0" styleClass="boton" text="Confirmar" AnchorPane.leftAnchor="108.0" AnchorPane.topAnchor="310.0">
+                <Button fx:id="btnConfirmar" layoutX="108.0" layoutY="310.0" onAction="#guardarAnticipo" prefHeight="45.0" prefWidth="149.0" styleClass="boton" text="Confirmar" AnchorPane.leftAnchor="108.0" AnchorPane.topAnchor="310.0">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Button>
                 
-                <Button fx:id="btnCancelar" layoutX="392.0" layoutY="310.0" onAction="#cerrarOverlay" prefHeight="35.0" prefWidth="100.0" styleClass="boton" text="Cancelar" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="310.0">
+                <Button fx:id="btnCancelar" layoutX="392.0" layoutY="310.0" onAction="#cerrarOverlay" prefHeight="45.0" prefWidth="150.0" styleClass="boton" text="Cancelar" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="310.0">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Button>
             <Label fx:id="lblError" layoutX="47.0" layoutY="144.0" prefHeight="18.0" prefWidth="335.0" text="Label" textFill="RED" visible="false" />
+            <Button fx:id="btnIngresarTodo" layoutX="420.0" layoutY="178.0" onAction="#ingresarTodo" prefHeight="45.0" prefWidth="246.0" styleClass="boton" text="&lt;- Ingresar dinero restante">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
                 
             </children>
         </AnchorPane>
-      <Label layoutX="74.0" layoutY="25.0" styleClass="subtitulo" text="Cliente seleccionado:" />
-      <Label fx:id="lblClienteAsociado" layoutX="316.0" layoutY="25.0" prefHeight="29.0" prefWidth="257.0" styleClass="subtitulo" text="--" />
+      <Label layoutX="168.0" layoutY="26.0" styleClass="label-total" text="Cliente seleccionado:" />
+      <Label fx:id="lblClienteAsociado" layoutX="395.0" layoutY="23.0" prefHeight="29.0" prefWidth="257.0" styleClass="label-total" text="--" />
         
     </children>
 </AnchorPane>

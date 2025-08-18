@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="693.0" prefWidth="1200.0" styleClass="main-container" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Producto_menuController">
+<AnchorPane id="AnchorPane" prefHeight="693.0" prefWidth="1200.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Producto_menuController">
     <stylesheets>
         <URL value="@../styles/producto_menu.css" />
     </stylesheets>
@@ -51,7 +51,7 @@
             <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="toolbar-section">
                 <Button fx:id="btnAgregar" onAction="#setRutaProducto" styleClass="boton" text="➕ Agregar Producto" />
                 <Button fx:id="btnEditar" onAction="#editarProducto" styleClass="boton" text="✏ Editar Seleccionado" />
-                <Button fx:id="btnEliminar" onAction="#eliminarSeleccionado" styleClass="boton" text="🗑 Eliminar Seleccionado" />
+                <Button fx:id="btnEliminar" onAction="#eliminarSeleccionado" styleClass="boton-eliminar" text="🗑 Eliminar Seleccionado" />
                 <Button fx:id="btnAumentarPrecio" onAction="#setRutaPorcentaje" styleClass="boton" text="📈 Aumentar Precio %" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Button fx:id="btnExportar" styleClass="boton" text="📄 Exportar" />

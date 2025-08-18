@@ -1,22 +1,30 @@
 /* ==============================
    ESTILOS PROFESIONALES MEJORADOS
    PARA TABLEVIEW Y COMPONENTES
+   CON COLORES BALANCEADOS
    ============================== */
 
 /* ==============================
    TABLEVIEW - ESTILO PROFESIONAL
    ============================== */
+.mainFxmlClass {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #f5f7fa; /* gris azulado claro */
+}
 
 .tabla-productos {
     -fx-background-color: #ffffff;
-    -fx-border-color: #e1e5e9;
+    -fx-border-color: #dee2e6;
     -fx-border-width: 1px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 10, 0, 0, 4);
     -fx-table-cell-border-color: #f1f3f4;
-    -fx-selection-bar: #3498db;
-    -fx-selection-bar-non-focused: #bdc3c7;
+    -fx-selection-bar: #e3f2fd;
+    -fx-selection-bar-non-focused: #f1f3f4;
     -fx-font-family: "Segoe UI", Arial, sans-serif;
     -fx-pref-height: 450px;
     -fx-min-height: 400px;
@@ -24,7 +32,7 @@
 
 /* Encabezado de la tabla */
 .tabla-productos .column-header-background {
-    -fx-background-color: linear-gradient(to bottom, #34495e 0%, #2c3e50 100%);
+    -fx-background-color: linear-gradient(to bottom, #2c3e50 0%, #34495e 100%);
     -fx-background-radius: 12px 12px 0 0;
     -fx-border-radius: 12px 12px 0 0;
     -fx-padding: 0;
@@ -52,24 +60,29 @@
 .tabla-productos .table-cell {
     -fx-alignment: CENTER !important;
     -fx-font-size: 15px;
-    -fx-padding: 8px 20px;   /* Padding más pequeño */
+    -fx-padding: 8px 20px;
     -fx-text-fill: #2c3e50;
     -fx-border-color: #f8f9fa;
     -fx-border-width: 0 0 1px 0;
-    -fx-min-height: 65px;    /* Altura más compacta */
-    -fx-pref-height: 65px;   /* Altura preferida consistente */
+    -fx-min-height: 65px;
+    -fx-pref-height: 65px;
+    -fx-background-color: #ffffff;
 }
 
 /* Filas alternadas - TAMAÑO COMPACTO */
 .tabla-productos .table-row-cell {
     -fx-background-color: #ffffff;
     -fx-border-color: transparent;
-    -fx-min-height: 65px;    /* Misma altura que las celdas */
-    -fx-pref-height: 65px;   /* Altura preferida consistente */
-    -fx-padding: 3px 0;      /* Padding mínimo */
+    -fx-min-height: 65px;
+    -fx-pref-height: 65px;
+    -fx-padding: 3px 0;
 }
 
 .tabla-productos .table-row-cell:odd {
+    -fx-background-color: #f8f9fa;
+}
+
+.tabla-productos .table-row-cell:odd .table-cell {
     -fx-background-color: #f8f9fa;
 }
 
@@ -84,6 +97,7 @@
 .tabla-productos .table-row-cell:selected .table-cell {
     -fx-text-fill: #1976d2;
     -fx-font-weight: bold;
+    -fx-background-color: #e3f2fd;
 }
 
 /* Hover en filas */
@@ -92,9 +106,13 @@
     -fx-cursor: hand;
 }
 
+.tabla-productos .table-row-cell:hover .table-cell {
+    -fx-background-color: #f0f8ff;
+}
+
 /* Placeholder cuando no hay datos */
 .tabla-productos .placeholder .label {
-    -fx-text-fill: #7f8c8d;
+    -fx-text-fill: #6c757d;
     -fx-font-size: 16px;
     -fx-font-style: italic;
     -fx-padding: 40px;
@@ -121,8 +139,8 @@
    ============================== */
 
 .combo-box {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e1e5e9;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #ced4da;
     -fx-border-width: 1.5px;
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
@@ -130,21 +148,21 @@
     -fx-font-family: "Segoe UI", Arial, sans-serif;
     -fx-font-size: 15px;
     -fx-text-fill: #2c3e50;
-    -fx-prompt-text-fill: #95a5a6;
+    -fx-prompt-text-fill: #6c757d;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 3, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 2);
 }
 
 .combo-box:hover {
     -fx-border-color: #3498db;
-    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.2), 5, 0, 0, 2);
-    -fx-background-color: #fafbfc;
+    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.25), 6, 0, 0, 2);
+    -fx-background-color: #ffffff;
 }
 
 .combo-box:focused {
     -fx-border-color: #2980b9;
     -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(41,128,185,0.3), 6, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(41,128,185,0.3), 8, 0, 0, 3);
     -fx-background-color: #ffffff;
 }
 
@@ -156,7 +174,7 @@
 }
 
 .combo-box .arrow {
-    -fx-background-color: #34495e;
+    -fx-background-color: #495057;
     -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
     -fx-scale-shape: true;
     -fx-scale-x: 1.2;
@@ -170,11 +188,11 @@
 /* Lista desplegable del ComboBox */
 .combo-box-popup .list-view {
     -fx-background-color: #ffffff;
-    -fx-border-color: #e1e5e9;
+    -fx-border-color: #dee2e6;
     -fx-border-width: 1px;
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 4);
 }
 
 .combo-box-popup .list-view .list-cell {
@@ -199,22 +217,26 @@
    COMBOBOX EN TABLA - ALTURA AJUSTADA PARA TEXTO
    ============================== */
 .tabla-productos .table-cell {
-    -fx-alignment: CENTER_LEFT; /* mantiene centrado vertical, alineado a la izquierda */
-    -fx-padding: 10px 15px;     /* más padding vertical y horizontal */
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10px 15px;
     -fx-font-size: 15px;
-    -fx-min-height: 60px;       /* un poco menos que el combo pero suficiente */
+    -fx-min-height: 60px;
     -fx-pref-height: 60px;
 }
 
 /* Ajuste del ComboBox dentro de la celda */
 .tabla-productos .table-cell .combo-box {
-    -fx-min-height: 45px;   /* deja espacio vertical dentro de la celda */
+    -fx-min-height: 45px;
     -fx-pref-height: 45px;
     -fx-max-height: 45px;
-    -fx-alignment: CENTER;  /* centra verticalmente */
-    -fx-padding: 0 12px;    /* padding horizontal */
+    -fx-alignment: CENTER;
+    -fx-padding: 0 12px;
+    -fx-background-color: #f8f9fa;
 }
 
+.tabla-productos .table-cell .combo-box:hover {
+    -fx-background-color: #ffffff;
+}
 
 /* ==============================
    LABELS - ESTILO PROFESIONAL
@@ -229,7 +251,7 @@
 }
 
 .label-info {
-    -fx-text-fill: #5d6d7e;
+    -fx-text-fill: #495057;
     -fx-font-size: 16px;
     -fx-font-family: "Segoe UI", Arial, sans-serif;
     -fx-padding: 5px 0;
@@ -243,14 +265,14 @@
 }
 
 .valor-total {
-    -fx-text-fill: #27ae60;
+    -fx-text-fill: #28a745;
     -fx-font-weight: bold;
     -fx-font-size: 20px;
     -fx-font-family: "Segoe UI Bold", Arial, sans-serif;
-    -fx-background-color: #f1f8e9;
+    -fx-background-color: #f8fff9;
     -fx-padding: 8px 12px;
     -fx-background-radius: 6px;
-    -fx-border-color: #27ae60;
+    -fx-border-color: #28a745;
     -fx-border-width: 1px;
     -fx-border-radius: 6px;
 }
@@ -280,7 +302,7 @@
 
 .radio-button:hover {
     -fx-text-fill: #3498db;
-    -fx-background-color: #f8f9fa;
+    -fx-background-color: #f0f8ff;
     -fx-background-radius: 8px;
 }
 
@@ -293,8 +315,8 @@
 
 /* Círculo del Radio Button */
 .radio-button .radio {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #bdc3c7;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #ced4da;
     -fx-border-width: 2px;
     -fx-background-radius: 12px;
     -fx-border-radius: 12px;
@@ -308,7 +330,7 @@
 
 .radio-button:hover .radio {
     -fx-border-color: #3498db;
-    -fx-background-color: #f7fafc;
+    -fx-background-color: #ffffff;
     -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.3), 4, 0, 0, 1);
 }
 
@@ -332,17 +354,17 @@
 .radio-group {
     -fx-spacing: 8px;
     -fx-padding: 15px;
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e1e5e9;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
     -fx-border-width: 1px;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 4, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
 }
 
 .radio-group:hover {
-    -fx-border-color: #bdc3c7;
-    -fx-background-color: #fafbfc;
+    -fx-border-color: #ced4da;
+    -fx-background-color: #ffffff;
 }
 
 /* ==============================
@@ -350,8 +372,8 @@
    ============================== */
 
 .text-field {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e1e5e9;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #ced4da;
     -fx-border-width: 1.5px;
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
@@ -359,38 +381,64 @@
     -fx-font-family: "Segoe UI", Arial, sans-serif;
     -fx-font-size: 15px;
     -fx-text-fill: #2c3e50;
-    -fx-prompt-text-fill: #95a5a6;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-prompt-text-fill: #6c757d;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 3, 0, 0, 1);
 }
 
 .text-field:hover {
     -fx-border-color: #3498db;
-    -fx-background-color: #fafbfc;
-    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.15), 4, 0, 0, 2);
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.2), 5, 0, 0, 2);
 }
 
 .text-field:focused {
     -fx-border-color: #2980b9;
     -fx-border-width: 2px;
     -fx-background-color: #ffffff;
-    -fx-effect: dropshadow(gaussian, rgba(41,128,185,0.25), 6, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(41,128,185,0.3), 6, 0, 0, 3);
 }
 
 /* ==============================
    TEXTFIELD EN TABLA - TAMAÑO COMPACTO  
    ============================== */
 .tabla-productos .text-field {
-    -fx-min-height: 45px;   /* Más compacto */
-    -fx-pref-height: 45px;  /* Altura preferida */
-    -fx-max-height: 45px;   /* Altura máxima */
-    -fx-padding: 8px 12px;  /* Padding reducido */
-    -fx-font-size: 15px;    /* Tamaño de fuente normal */
+    -fx-min-height: 45px;
+    -fx-pref-height: 45px;
+    -fx-max-height: 45px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 15px;
+    -fx-background-color: #f8f9fa;
+}
+
+.tabla-productos .text-field:hover {
+    -fx-background-color: #ffffff;
+}
+
+.tabla-productos .text-field:focused {
+    -fx-background-color: #ffffff;
 }
 
 /* ==============================
    BOTONES - ESTILO PROFESIONAL MEJORADO
    ============================== */
+.btn-delete {
+    -fx-background-color: linear-gradient(to bottom, #dc3545, #c82333);
+    -fx-text-fill: white;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 12px 20px;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
 
+.btn-delete:hover {
+    -fx-background-color: linear-gradient(to bottom, #c82333, #a71d2a);
+}
+
+.btn-action:hover {
+    -fx-background-color: linear-gradient(to bottom, #218838, #1e7e34);
+}
 .boton {
     -fx-background-color: linear-gradient(to bottom, #3498db 0%, #2980b9 100%);
     -fx-text-fill: #ffffff;
@@ -399,14 +447,14 @@
     -fx-font-size: 15px;
     -fx-padding: 12px 20px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3);
     -fx-font-family: "Segoe UI Semibold", Arial, sans-serif;
     -fx-border-color: transparent;
 }
 
 .boton:hover {
     -fx-background-color: linear-gradient(to bottom, #5dade2 0%, #3498db 100%);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
 }
@@ -427,21 +475,24 @@
 .seccion-tabla {
     -fx-padding: 20px;
     -fx-background-color: #ffffff;
-    -fx-border-color: #e1e5e9;
+    -fx-border-color: #dee2e6;
     -fx-border-width: 1px;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);
     -fx-spacing: 15px;
 }
 
 .seccion-botones-finales {
     -fx-padding: 15px 0;
     -fx-spacing: 15px;
+    -fx-background-color: #f8f9fa;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
 }
 
 .container-principal {
-    -fx-background-color: #f8f9fa;
+    -fx-background-color: #f5f7fa;
     -fx-padding: 25px;
 }
 
@@ -449,25 +500,78 @@
    DATEPICKER EN TABLA - TAMAÑO COMPACTO
    ============================== */
 .tabla-productos .date-picker {
-    -fx-min-height: 45px;   /* Más compacto */
-    -fx-pref-height: 45px;  /* Altura preferida */
-    -fx-max-height: 45px;   /* Altura máxima */
-    -fx-font-size: 15px;    /* Tamaño de fuente normal */
-    -fx-padding: 5px;       /* Padding mínimo */
+    -fx-min-height: 45px;
+    -fx-pref-height: 45px;
+    -fx-max-height: 45px;
+    -fx-font-size: 15px;
+    -fx-padding: 5px;
+    -fx-background-color: #f8f9fa;
 }
 
 .tabla-productos .date-picker .text-field {
     -fx-font-size: 15px;
-    -fx-min-height: 38px;   /* Altura compacta */
-    -fx-pref-height: 38px;  /* Altura preferida */
-    -fx-max-height: 38px;   /* Altura máxima */
-    -fx-padding: 8px 12px;  /* Padding reducido */
+    -fx-min-height: 38px;
+    -fx-pref-height: 38px;
+    -fx-max-height: 38px;
+    -fx-padding: 8px 12px;
+    -fx-background-color: #f8f9fa;
+}
+
+.tabla-productos .date-picker:hover {
+    -fx-background-color: #ffffff;
+}
+
+.tabla-productos .date-picker:hover .text-field {
+    -fx-background-color: #ffffff;
 }
 
 /* Celdas del calendario (días) */
 .date-picker-popup .day-cell {
     -fx-min-width: 40px;
     -fx-min-height: 40px;
-    -fx-font-size: 16px; /* días más grandes */
+    -fx-font-size: 16px;
     -fx-alignment: center;
+    -fx-background-color: #f8f9fa;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #e3f2fd;
+}
+
+.date-picker-popup .day-cell.selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+/* ==============================
+   MEJORAS ADICIONALES
+   ============================== */
+
+/* Contenedores de formulario */
+.form-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+/* Separadores visuales */
+.separator {
+    -fx-background-color: #dee2e6;
+    -fx-pref-height: 1px;
+    -fx-max-height: 1px;
+    -fx-padding: 10px 0;
+}
+
+/* Headers de sección */
+.section-header {
+    -fx-background-color: #e9ecef;
+    -fx-padding: 15px 20px;
+    -fx-border-radius: 8px 8px 0 0;
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-border-color: #ced4da;
+    -fx-border-width: 0 0 1px 0;
 }

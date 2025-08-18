@@ -71,7 +71,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button mnemonicParsing="false" onAction="#eliminarVentaSeleccionada" styleClass="boton" text="Borrar Venta seleccionada" />
+            <Button mnemonicParsing="false" onAction="#eliminarVentaSeleccionada" styleClass="boton-eliminar" text="Borrar Venta seleccionada" />
             
             <!-- Tabla de Productos -->
             <TableView fx:id="tblProductos" prefHeight="287.0" prefWidth="1194.0" styleClass="tablaVenta">

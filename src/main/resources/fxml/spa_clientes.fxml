@@ -31,13 +31,13 @@
             <!-- Panel de botones -->
             <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <Button fx:id="btnAgregarPago" onAction="#difuminarTodo" prefHeight="40.0" prefWidth="190.0" styleClass="boton" text="Agregar pago a cuenta" />
-                  <Button fx:id="btnEliminarPago" prefHeight="40.0" prefWidth="181.0" styleClass="boton" text="Eliminar seleccionado" />
+                  <Button fx:id="btnAgregarPago" onAction="#difuminarTodo" prefHeight="45.0" prefWidth="237.0" styleClass="boton" text="Agregar pago a cuenta" />
+                  <Button fx:id="btnEliminarPago" prefHeight="45.0" prefWidth="224.0" styleClass="boton" text="Eliminar seleccionado" />
                   
                   <!-- Espaciador para empujar el botón regresar a la derecha -->
                   <HBox HBox.hgrow="ALWAYS" />
                   
-                  <Button fx:id="btnRegresar" onAction="#cerrarOverlay" prefHeight="40.0" prefWidth="120.0" styleClass="boton" text="← Regresar" />
+                  <Button fx:id="btnRegresar" onAction="#cerrarOverlay" prefHeight="45.0" prefWidth="156.0" styleClass="boton" text="← Regresar" />
                </children>
                <padding>
                   <Insets bottom="5.0" top="5.0" />

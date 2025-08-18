@@ -55,10 +55,10 @@
             </TableView>
             
             <!-- Tabla de vuelto (30% del ancho) -->
-            <TableView fx:id="tbolVueltos" prefHeight="520.0" prefWidth="692.0" styleClass="tablaCrearVenta">
+            <TableView fx:id="tbolVueltos" prefHeight="516.0" prefWidth="461.0" styleClass="tablaCrearVenta">
               <columns>
                 <TableColumn fx:id="colRecibido" prefWidth="75.0" text="Recibido" />
-                <TableColumn fx:id="colVuelto" prefWidth="75.0" text="Vuelto a dar" />
+                <TableColumn fx:id="colVuelto" prefWidth="75.0" text="Vuelto" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -6,6 +6,7 @@ import dao.FiadoParcialDAO;
 import dao.VentaDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -54,6 +55,7 @@ public class ClientesController implements Initializable {
     List<Cliente> listaClientes;
     private Cliente clienteSeleccionado;
     private boolean listenerFiadosConfigurado = false; // Flag para evitar múltiples listeners
+    private final DecimalFormat decimalFormatter = new DecimalFormat("#");
 
     @FXML
     private AnchorPane difuminar;
@@ -166,7 +168,7 @@ public class ClientesController implements Initializable {
 
         List<Fiado> fiadosCliente = fiadoDao.obtenerFiadosPorClienteId(clienteSeleccionado.getId());
 
-        // Configurar columnas de fiados (esto se puede mover a initialize si siempre es igual)
+        // Configurar columnas de fiados
         configurarColumnasTablaFiados();
 
         tablaFiados.getItems().setAll(fiadosCliente);
@@ -179,7 +181,6 @@ public class ClientesController implements Initializable {
         if (!fiadosCliente.isEmpty()) {
             Platform.runLater(() -> {
                 tablaFiados.getSelectionModel().selectFirst();
-                // El listener se encargará de actualizar las tablas automáticamente
             });
         }
     }
@@ -189,12 +190,37 @@ public class ClientesController implements Initializable {
                 cd.getValue().getFecha().toLocalDate().format(fechaFormatter)));
         colHora.setCellValueFactory(cd -> new SimpleStringProperty(
                 cd.getValue().getFecha().toLocalTime().format(horaFormatter)));
+
         colMonto.setCellValueFactory(cd -> new SimpleDoubleProperty(
                 cd.getValue().getVenta().getTotal()).asObject());
+        colMonto.setCellFactory(tc -> new TableCell<Fiado, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : decimalFormatter.format(value));
+            }
+        });
+
         colAnticipo.setCellValueFactory(cd -> new SimpleDoubleProperty(
                 cd.getValue().getTotalParciales()).asObject());
+        colAnticipo.setCellFactory(tc -> new TableCell<Fiado, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : decimalFormatter.format(value));
+            }
+        });
+
         colResto.setCellValueFactory(cd -> new SimpleDoubleProperty(
                 cd.getValue().getResto()).asObject());
+        colResto.setCellFactory(tc -> new TableCell<Fiado, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : decimalFormatter.format(value));
+            }
+        });
+
         colEstado.setCellValueFactory(cd -> new SimpleBooleanProperty(
                 cd.getValue().getEstado()).asObject());
 
@@ -215,27 +241,21 @@ public class ClientesController implements Initializable {
             }
         });
 
-        // Agregar estilo a toda la fila basado en el estado del fiado
-        tablaFiados.setRowFactory(tv -> {
-            javafx.scene.control.TableRow<Fiado> row = new javafx.scene.control.TableRow<Fiado>() {
-                @Override
-                protected void updateItem(Fiado fiado, boolean empty) {
-                    super.updateItem(fiado, empty);
-                    if (empty || fiado == null) {
-                        setStyle("");
-                        setDisable(false);
-                    } else if (fiado.getEstado()) {
-                        // Fiado finalizado - darle un aspecto más tenue
-                        setStyle("-fx-opacity: 0.7; -fx-background-color: #f8f9fa;");
-                        setDisable(false); // No deshabilitamos para que se pueda ver la info
-                    } else {
-                        // Fiado pendiente - estilo normal
-                        setStyle("");
-                        setDisable(false);
-                    }
+        tablaFiados.setRowFactory(tv -> new javafx.scene.control.TableRow<Fiado>() {
+            @Override
+            protected void updateItem(Fiado fiado, boolean empty) {
+                super.updateItem(fiado, empty);
+                if (empty || fiado == null) {
+                    setStyle("");
+                    setDisable(false);
+                } else if (fiado.getEstado()) {
+                    setStyle("-fx-opacity: 0.7; -fx-background-color: #f8f9fa;");
+                    setDisable(false);
+                } else {
+                    setStyle("");
+                    setDisable(false);
                 }
-            };
-            return row;
+            }
         });
     }
 
@@ -252,15 +272,38 @@ public class ClientesController implements Initializable {
             return;
         }
 
-        // Configurar columnas solo una vez (esto también se puede mover a initialize)
         colNombreProducto.setCellValueFactory(cd -> new SimpleStringProperty(
                 cd.getValue().getProducto().getNombre()));
+
         colPrecio.setCellValueFactory(cd -> new SimpleDoubleProperty(
                 cd.getValue().getPrecio()).asObject());
+        colPrecio.setCellFactory(tc -> new TableCell<DetalleVenta, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : decimalFormatter.format(value));
+            }
+        });
+
         colPesoCantidad.setCellValueFactory(cd -> new SimpleDoubleProperty(
                 cd.getValue().getPeso()).asObject());
+        colPesoCantidad.setCellFactory(tc -> new TableCell<DetalleVenta, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : decimalFormatter.format(value));
+            }
+        });
+
         colTotal.setCellValueFactory(cd -> new SimpleDoubleProperty(
                 cd.getValue().getPrecio() * cd.getValue().getPeso()).asObject());
+        colTotal.setCellFactory(tc -> new TableCell<DetalleVenta, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : decimalFormatter.format(value));
+            }
+        });
 
         tablaProductos.getItems().setAll(venta.getDetalleVentas());
     }
@@ -271,13 +314,21 @@ public class ClientesController implements Initializable {
             return;
         }
 
-        // Configurar columnas (esto también se puede mover a initialize)
         colDiaAnticipo.setCellValueFactory(cd -> new SimpleStringProperty(
                 cd.getValue().getFecha().toLocalDate().format(fechaFormatter)));
         colHoraAnticipo.setCellValueFactory(cd -> new SimpleStringProperty(
                 cd.getValue().getFecha().toLocalTime().format(horaFormatter)));
+
         colDineroAnticipo.setCellValueFactory(cd -> new SimpleDoubleProperty(
                 cd.getValue().getAnticipo()).asObject());
+        colDineroAnticipo.setCellFactory(tc -> new TableCell<FiadoParcial, Double>() {
+            @Override
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : decimalFormatter.format(value));
+            }
+        });
+
         colMedioAnticipo.setCellValueFactory(cd -> new SimpleStringProperty(
                 cd.getValue().getMedioAbonado()));
 
@@ -763,6 +814,7 @@ public class ClientesController implements Initializable {
     }
 // Método para hacer invisible solo el texto de la columna Celular
 
+   
     private void configurarCheckBoxTelefono() {
         // Configurar estado inicial - CheckBox activado y texto invisible
         checkTelefono.setSelected(true);

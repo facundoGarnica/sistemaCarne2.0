@@ -148,7 +148,9 @@ public class NombreFiadoClienteController implements Initializable {
         if (anticipo != null && !anticipo.trim().isEmpty()) {
             try {
                 Double anticipoDouble = Double.valueOf(anticipo.trim());
-                mensajeConfirmacion += "\nAnticipo a registrar: $" + String.format("%.2f", anticipoDouble);
+                Double anticipoRedondeado = (double) Math.round(anticipoDouble);
+
+                mensajeConfirmacion += "\nAnticipo a registrar: $" + String.format("%.0f", anticipoRedondeado);
             } catch (NumberFormatException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error de formato");
@@ -194,6 +196,12 @@ public class NombreFiadoClienteController implements Initializable {
             ventaDao = new VentaDAO();
             venta = ventaDao.buscarUltimaVenta();
 
+            // ✅ Redondear total de la venta antes de asignarlo
+            if (venta != null && venta.getTotal() != null) {
+                double totalRedondeado = Math.round(venta.getTotal());
+                venta.setTotal(totalRedondeado);
+            }
+
             // Crear y guardar fiado
             fiado = new Fiado();
             fiado.setCliente(cliente);
@@ -206,12 +214,14 @@ public class NombreFiadoClienteController implements Initializable {
             // Guardar anticipo si se ingresó
             if (anticipo != null && !anticipo.trim().isEmpty()) {
                 Double anticipoToDouble = Double.valueOf(anticipo.trim());
+                Double anticipoRedondeado = (double) Math.round(anticipoToDouble);
+
                 fiadoParcial = new FiadoParcial();
                 fiadoParcial.setFiado(fiado);
-                fiadoParcial.setAnticipo(anticipoToDouble);
+                fiadoParcial.setAnticipo(anticipoRedondeado);
                 fiadoParcial.setFecha(LocalDateTime.now());
-                
                 fiadoParcial.setMedioAbonado(medioPago);
+
                 fiadoParcialDao = new FiadoParcialDAO();
                 fiadoParcialDao.guardar(fiadoParcial);
             }

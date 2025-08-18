@@ -128,7 +128,7 @@
             <HBox alignment="CENTER" spacing="25.0" styleClass="contenedor-botones">
                 <children>
                     <Button fx:id="generarFiadoButton" mnemonicParsing="false" onAction="#guardarFiado" prefHeight="42.0" prefWidth="180.0" styleClass="boton" text="Generar Fiado" />
-                    <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cerrarOverlay" prefHeight="42.0" prefWidth="120.0" styleClass="boton" text="Cancelar" />
+                    <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cerrarOverlay" prefHeight="42.0" prefWidth="120.0" styleClass="boton-eliminar" text="Cancelar" />
                 </children>
                 <padding>
                     <Insets bottom="10.0" top="10.0" />

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="600.0" minWidth="900.0" prefHeight="841.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Cliente_pedidoController">
+<AnchorPane minHeight="600.0" minWidth="900.0" prefHeight="841.0" prefWidth="1400.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Cliente_pedidoController">
 
     <stylesheets>
         <URL value="@../styles/clientes_modern.css" />
@@ -59,7 +59,7 @@
                 </VBox>
 
                 <!-- Main Content Area con distribución vertical mejorada -->
-                <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+                <VBox prefWidth="1400.0" spacing="15.0" VBox.vgrow="ALWAYS">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
                     </padding>
@@ -75,7 +75,7 @@
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <CheckBox mnemonicParsing="false" prefHeight="25.0" text="Ocultar teléfono" />
+                                        <CheckBox fx:id="checkTelefono" mnemonicParsing="false" prefHeight="25.0" text="Ocultar teléfono" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="10.0" />
@@ -129,13 +129,13 @@
                                                     <children>
                                                         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <TableView fx:id="tablaPedidos" styleClass="modern-table">
+                                                                <TableView fx:id="tablaPedidos" prefHeight="227.0" prefWidth="1266.0" styleClass="modern-table">
                                                                     <columns>
                                                                         <!-- COLUMNAS MÁS ANCHAS Y MEJOR DISTRIBUIDAS -->
                                                                         <TableColumn fx:id="colFechaPedido" minWidth="120.0" prefWidth="150.0" text="Fecha Pedido" />
-                                                                        <TableColumn fx:id="colMonto" minWidth="100.0" prefWidth="120.0" text="Total" />
+                                                                        <TableColumn fx:id="colMonto" minWidth="100.0" prefWidth="120.0" text="Total aproximado" />
                                                                         <TableColumn fx:id="colSena" minWidth="100.0" prefWidth="120.0" text="Señas" />
-                                                                        <TableColumn fx:id="colResto" minWidth="100.0" prefWidth="120.0" text="Resto" />
+                                                                        <TableColumn fx:id="colResto" minWidth="100.0" prefWidth="120.0" text="Resto aproximado" />
                                                                         <TableColumn fx:id="colEstado" minWidth="100.0" prefWidth="120.0" text="Estado" />
                                                                         <TableColumn fx:id="colDiaEntrega" minWidth="120.0" prefWidth="150.0" text="Fecha Entrega" />
                                                                     </columns>
@@ -146,15 +146,16 @@
                                                             </content>
                                                         </ScrollPane>
                                                         
-                                                        <!-- Botones -->
+                                                        <!-- Botones reorganizados con HBox -->
                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                             <VBox.margin>
                                                                 <Insets top="10.0" />
                                                             </VBox.margin>
                                                             <children>
-                                                                <Button prefHeight="35.0" prefWidth="140.0" styleClass="btn-action" text="Agregar Seña" />
+                                                                <Button onAction="#finalizarPedidoSeleccionado" prefHeight="35.0" prefWidth="140.0" styleClass="btn-action" text="Finalizar pedido" />
+                                                                <!-- Espacio flexible para separar botones -->
                                                                 <HBox HBox.hgrow="ALWAYS" />
-                                                                <Button prefHeight="35.0" prefWidth="140.0" styleClass="btn-action" text="Borrar Pedido" />
+                                                                <Button onAction="#borrarPedidoCompleto" prefHeight="38.0" prefWidth="228.0" styleClass="btn-delete" text="Borrar pedido seleccionado" />
                                                             </children>
                                                         </HBox>
                                                     </children>
@@ -172,7 +173,7 @@
                                                     <children>
                                                         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <TableView fx:id="tblSenia" styleClass="modern-table">
+                                                                <TableView fx:id="tblSenia" prefHeight="218.0" prefWidth="1266.0" styleClass="modern-table">
                                                                     <columns>
                                                                         <TableColumn fx:id="colFechaSenia" minWidth="120.0" prefWidth="150.0" text="Fecha" />
                                                                         <TableColumn fx:id="colHoraSenia" minWidth="80.0" prefWidth="100.0" text="Hora" />
@@ -184,6 +185,18 @@
                                                                 </TableView>
                                                             </content>
                                                         </ScrollPane>
+                                                        <!-- Botones reorganizados - Agregar a la izquierda, Borrar a la derecha -->
+                                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                            <VBox.margin>
+                                                                <Insets top="10.0" />
+                                                            </VBox.margin>
+                                                            <children>
+                                                                <Button onAction="#invocarSpaAgregarSenia" prefHeight="38.0" prefWidth="150.0" styleClass="btn-action" text="Agregar Seña" />
+                                                                <!-- Espacio flexible para separar botones -->
+                                                                <HBox HBox.hgrow="ALWAYS" />
+                                                                <Button onAction="#borrarSenia" prefHeight="38.0" prefWidth="210.0" styleClass="btn-delete" text="Borrar Seña seleccionada" />
+                                                            </children>
+                                                        </HBox>
                                                     </children>
                                                 </VBox>
                                             </content>
@@ -199,7 +212,7 @@
                                                     <children>
                                                         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <TableView fx:id="tblProductos" styleClass="modern-table">
+                                                                <TableView fx:id="tblProductos" prefHeight="261.0" prefWidth="1282.0" styleClass="modern-table">
                                                                     <columns>
                                                                         <TableColumn fx:id="colProducto" minWidth="150.0" prefWidth="200.0" text="Producto" />
                                                                         <TableColumn fx:id="colPrecio" minWidth="80.0" prefWidth="100.0" text="Precio" />
@@ -213,6 +226,18 @@
                                                                 </TableView>
                                                             </content>
                                                         </ScrollPane>
+                                                        <!-- Botones reorganizados - Agregar a la izquierda, Borrar a la derecha -->
+                                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                            <VBox.margin>
+                                                                <Insets top="10.0" />
+                                                            </VBox.margin>
+                                                            <children>
+                                                                <Button fx:id="AgregarProducto" onAction="#invocarSpaAgregarUnProducto" prefHeight="38.0" prefWidth="150.0" styleClass="btn-action" text="Agregar Producto" />
+                                                                <!-- Espacio flexible para separar botones -->
+                                                                <HBox HBox.hgrow="ALWAYS" />
+                                                                <Button fx:id="borrarProducto" onAction="#borrarProducto" prefHeight="38.0" prefWidth="234.0" styleClass="btn-delete" text="Borrar producto seleccionado" />
+                                                            </children>
+                                                        </HBox>
                                                     </children>
                                                 </VBox>
                                             </content>
@@ -230,6 +255,16 @@
         <AnchorPane fx:id="difuminar" disable="true" styleClass="modal-overlay" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <AnchorPane fx:id="overlayPedido" layoutY="13.0" maxWidth="1300.0" minWidth="400.0" prefHeight="768.0" prefWidth="1300.0" styleClass="modal-content" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="13.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="difuminar3" disable="true" layoutX="8.0" layoutY="8.0" prefHeight="837.0" prefWidth="1388.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="6.0">
+            <children>
+                <AnchorPane fx:id="overLayAgregarUnProducto" layoutX="409.0" layoutY="194.0" prefHeight="468.0" prefWidth="513.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="difuminar1" disable="true" layoutX="10.0" layoutY="10.0" styleClass="modal-overlay" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <AnchorPane fx:id="overLayAgregarSenia" layoutY="204.0" prefHeight="564.0" prefWidth="611.0" AnchorPane.leftAnchor="509.0" />
             </children>
         </AnchorPane>
 

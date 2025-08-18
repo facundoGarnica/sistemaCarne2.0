@@ -110,7 +110,6 @@ public class Crear_ventasController implements Initializable {
     private TableColumn<Transaccion, String> colVuelto;
 
     //Variables para guardar cliente
-
     //variables para mostrar mercadoPago
     @FXML
     private Label lblMonto;
@@ -145,7 +144,8 @@ public class Crear_ventasController implements Initializable {
         colTotal.setCellValueFactory(cellData -> {
             Producto producto = cellData.getValue();
             double total = producto.getPrecio() * producto.getPesoParaVender();
-            return new javafx.beans.property.SimpleDoubleProperty(total).asObject();
+            double totalRedondeado = Math.round(total); // Redondeo simple
+            return new javafx.beans.property.SimpleDoubleProperty(totalRedondeado).asObject();
         });
 
         // Configurar la tabla con la lista
@@ -262,9 +262,10 @@ public class Crear_ventasController implements Initializable {
         }).start();
     }
 
-    public String getMedioPago(){
+    public String getMedioPago() {
         return lblMedioPago.getText();
     }
+
     public void AgregarHuesos() {
         txtCodigoDeBarra.setText("2100480000014");
         SepararCodigo();
@@ -674,59 +675,66 @@ public class Crear_ventasController implements Initializable {
     }
 
     public void guardarVenta() {
-        if (!validarVentaParaProcesar()) {
-            return;
-        }
-
-        try {
-            System.out.println("=== INICIANDO GUARDADO DE VENTA ===");
-
-            // Crear nueva venta (usando el patrón del controlador de referencia)
-            venta = new Venta();
-            venta.setFecha(LocalDateTime.now()); // Usar LocalDate en lugar de LocalDateTime
-            venta.setMedioPago(lblMedioPago.getText()); // Usar setMedioDePago
-            venta.setTotal(SumarPreciosAPagar);
-
-            System.out.println("Datos de la venta:");
-            System.out.println("- Total: $" + SumarPreciosAPagar);
-            System.out.println("- Medio de pago: " + lblMedioPago.getText());
-            System.out.println("- Fecha: " + venta.getFecha());
-            System.out.println("- Productos a procesar: " + productosEnVenta.size());
-
-            // Guardar venta en base de datos (usando método del controlador de referencia)
-            System.out.println("Guardando venta principal...");
-            ventaDao.guardar(venta); // Usar agregarVenta como en el controlador de referencia
-
-            System.out.println("✓ Venta principal guardada");
-            System.out.println("✓ ID de venta: " + venta.getId());
-
-            // Guardar detalles de venta siguiendo el patrón del controlador de referencia
-            System.out.println("\n=== GUARDANDO DETALLES DE VENTA ===");
-            GenerarDetalleVenta(); // Usar el mismo método del controlador de referencia
-
-            System.out.println("✓ VENTA PROCESADA CORRECTAMENTE");
-
-            // Limpiar todo después de guardar exitosamente
-            limpiarTodo();
-
-            System.out.println("✓ Sistema limpiado - listo para nueva venta");
-
-        } catch (Exception e) {
-            System.err.println("\n✗ ERROR CRÍTICO EN GUARDADO DE VENTA");
-            System.err.println("✗ Mensaje: " + e.getMessage());
-            e.printStackTrace();
-
-            mostrarError("Error al procesar venta",
-                    "No se pudo completar el procesamiento de la venta:\n\n"
-                    + e.getMessage()
-                    + "\n\nVerifique:\n"
-                    + "• Conexión a la base de datos\n"
-                    + "• Configuración de entidades (Venta, DetalleVenta, Producto)\n"
-                    + "• Relaciones en Hibernate/JPA\n"
-                    + "• Que todos los productos tengan ID válido\n"
-                    + "• Transacciones de base de datos");
-        }
+    if (!validarVentaParaProcesar()) {
+        return;
     }
+
+    try {
+        System.out.println("=== INICIANDO GUARDADO DE VENTA ===");
+
+        // Calcular total redondeado tal como se muestra en lblCantidadPagar
+        int entero = (int) Math.round(SumarPreciosAPagar);
+        int unidades = entero % 10;
+        if (unidades >= 6) {
+            entero = (entero / 10) * 10 + 10; // redondea hacia arriba
+        } else {
+            entero = (entero / 10) * 10;       // redondea hacia abajo
+        }
+        double totalRedondeado = entero;
+        System.out.println("Total redondeado a guardar: $" + totalRedondeado);
+
+        // Crear nueva venta
+        venta = new Venta();
+        venta.setFecha(LocalDateTime.now());
+        venta.setMedioPago(lblMedioPago.getText());
+        venta.setTotal(totalRedondeado);
+
+        System.out.println("Datos de la venta:");
+        System.out.println("- Total: $" + totalRedondeado);
+        System.out.println("- Medio de pago: " + lblMedioPago.getText());
+        System.out.println("- Fecha: " + venta.getFecha());
+        System.out.println("- Productos a procesar: " + productosEnVenta.size());
+
+        // Guardar venta principal en base de datos
+        ventaDao.guardar(venta);
+        System.out.println("✓ Venta principal guardada");
+        System.out.println("✓ ID de venta: " + venta.getId());
+
+        // Guardar detalles de venta
+        System.out.println("\n=== GUARDANDO DETALLES DE VENTA ===");
+        GenerarDetalleVenta();
+
+        System.out.println("✓ VENTA PROCESADA CORRECTAMENTE");
+
+        // Limpiar todo después de guardar exitosamente
+        limpiarTodo();
+        System.out.println("✓ Sistema limpiado - listo para nueva venta");
+
+    } catch (Exception e) {
+        System.err.println("\n✗ ERROR CRÍTICO EN GUARDADO DE VENTA");
+        System.err.println("✗ Mensaje: " + e.getMessage());
+        e.printStackTrace();
+        mostrarError("Error al procesar venta",
+            "No se pudo completar el procesamiento de la venta:\n\n" + e.getMessage() +
+            "\n\nVerifique:\n" +
+            "• Conexión a la base de datos\n" +
+            "• Configuración de entidades (Venta, DetalleVenta, Producto)\n" +
+            "• Relaciones en Hibernate/JPA\n" +
+            "• Que todos los productos tengan ID válido\n" +
+            "• Transacciones de base de datos");
+    }
+}
+
 
     // Método extraído del controlador de referencia para generar detalles
     public void GenerarDetalleVenta() {

@@ -164,7 +164,7 @@
                         <Button onAction="#exportarDatos" styleClass="boton" text="Exportar" />
                         <Button onAction="#verHistorial" styleClass="boton" text="Ver Historial" />
                         <Button onAction="#cargarParaEditar" styleClass="boton" text="Editar Seleccionado" />
-                        <Button onAction="#borrarSeleccionado" styleClass="boton" text="Eliminar Stock" />
+                        <Button onAction="#borrarSeleccionado" styleClass="boton-eliminar" text="Eliminar Stock" />
                         <Button onAction="#actualizarTabla" styleClass="boton" text="Actualizar" />
                     </children>
                     <padding>

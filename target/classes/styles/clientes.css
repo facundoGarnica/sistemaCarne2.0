@@ -6,6 +6,13 @@
     -fx-font-size: 16px;
     -fx-background-color: #f4f6f8;
 }
+.mainFxmlClass {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #e0e0e0; /* gris claro */
+}
 
 .container-principal {
     -fx-background-color: #ffffff;
@@ -409,6 +416,21 @@
     -fx-min-width: 45px;
     -fx-min-height: 45px;
 }
+.boton-eliminar {
+    -fx-background-color: #e74c3c; /* Rojo base */
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+    -fx-font-size: 14px;
+}
+
+.boton-eliminar:hover {
+    -fx-background-color: #c0392b; /* Rojo más oscuro al hover */
+}
+
 
 /* ==============================
    FORMULARIOS Y CAMPOS DE TEXTO
@@ -503,3 +525,69 @@
 .tabla-productos .boton-tabla {
     -fx-transition: all 0.2s ease-in-out;
 }
+
+/* Estilo general del ComboBox */
+.combo-box {
+    -fx-background-color: #ffffff; /* color de fondo */
+    -fx-border-color: #3498db; /* color del borde */
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Cuando el ComboBox está enfocado */
+.combo-box:focused {
+    -fx-border-color: #2980b9; /* borde azul más intenso */
+}
+
+/* Efecto al pasar el mouse */
+.combo-box:hover {
+    -fx-background-color: #ecf0f1; /* fondo ligeramente gris */
+}
+
+/* Flecha del ComboBox */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #3498db; /* color de la flecha */
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z"; /* triángulo hacia abajo */
+}
+
+/* Elementos del dropdown */
+.combo-box .list-cell {
+    -fx-padding: 5px 10px;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #3498db; /* resaltado azul */
+    -fx-text-fill: white;
+}
+/* Estilo general del TextField */
+.text-field {
+    -fx-background-color: #ffffff; /* fondo blanco */
+    -fx-border-color: #3498db;     /* borde azul */
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-text-fill: #2c3e50;        /* color del texto */
+}
+
+/* Cuando el TextField está enfocado */
+.text-field:focused {
+    -fx-border-color: #2980b9;     /* borde azul más intenso */
+    -fx-background-color: #ecf0f1; /* fondo ligeramente gris */
+}
+
+/* Efecto al pasar el mouse */
+.text-field:hover {
+    -fx-background-color: #f5f7fa; /* fondo gris muy claro */
+}
+s

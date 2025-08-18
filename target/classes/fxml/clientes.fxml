@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="AnchorPane" minHeight="600.0" minWidth="900.0" prefHeight="841.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientesController">
+<AnchorPane fx:id="AnchorPane" minHeight="600.0" minWidth="900.0" prefHeight="841.0" prefWidth="1400.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientesController">
 
     <stylesheets>
         <URL value="@../styles/clientes_modern.css" />
@@ -168,7 +168,7 @@
                                                                 <Button fx:id="btnFinalizarFiado" maxWidth="Infinity" minWidth="108.0" onAction="#difuminarTodo" prefHeight="38.0" prefWidth="231.0" styleClass="btn-action" text="Agregar anticipo" HBox.hgrow="SOMETIMES" />
                                                                 <!-- Spacer para empujar botones adicionales si es necesario -->
                                                                 <HBox prefHeight="38.0" prefWidth="459.0" HBox.hgrow="ALWAYS" />
-                                                <Button fx:id="btnFinalizarFiado1" maxWidth="Infinity" minWidth="120.0" onAction="#borrarFiadoSeleccionado" prefHeight="38.0" prefWidth="178.0" styleClass="btn-action" text="Borrar fiado" />
+                                                <Button fx:id="btnFinalizarFiado1" maxWidth="Infinity" minWidth="120.0" onAction="#borrarFiadoSeleccionado" prefHeight="38.0" prefWidth="178.0" styleClass="btn-delete" text="Borrar fiado" />
                                                             </children>
                                                         </HBox>
                                                     </children>
@@ -247,7 +247,7 @@
         <AnchorPane fx:id="difuminar" disable="true" styleClass="modal-overlay" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <!-- Modal centrado y responsive -->
-                <AnchorPane fx:id="spaDetalle" maxWidth="600.0" minWidth="400.0" prefWidth="500.0" styleClass="modal-content" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0" />
+                <AnchorPane fx:id="spaDetalle" layoutX="250.0" layoutY="187.0" maxWidth="1096.0" minWidth="400.0" prefHeight="500.0" prefWidth="676.0" styleClass="modal-content" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="470.0" AnchorPane.topAnchor="187.0" />
             </children>
         </AnchorPane>
 

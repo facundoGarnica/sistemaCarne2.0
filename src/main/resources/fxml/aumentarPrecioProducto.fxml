@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1200.0" styleClass="anchor-border-blue" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AumentarPrecioProductoController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1200.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AumentarPrecioProductoController">
     <stylesheets>
         <URL value="@../styles/producto_menu.css" />
     </stylesheets>
@@ -107,7 +107,7 @@
                     </VBox>
                     
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button fx:id="btnCancelar" onAction="#limpiar" prefHeight="34.0" prefWidth="176.0" styleClass="boton" text="↩️ Cancelar Cambios" />
+                    <Button fx:id="btnCancelar" onAction="#limpiar" prefHeight="38.0" prefWidth="205.0" styleClass="boton-eliminar" text="↩️ Cancelar Cambios" />
                     <Button fx:id="btnAplicar" onAction="#aplicarAumento" prefHeight="34.0" prefWidth="171.0" styleClass="boton" text="✅ Aplicar Aumento" />
                 </HBox>
                 

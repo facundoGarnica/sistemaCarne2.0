@@ -107,7 +107,20 @@ public class HistorialVentasController implements Initializable {
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         colHora.setCellValueFactory(new PropertyValueFactory<>("fecha")); // Mismo campo para ambas
         colMedioPago.setCellValueFactory(new PropertyValueFactory<>("medioPago"));
-        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        colTotal.setCellFactory(column -> {
+            return new TableCell<Venta, Double>() {
+                @Override
+                protected void updateItem(Double item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        double totalRedondeado = Math.round(item);
+                        setText(String.format("%.0f", totalRedondeado));
+                    }
+                }
+            };
+        });
 
         // Configurar formato personalizado para la fecha
         colFecha.setCellFactory(new Callback<TableColumn<Venta, java.time.LocalDateTime>, TableCell<Venta, java.time.LocalDateTime>>() {
@@ -162,7 +175,7 @@ public class HistorialVentasController implements Initializable {
         colNombre.setCellValueFactory(new PropertyValueFactory<>("producto"));
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colKilos.setCellValueFactory(new PropertyValueFactory<>("peso"));
-
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         // Configurar formato personalizado para mostrar el nombre del producto
         colNombre.setCellFactory(new Callback<TableColumn<DetalleVenta, Producto>, TableCell<DetalleVenta, Producto>>() {
             @Override
@@ -184,8 +197,22 @@ public class HistorialVentasController implements Initializable {
         // Configurar cálculo del total por producto (precio * peso)
         colTotalProducto.setCellValueFactory(cellData -> {
             DetalleVenta detalle = cellData.getValue();
-            Double total = detalle.getPrecio() * detalle.getPeso();
-            return new javafx.beans.property.SimpleObjectProperty<>(total);
+            double total = detalle.getPrecio() * detalle.getPeso();
+            double totalRedondeado = Math.round(total); // Redondeo simple
+            return new javafx.beans.property.SimpleObjectProperty<>(totalRedondeado);
+        });
+        colTotalProducto.setCellFactory(column -> {
+            return new javafx.scene.control.TableCell<DetalleVenta, Double>() {
+                @Override
+                protected void updateItem(Double item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(String.format("%.0f", item)); // Sin decimales
+                    }
+                }
+            };
         });
     }
 

@@ -1,9 +1,13 @@
 model\Senia.class
 controller\Cliente_pedidoController$9.class
+controller\HistorialVentasController$4$1.class
 dao\DetalleMediaResDAO.class
 model\DetallePedido.class
+controller\ClientesController$11.class
 controller\Cliente_pedidoController$6.class
+controller\ClientesController$7.class
 controller\Cliente_pedidoController$10.class
+controller\Cliente_pedidoController$13.class
 controller\ClientesController$4.class
 controller\StockCajonPolloController$3.class
 carniceria\sistemacarne\AppTester.class
@@ -16,6 +20,7 @@ controller\HistorialVentasController$2.class
 controller\StockProductoController$5.class
 controller\Cliente_CrearPedidoController$4.class
 model\Stock.class
+controller\AgregarUnProductoController.class
 controller\StockMediaResController$4.class
 dao\SeniaDAO.class
 dao\StockDAO.class
@@ -24,6 +29,7 @@ controller\StockMediaResController$1.class
 controller\Cliente_pedidoController$4.class
 controller\Crear_ventasController$1.class
 Util\CalcularVuelto.class
+controller\ClientesController$6.class
 controller\Cliente_pedidoController$11.class
 controller\HistorialVentasController$3$1.class
 controller\StockCajonPolloController$1.class
@@ -36,9 +42,12 @@ model\DetalleMediaRes.class
 controller\Crear_productoController.class
 controller\Cliente_pedidoController$3.class
 controller\StockProductoController$3.class
+controller\HistorialVentasController$5.class
+controller\HistorialVentasController$4.class
 dao\FiadoDAO.class
 controller\AumentarPrecioProductoController.class
 controller\Cliente_pedidoController$12.class
+controller\ClientesController$10.class
 controller\ClientesController$5.class
 controller\StockCajonPolloController$2.class
 controller\Crear_ventasController.class
@@ -49,6 +58,7 @@ dao\MediaResDAO.class
 controller\Cliente_CrearPedidoController$2.class
 controller\Cliente_CrearPedidoController$ProductoPedido.class
 dao\ProductoDAO.class
+controller\AgregarSeniaController.class
 controller\StockProductoController$1.class
 controller\StockMediaResController.class
 dao\DetallePedidoDAO.class
@@ -68,11 +78,13 @@ controller\ClientesController$3.class
 controller\StockCajonPolloController$4.class
 controller\StockProductoController.class
 controller\Cliente_pedidoController$8.class
+controller\ClientesController$12.class
 controller\Producto_menuController.class
 model\Producto.class
 controller\ClientesController.class
 controller\Cliente_pedidoController$5.class
 Util\Transaccion.class
+controller\Cliente_pedidoController$14.class
 controller\ConfiguracionController.class
 model\MediaRes.class
 controller\MenuController.class
@@ -80,6 +92,8 @@ controller\NombreFiadoClienteController.class
 dao\CajonPolloDAO.class
 controller\AgregarPago_clienteController.class
 model\DetalleCajonPollo.class
+controller\AgregarUnProductoController$1.class
+controller\ClientesController$9.class
 model\FiadoParcial.class
 controller\StockCajonPolloController.class
 controller\ClientesController$2.class
@@ -87,11 +101,11 @@ controller\StockCajonPolloController$5.class
 controller\AgregarCajonPolloController.class
 controller\AumentarPrecioProductoController$1.class
 controller\Cliente_CrearPedidoController.class
+controller\Cliente_pedidoController$15.class
 controller\StockMediaResController$5.class
 dao\FiadoParcialDAO.class
 model\CajonPollo.class
 dao\DetalleVentaDAO.class
-controller\HistorialVentasController$1$1.class
 model\DetalleVenta.class
 Util\MercadoPagoApi.class
 controller\Producto_menuController$1.class
@@ -103,6 +117,8 @@ controller\ClientesController$1.class
 controller\StockCajonPolloController$6.class
 carniceria\sistemacarne\SecondaryController.class
 controller\HistorialVentasController$1.class
+controller\AgregarUnProductoController$2.class
 controller\Cliente_pedidoController$7.class
 controller\AgregarMediaResController.class
 Util\DatosPagos.class
+controller\ClientesController$8.class

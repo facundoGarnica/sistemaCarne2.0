@@ -336,7 +336,9 @@ public class Cliente_CrearPedidoController implements Initializable {
 
     @FXML
     public void cerrarOverlay() {
-        System.out.println("Cerrando...");
+        if (clienteController != null) {
+            clienteController.CerrarDifuminarYSpa();
+        }
     }
 
     // Método unificado para actualizar tanto el total como el contador de productos
@@ -526,7 +528,7 @@ public class Cliente_CrearPedidoController implements Initializable {
             // Limpiar formulario después del guardado exitoso
             limpiarFormulario();
             cerrarOverlay();
-
+            clienteController.cargarClientesConPedidos();
         } catch (Exception e) {
             mostrarError("Error inesperado al guardar el pedido: " + e.getMessage());
             e.printStackTrace();

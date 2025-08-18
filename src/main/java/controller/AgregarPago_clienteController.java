@@ -6,6 +6,8 @@ package controller;
 
 import dao.FiadoParcialDAO;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -15,8 +17,8 @@ import javafx.scene.control.Label;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import model.Cliente;
@@ -34,6 +36,10 @@ public class AgregarPago_clienteController implements Initializable {
      * Initializes the controller class.
      */
     //variables
+    // ✅ Forzar formato con punto y sin decimales
+    private final DecimalFormat decimalFormatter = new DecimalFormat("#,###",
+            DecimalFormatSymbols.getInstance(Locale.US));
+
     @FXML
     private ComboBox<String> cmbMedioPago;
     @FXML
@@ -46,7 +52,7 @@ public class AgregarPago_clienteController implements Initializable {
     private TextField txtDineroIngresar;
     @FXML
     private Label lblError; // Opcional: para mostrar mensajes de error en la interfaz
-    
+
     //Dao
     private FiadoParcialDAO fiadoParcialDao;
 
@@ -69,11 +75,11 @@ public class AgregarPago_clienteController implements Initializable {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yy");
         String fechaActual = LocalDate.now().format(formato);
         lblFecha.setText(fechaActual);
-        
+
         // Configurar listener para validar en tiempo real
         configurarValidacionTiempoReal();
     }
-    
+
     private void configurarValidacionTiempoReal() {
         txtDineroIngresar.textProperty().addListener((observable, oldValue, newValue) -> {
             limpiarMensajeError();
@@ -81,7 +87,7 @@ public class AgregarPago_clienteController implements Initializable {
                 try {
                     Double monto = Double.valueOf(newValue);
                     Double restoAPagar = fiadoRecibido.getResto();
-                    
+
                     if (monto > restoAPagar) {
                         mostrarMensajeError("El monto no puede ser mayor al resto a pagar: $" + restoAPagar);
                         txtDineroIngresar.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
@@ -120,14 +126,15 @@ public class AgregarPago_clienteController implements Initializable {
                 : " - " + clienteRecibido.getAlias())
         );
 
-        lblRestoAPagar.setText("$ " + fiadoRecibido.getResto());
-        
+        // ✅ Formatear el resto a pagar con $
+        lblRestoAPagar.setText("$ " + decimalFormatter.format(fiadoRecibido.getResto()));
+
         // Limpiar el campo de texto y mensajes de error al mostrar datos nuevos
         txtDineroIngresar.clear();
         limpiarMensajeError();
         txtDineroIngresar.setStyle("");
     }
-    
+
     private void mostrarMensajeError(String mensaje) {
         if (lblError != null) {
             lblError.setText(mensaje);
@@ -136,14 +143,14 @@ public class AgregarPago_clienteController implements Initializable {
         }
         System.out.println("Error: " + mensaje);
     }
-    
+
     private void limpiarMensajeError() {
         if (lblError != null) {
             lblError.setText("");
             lblError.setVisible(false);
         }
     }
-    
+
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -157,7 +164,7 @@ public class AgregarPago_clienteController implements Initializable {
         // Limpiar mensajes previos
         limpiarMensajeError();
         txtDineroIngresar.setStyle("");
-        
+
         // Validar que se ingresó un monto
         if (txtDineroIngresar.getText() == null || txtDineroIngresar.getText().trim().isEmpty()) {
             mostrarMensajeError("Debe ingresar un monto");
@@ -187,8 +194,10 @@ public class AgregarPago_clienteController implements Initializable {
         // VALIDACIÓN PRINCIPAL: El anticipo no puede ser mayor al resto a pagar
         Double restoAPagar = fiadoRecibido.getResto();
         if (dinero > restoAPagar) {
-            String mensaje = String.format("El monto ingresado no puede ser mayor al resto a pagar ($%.2f)", 
-                                          dinero, restoAPagar);
+            String mensaje = String.format(
+                    "El monto ingresado no puede ser mayor al resto a pagar ($%s)",
+                    decimalFormatter.format(restoAPagar)
+            );
             mostrarMensajeError(mensaje);
             mostrarAlerta("Error", mensaje, Alert.AlertType.WARNING);
             txtDineroIngresar.requestFocus();
@@ -217,7 +226,7 @@ public class AgregarPago_clienteController implements Initializable {
             confirmAlert.setTitle("Confirmar pago");
             confirmAlert.setHeaderText("Pago completo");
             confirmAlert.setContentText("Este pago completará la deuda. ¿Desea continuar?");
-            
+
             if (confirmAlert.showAndWait().get() != javafx.scene.control.ButtonType.OK) {
                 return;
             }
@@ -227,27 +236,28 @@ public class AgregarPago_clienteController implements Initializable {
             // Guardar anticipo
             fiadoParcialDao = new FiadoParcialDAO();
             fiadoParcial = new FiadoParcial();
-            fiadoParcial.setAnticipo(dinero);
+            fiadoParcial.setAnticipo((double) Math.round(dinero)); // ✅ redondea y guarda sin decimales
             fiadoParcial.setFecha(LocalDateTime.now());
             fiadoParcial.setMedioAbonado(medioPago);
             fiadoParcial.setFiado(fiadoRecibido);
             fiadoParcialDao.guardar(fiadoParcial);
 
             System.out.println("Anticipo guardado correctamente");
-            
+
             // Mostrar mensaje de éxito
-            String mensajeExito = completaDeuda ? 
-                "¡Pago registrado correctamente! La deuda ha sido completada." :
-                String.format("¡Anticipo de $%.2f registrado correctamente!", dinero);
+            String mensajeExito = completaDeuda
+                    ? "¡Pago registrado correctamente! La deuda ha sido completada."
+                    : String.format("¡Anticipo de $%s registrado correctamente!", decimalFormatter.format(dinero));
+
             mostrarAlerta("Éxito", mensajeExito, Alert.AlertType.INFORMATION);
-            
+
             cerrarOverlay();
-            
+
             // Refrescar los datos en el controller principal
             if (clientesController != null) {
                 clientesController.refrescarDatos();
             }
-            
+
         } catch (Exception e) {
             System.err.println("Error al guardar el anticipo: " + e.getMessage());
             mostrarAlerta("Error", "Error al guardar el anticipo. Intente nuevamente.", Alert.AlertType.ERROR);
@@ -265,6 +275,20 @@ public class AgregarPago_clienteController implements Initializable {
             clientesController.CerrarDifuminarYSpa();
         }
     }
-    
-    
+
+    public void ingresarTodo() {
+        if (fiadoRecibido != null) {
+            double resto = fiadoRecibido.getResto();
+            // Redondear si quieres igual que al guardar
+            resto = Math.round(resto);
+            // Poner en el TextField
+            txtDineroIngresar.setText(String.valueOf((int) resto));
+            // Limpiar cualquier error previo y resetear estilo
+            limpiarMensajeError();
+            txtDineroIngresar.setStyle("");
+        } else {
+            mostrarMensajeError("No se ha seleccionado un fiado");
+        }
+    }
+
 }
