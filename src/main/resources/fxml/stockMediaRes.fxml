@@ -100,7 +100,7 @@
     <HBox layoutX="30.0" layoutY="390.0" spacing="10.0">
         <children>
             <Button onAction="#difuminarTodo" prefHeight="34.0" prefWidth="165.0" styleClass="boton" text="Agregar Media Res" />
-            <Button onAction="#eliminar" prefHeight="45.0" prefWidth="225.0" styleClass="boton-eliminar" text="Eliminar Seleccionada" />
+            <Button onAction="#eliminar" prefHeight="34.0" prefWidth="165.0" styleClass="boton-eliminar" text="Eliminar Seleccionada" />
         </children>
     </HBox>
     
@@ -132,7 +132,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
     </TableView>
-   <AnchorPane fx:id="difuminar" disable="true" layoutX="11.200000000000001" layoutY="319.2" prefHeight="653.0" prefWidth="1196.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <AnchorPane fx:id="difuminar" disable="true" layoutX="4.0" layoutY="319.2" prefHeight="653.0" prefWidth="1196.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <AnchorPane fx:id="overlayAgregarMedia" layoutX="271.0" layoutY="149.0" prefHeight="498.0" prefWidth="564.0" />
       </children>

@@ -50,6 +50,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -69,11 +70,13 @@ public class Crear_ventasController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private boolean stockBajoActivo = false;
+    private boolean ventanaStockAbierta = false;
     private boolean overlayActivo = false;
     private Timeline temporizadorActual;
     private int indicePagoActual = 0;
     StockProductoController stockController = new StockProductoController();
-    private List<AlertaStockDTO> listaStockBajo;
+
     private MercadoPagoApi MP;
     private List<DatosPagos> datos;
     private Venta venta;
@@ -86,6 +89,8 @@ public class Crear_ventasController implements Initializable {
     private ProductoDAO productoDAO;
     private StockDAO stockDao;
 
+    @FXML
+    private AnchorPane paneMensaje;
     @FXML
     private ImageView imagenSigno;
     @FXML
@@ -105,6 +110,7 @@ public class Crear_ventasController implements Initializable {
     private TableColumn<Producto, Double> colPeso;
     @FXML
     private TableColumn<Producto, Double> colTotal;
+
     @FXML
     private Label lblCantidadPagar;
     @FXML
@@ -271,79 +277,200 @@ public class Crear_ventasController implements Initializable {
                 System.out.println("Precalentamiento completado");
             }
         }).start();
+        verificarEstadoStockInicial();
         ImagenStock();
-        productosBajos();
+    }
+// Método que se invoca al hacer clic en la imagen
+
+    @FXML
+    private void clicEnImagen(MouseEvent event) {
+        toggleVentanaStockBajos();
     }
 
-    public void productosBajos() {
+    private void toggleVentanaStockBajos() {
+        if (ventanaStockAbierta) {
+            // Si está abierta, cerrarla
+            cerrarVentanaStockBajos();
+        } else {
+            // Si está cerrada, abrirla
+            mostrarVentanaStockBajos();
+        }
+    }
+
+    private void mostrarVentanaStockBajos() {
         try {
-            System.out.println("=== Verificando productos con stock bajo ===");
+            // Carga el FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ventanaStockBajos.fxml"));
+            AnchorPane nuevaVentana = loader.load();
 
-            // Usar los DAOs directamente
-            StockDAO stockDao = new StockDAO();
-            List<Stock> listaStock = stockDao.buscarTodos();
+            // Obtener referencia al controlador y establecer la comunicación bidireccional
+            VentanaStockBajosController stockController = loader.getController();
+            stockController.setCrearVentasController(this);
 
-            listaStockBajo = new ArrayList<>();
+            // Limpia cualquier contenido previo
+            paneMensaje.getChildren().clear();
 
-            for (Stock stock : listaStock) {
-                // Lógica igual que en StockProductoController
-                double cantidad = stock.getCantidad();
-                double minima = stock.getCantidadMinima();
+            // Agrega el nuevo contenido
+            paneMensaje.getChildren().add(nuevaVentana);
 
-                String estado = "";
-                boolean esStockBajo = false;
+            // Ajusta el tamaño para que ocupe todo el AnchorPane
+            AnchorPane.setTopAnchor(nuevaVentana, 0.0);
+            AnchorPane.setBottomAnchor(nuevaVentana, 0.0);
+            AnchorPane.setLeftAnchor(nuevaVentana, 0.0);
+            AnchorPane.setRightAnchor(nuevaVentana, 0.0);
 
-                if (cantidad == 0) {
-                    // Sin stock - no incluir en alertas
-                    continue;
-                } else if (cantidad <= minima) {
-                    estado = "Crítico";
-                    esStockBajo = true;
-                } else if (cantidad <= minima * 1.5) {
-                    estado = "Bajo";
-                    esStockBajo = true;
+            // Marcar como abierta
+            ventanaStockAbierta = true;
+
+            System.out.println("✓ Ventana de stock abierta con comunicación bidireccional establecida");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("❌ Error al cargar ventana de stock: " + e.getMessage());
+            // Reset del estado en caso de error
+            ventanaStockAbierta = false;
+        }
+    }
+
+// Método para verificar estado inicial (SIN crear controladores)
+// MÉTODO CORREGIDO para Crear_ventasController
+    private void verificarEstadoStockInicial() {
+        // Ejecutar en un hilo separado para no bloquear la UI
+        new Thread(() -> {
+            try {
+                System.out.println("🔍 Verificando estado inicial del stock...");
+
+                // Usar directamente el DAO sin crear controladores
+                StockDAO stockDao = new StockDAO();
+                List<Stock> listaStock = stockDao.buscarTodos();
+
+                boolean hayStockBajo = false;
+                int productosConStockBajo = 0;
+                int sinStock = 0;
+                int criticos = 0;
+                int bajos = 0;
+
+                // CORREGIDO: Aplicar la misma lógica que VentanaStockBajosController
+                for (Stock stock : listaStock) {
+                    double cantidad = stock.getCantidad();
+                    double minima = stock.getCantidadMinima();
+
+                    boolean esStockBajo = false;
+
+                    // INCLUIR productos con stock en 0 como "Sin Stock"
+                    if (cantidad == 0) {
+                        hayStockBajo = true;
+                        esStockBajo = true;
+                        sinStock++;
+                        productosConStockBajo++;
+                    } else if (cantidad <= minima) {
+                        // Estado "Crítico"
+                        hayStockBajo = true;
+                        esStockBajo = true;
+                        criticos++;
+                        productosConStockBajo++;
+                    } else if (cantidad <= minima * 1.5) {
+                        // Estado "Bajo" 
+                        hayStockBajo = true;
+                        esStockBajo = true;
+                        bajos++;
+                        productosConStockBajo++;
+                    }
                 }
 
-                if (esStockBajo) {
-                    listaStockBajo.add(new AlertaStockDTO(
-                            stock.getProducto().getNombre(),
-                            estado,
-                            stock.getCantidad()
-                    ));
-                }
+                // Actualizar la UI en el hilo de JavaFX
+                final boolean stockBajoFinal = hayStockBajo;
+                final int cantidadFinal = productosConStockBajo;
+                final int sinStockFinal = sinStock;
+                final int criticosFinal = criticos;
+                final int bajosFinal = bajos;
+
+                Platform.runLater(() -> {
+                    actualizarEstadoImagenStock(stockBajoFinal);
+                    if (stockBajoFinal) {
+                        System.out.println("⚠️  ALERTA INICIAL DE STOCK:");
+                        System.out.println("   🚨 Sin Stock (0): " + sinStockFinal + " productos");
+                        System.out.println("   ⚠️  Críticos: " + criticosFinal + " productos");
+                        System.out.println("   🔶 Bajos: " + bajosFinal + " productos");
+                        System.out.println("   📦 TOTAL: " + cantidadFinal + " productos necesitan atención");
+                    } else {
+                        System.out.println("✅ Stock inicial OK: No hay productos con stock bajo");
+                    }
+                });
+
+            } catch (Exception e) {
+                System.err.println("❌ Error al verificar estado inicial del stock: " + e.getMessage());
+                e.printStackTrace();
+                // En caso de error, desactivar por seguridad
+                Platform.runLater(() -> {
+                    actualizarEstadoImagenStock(false);
+                    System.out.println("🔒 Imagen desactivada por error en verificación inicial");
+                });
             }
+        }).start();
+    }
 
-            if (!listaStockBajo.isEmpty()) {
-                System.out.println("✓ Encontrados " + listaStockBajo.size() + " productos con stock bajo:");
-                for (AlertaStockDTO alerta : listaStockBajo) {
-                    System.out.println("  - " + alerta.getNombreProducto()
-                            + " | Estado: " + alerta.getEstado()
-                            + " | Cantidad: " + alerta.getCantidad());
-                }
-            } else {
-                System.out.println("ℹ️  No hay productos con stock bajo actualmente");
-            }
+    private void cerrarVentanaStockBajos() {
+        try {
+            // Limpiar el contenido del panel
+            paneMensaje.getChildren().clear();
+
+            // Marcar como cerrada
+            ventanaStockAbierta = false;
+
+            System.out.println("✓ Ventana de stock cerrada");
 
         } catch (Exception e) {
-            System.err.println("❌ Error al verificar stock bajo: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("❌ Error al cerrar ventana de stock: " + e.getMessage());
+            // Forzar reset del estado
+            ventanaStockAbierta = false;
+        }
+    }
+
+// Método público para cerrar desde otros lugares si es necesario
+    public void cerrarVentanaStock() {
+        if (ventanaStockAbierta) {
+            cerrarVentanaStockBajos();
         }
     }
 
     public void ImagenStock() {
-        ScaleTransition st = new ScaleTransition(Duration.seconds(1), imagenSigno);
-        st.setToX(1.2); // 20% más ancho
-        st.setToY(1.2); // 20% más alto
-        st.setAutoReverse(true);
-        st.setCycleCount(ScaleTransition.INDEFINITE);
+        // Detener cualquier animación previa
+        if (imagenSigno.getScaleX() != 1.0 || imagenSigno.getScaleY() != 1.0) {
+            imagenSigno.setScaleX(1.0);
+            imagenSigno.setScaleY(1.0);
+        }
 
-        // Cargar solo la imagen roja
-        Image rojo = new Image(getClass().getResource("/images/peligroRojo.png").toExternalForm());
+        if (stockBajoActivo) {
+            // Activar animación cuando hay productos con stock bajo
+            ScaleTransition st = new ScaleTransition(Duration.seconds(1), imagenSigno);
+            st.setToX(1.2); // 20% más ancho
+            st.setToY(1.2); // 20% más alto
+            st.setAutoReverse(true);
+            st.setCycleCount(ScaleTransition.INDEFINITE);
 
-        // Al iniciar la animación, siempre usa la roja
-        imagenSigno.setImage(rojo);
+            // Cargar imagen roja para indicar alerta
+            Image rojo = new Image(getClass().getResource("/images/peligroRojo.png").toExternalForm());
+            imagenSigno.setImage(rojo);
+            imagenSigno.setVisible(true);
+            imagenSigno.setDisable(false);
 
-        st.play();
+            st.play();
+            System.out.println("✓ Imagen de stock ACTIVADA - Productos con stock bajo detectados");
+        } else {
+            // Desactivar cuando no hay productos con stock bajo
+            imagenSigno.setVisible(false);
+            imagenSigno.setDisable(true);
+            System.out.println("✓ Imagen de stock DESACTIVADA - No hay productos con stock bajo");
+        }
+    }
+
+    public void actualizarEstadoImagenStock(boolean hayProductosBajos) {
+        stockBajoActivo = hayProductosBajos;
+        ImagenStock(); // Actualizar la imagen según el nuevo estado
+
+        System.out.println("📊 Estado de imagen actualizado: "
+                + (stockBajoActivo ? "ACTIVO (hay alertas)" : "INACTIVO (sin alertas)"));
     }
 
     public String getMedioPago() {
@@ -802,6 +929,7 @@ public class Crear_ventasController implements Initializable {
 
             // Limpiar todo después de guardar exitosamente
             limpiarTodo();
+            verificarEstadoStockInicial();
             System.out.println("✓ Sistema limpiado - listo para nueva venta");
 
         } catch (Exception e) {

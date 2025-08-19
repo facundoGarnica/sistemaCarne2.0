@@ -84,7 +84,7 @@
     -fx-text-fill: white;
     -fx-background-radius: 5px;
     -fx-font-weight: bold;
-    -fx-padding: 8px 16px;
+    
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
     -fx-font-size: 14px;
@@ -95,13 +95,7 @@
 }
 
 
-.boton-eliminar-peque {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-padding: 12px 16px;
-    -fx-min-width: 45px;
-    -fx-min-height: 45px;
-}
+
 
 .boton {
     -fx-background-color: #3498db;

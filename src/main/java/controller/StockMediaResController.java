@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -295,10 +296,56 @@ public class StockMediaResController implements Initializable {
         }
     }
 
+    public void calcularYMostrarGananciaTotal() {
+        List<MediaRes> todasLasMedias = mediaResDao.buscarTodos();
+
+        if (todasLasMedias == null || todasLasMedias.isEmpty()) {
+            lblganancia.setText("Ganancia Total: $0.00");
+            return;
+        }
+
+        double gananciaTotalGeneral = 0.0;
+
+        for (MediaRes media : todasLasMedias) {
+            // Calcular ganancia de cada media res
+            double gananciaDeEstaMedia = calcularGananciaPorMedia(media);
+            gananciaTotalGeneral += gananciaDeEstaMedia;
+        }
+
+        lblganancia.setText(String.format("Ganancia Total: $%.2f", gananciaTotalGeneral));
+    }
+
+    private double calcularGananciaPorMedia(MediaRes media) {
+        detalleMediaResDao = new DetalleMediaResDAO();
+        List<DetalleMediaRes> detalles = detalleMediaResDao.obtenerPorMediaRes(media.getId());
+
+        if (detalles == null || detalles.isEmpty()) {
+            return 0.0;
+        }
+
+        // FILTRAR productos duplicados también aquí
+        List<DetalleMediaRes> detallesFiltrados = detalles.stream()
+                .filter(detalle -> !esProductoDuplicado(detalle.getNombreProducto()))
+                .collect(Collectors.toList());
+
+        double totalStockEnDinero = detallesFiltrados.stream()
+                .mapToDouble(detalle -> {
+                    double stockCantidad = obtenerCantidadStock(detalle.getProducto());
+                    return stockCantidad * detalle.getProducto().getPrecio();
+                })
+                .sum();
+
+        double costoMediaRes = media.getPesoFinal() * media.getPrecio();
+        return totalStockEnDinero - costoMediaRes;
+    }
+
     public void recargarTablaProductos() {
-        listaMediasRes = mediaResDao.buscarTodos(); // Trae productos actualizados
+        listaMediasRes = mediaResDao.buscarTodos();
         tblRegistroMediaRes.setItems(FXCollections.observableArrayList(listaMediasRes));
         tblRegistroMediaRes.refresh();
+
+        // Limpiar ganancia al recargar
+        lblganancia.setText("Ganancia: $0.00");
     }
 
     public void difuminarTodo() {
@@ -383,6 +430,7 @@ public class StockMediaResController implements Initializable {
     @FXML
     public void cargarDetallesDeMediaSeleccionada() {
         seleccionada = tblRegistroMediaRes.getSelectionModel().getSelectedItem();
+
         if (seleccionada == null) {
             tblStockProductos.setItems(FXCollections.emptyObservableList());
             sumaGanancia = 0.0;
@@ -393,24 +441,35 @@ public class StockMediaResController implements Initializable {
         detalleMediaResDao = new DetalleMediaResDAO();
         List<DetalleMediaRes> detalles = detalleMediaResDao.obtenerPorMediaRes(seleccionada.getId());
 
-        ObservableList<DetalleMediaRes> listaDetalles = FXCollections.observableArrayList(detalles);
+        // FILTRAR: Excluir productos duplicados (Corte Americano y Bife de Chorizo)
+        List<DetalleMediaRes> detallesFiltrados = detalles.stream()
+                .filter(detalle -> !esProductoDuplicado(detalle.getNombreProducto()))
+                .collect(Collectors.toList());
+
+        ObservableList<DetalleMediaRes> listaDetalles = FXCollections.observableArrayList(detallesFiltrados);
         tblStockProductos.setItems(listaDetalles);
 
-        // Total en dinero (precio de venta de todo el stock)
-        double totalStockEnDinero = listaDetalles.stream()
+        // Calcular ganancia solo con productos únicos
+        double totalStockEnDinero = detallesFiltrados.stream()
                 .mapToDouble(detalle -> {
                     double stockCantidad = obtenerCantidadStock(detalle.getProducto());
                     return stockCantidad * detalle.getProducto().getPrecio();
                 })
                 .sum();
 
-        // Costo original de la media res
         double costoMediaRes = seleccionada.getPesoFinal() * seleccionada.getPrecio();
-
-        // Ganancia = venta - costo
         sumaGanancia = totalStockEnDinero - costoMediaRes;
 
         lblganancia.setText(String.format("Ganancia: $%.2f", sumaGanancia));
+    }
+// Método para identificar productos duplicados
+
+    private boolean esProductoDuplicado(String nombreProducto) {
+        // Lista de productos que son duplicados conceptualmente
+        return nombreProducto.equalsIgnoreCase("Americano")
+                || nombreProducto.equalsIgnoreCase("Bife de Chori")
+                || nombreProducto.equalsIgnoreCase("Aguja comun");
+        // Solo mantienes "Bife Angosto" como el producto principal
     }
 
     public void buscarMediaPorRango() {
@@ -435,6 +494,9 @@ public class StockMediaResController implements Initializable {
         } else {
             tblRegistroMediaRes.setItems(FXCollections.observableArrayList(resultados));
         }
+
+        // Limpiar ganancia cuando se filtra
+        lblganancia.setText("Ganancia: $0.00");
     }
 
     public void buscarMediaPorFecha() {
@@ -449,7 +511,6 @@ public class StockMediaResController implements Initializable {
             return;
         }
 
-        // Traer resultados del DAO
         List<MediaRes> resultados = mediaResDao.buscarPorFecha(fechaSeleccionada);
 
         if (resultados == null || resultados.isEmpty()) {
@@ -464,15 +525,19 @@ public class StockMediaResController implements Initializable {
         }
 
         tblRegistroMediaRes.refresh();
+
+        // Limpiar ganancia cuando se filtra
+        lblganancia.setText("Ganancia: $0.00");
     }
 
     public void mostrarTodo() {
         MediaResDAO dao = new MediaResDAO();
-        List<MediaRes> lista = dao.buscarTodos(); // Paso 1: traer todos los registros
+        List<MediaRes> lista = dao.buscarTodos();
+        ObservableList<MediaRes> observableList = FXCollections.observableArrayList(lista);
+        tblRegistroMediaRes.setItems(observableList);
 
-        ObservableList<MediaRes> observableList = FXCollections.observableArrayList(lista); // Paso 2
-
-        tblRegistroMediaRes.setItems(observableList); // Paso 3
+        // Limpiar ganancia al mostrar todo
+        lblganancia.setText("Ganancia: $0.00");
     }
 
 }
