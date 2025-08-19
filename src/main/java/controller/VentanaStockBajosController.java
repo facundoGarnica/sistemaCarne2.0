@@ -53,7 +53,7 @@ public class VentanaStockBajosController implements Initializable {
         // Vinculamos las columnas con las propiedades de AlertaStockDTO
         colNombreStock.setCellValueFactory(new PropertyValueFactory<>("nombreProducto"));
         colEstadoStock.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        colCantidadStock.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        colCantidadStock.setCellValueFactory(new PropertyValueFactory<>("cantidadFormateada"));
 
         // PRIMERO cargar los datos de productos bajos
         productosBajos();

@@ -161,10 +161,8 @@
                 <!-- Panel de Acciones -->
                 <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="840.0" spacing="10.0" styleClass="action-panel">
                     <children>
-                        <Button onAction="#exportarDatos" styleClass="boton" text="Exportar" />
-                        <Button onAction="#verHistorial" styleClass="boton" text="Ver Historial" />
                         <Button onAction="#cargarParaEditar" styleClass="boton" text="Editar Seleccionado" />
-                        <Button onAction="#borrarSeleccionado" styleClass="boton-eliminar" text="Eliminar Stock" />
+                        <Button onAction="#borrarSeleccionado" prefHeight="34.0" prefWidth="173.0" styleClass="boton-eliminar" text="Eliminar seleccionado" />
                         <Button onAction="#actualizarTabla" styleClass="boton" text="Actualizar" />
                     </children>
                     <padding>

@@ -323,20 +323,23 @@ public class StockMediaResController implements Initializable {
             return 0.0;
         }
 
-        // FILTRAR productos duplicados también aquí
+        // FILTRAR productos duplicados
         List<DetalleMediaRes> detallesFiltrados = detalles.stream()
                 .filter(detalle -> !esProductoDuplicado(detalle.getNombreProducto()))
                 .collect(Collectors.toList());
 
-        double totalStockEnDinero = detallesFiltrados.stream()
+        // Calcular valor usando kilos obtenidos, no stock total
+        double sumaValorKilosObtenidos = detallesFiltrados.stream()
                 .mapToDouble(detalle -> {
-                    double stockCantidad = obtenerCantidadStock(detalle.getProducto());
-                    return stockCantidad * detalle.getProducto().getPrecio();
+                    // Calcular kilos obtenidos de esta media
+                    double kilosObtenidos = media.getPesoFinal() * (detalle.getPorcentajeCorte() / 100.0);
+                    // Multiplicar por precio de venta
+                    return kilosObtenidos * detalle.getProducto().getPrecio();
                 })
                 .sum();
 
         double costoMediaRes = media.getPesoFinal() * media.getPrecio();
-        return totalStockEnDinero - costoMediaRes;
+        return sumaValorKilosObtenidos - costoMediaRes;
     }
 
     public void recargarTablaProductos() {
@@ -449,16 +452,21 @@ public class StockMediaResController implements Initializable {
         ObservableList<DetalleMediaRes> listaDetalles = FXCollections.observableArrayList(detallesFiltrados);
         tblStockProductos.setItems(listaDetalles);
 
-        // Calcular ganancia solo con productos únicos
-        double totalStockEnDinero = detallesFiltrados.stream()
+        // Calcular ganancia usando los kilos obtenidos de esta media específica
+        double sumaValorKilosObtenidos = detallesFiltrados.stream()
                 .mapToDouble(detalle -> {
-                    double stockCantidad = obtenerCantidadStock(detalle.getProducto());
-                    return stockCantidad * detalle.getProducto().getPrecio();
+                    // Calcular kilos obtenidos de esta media = pesoFinal * porcentajeCorte / 100
+                    double kilosObtenidos = seleccionada.getPesoFinal() * (detalle.getPorcentajeCorte() / 100.0);
+                    // Multiplicar kilos obtenidos por precio de venta
+                    return kilosObtenidos * detalle.getProducto().getPrecio();
                 })
                 .sum();
 
-        double costoMediaRes = seleccionada.getPesoFinal() * seleccionada.getPrecio();
-        sumaGanancia = totalStockEnDinero - costoMediaRes;
+        // Calcular el total de la media res (costo)
+        double totalMediaRes = seleccionada.getPesoFinal() * seleccionada.getPrecio();
+
+        // Ganancia = Valor de kilos obtenidos - Costo de la media
+        sumaGanancia = sumaValorKilosObtenidos - totalMediaRes;
 
         lblganancia.setText(String.format("Ganancia: $%.2f", sumaGanancia));
     }
